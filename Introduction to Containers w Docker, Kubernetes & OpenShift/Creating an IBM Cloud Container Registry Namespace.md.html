@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <center>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/1a_ContainerRegistry/images/labs_module_1_images_IDSNlogo.png" width="300">
+    </center>
+    <h1>Creating an IBM Cloud Container Registry Namespace</h1>
+    <h2>Objectives</h2>
+    <p>In this lab, you will:</p>
+    <ul>
+      <li>Sign up for an IBM Cloud account</li>
+      <li>View the IBM Cloud catalog</li>
+      <li>View the IBM Cloud Container Registry service</li>
+      <li>Create a Container Registry namespace</li>
+    </ul>
+    <h2>Lab Overview</h2>
+    <p>IBM Cloud offers numerous cloud resources and services. In this hands-on lab, you will create a Lite account on IBM Cloud. You can then use your IBM Cloud Lite account, in this course or otherwise, to explore the catalog and provision many cloud services at no charge. In this lab you will also create an IBM Cloud Container Registry namespace, which you will use in a subsequent lab.</p>
+    <h2>About IBM Cloud</h2>
+    <p>The IBM Cloud platform is deployed across data centers around the world. It combines platform as a service (PaaS) with infrastructure as a service (IaaS) to provide an integrated experience. The platform scales and supports both large enterprise businesses and small development teams and organizations.</p>
+    <p>The platform is built to support your needs, whether it's working only in the public cloud or taking advantage of a multicloud deployment model. IBM Cloud offers a variety of services, including Compute, Network, Storage, Management, Security, Databases, Analytics, AI, and Cloud Paks.</p>
+    <h2>About IBM Cloud Container Registry namespaces</h2>
+    <p>IBM Cloud Container Registry is a multi-tenant registry in the public cloud. Namespaces are used to provide isolation for users' images. The namespace is a slice of the registry to which you can push your images. The namespace will be a part of the image name when you tag and push an image. For example, <code>us.icr.io/&#x3C;my_namespace>/&#x3C;my_repo>:&#x3C;my_tag></code>.</p>
+    <h1>Create an IBM Cloud account</h1>
+    <ol>
+      <li>
+        <p>Go to <a href="https://cloud.ibm.com/registration?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursescc20117568655-2021-01-01&#x26;target=%2Fkubernetes%2Fregistry%2Fmain%2Fstart" target="_blank" rel="external">IBM Cloud sign-up page</a>.</p>
+      </li>
+      <li>
+        <p>Follow the steps to create your account. You will need to provide an email address and password, as well as some personal information. You'll have to verify your account by accessing your email.<br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/1a_ContainerRegistry/images/signup-page.png" alt="IBM Cloud signup page">{ width=840 height=482 }
+        </p>
+      </li>
+      <li>
+        <p>Once you have created an account, go to the <a href="https://cloud.ibm.com/login?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursescc20117568655-2021-01-01" target="_blank" rel="external">IBM Cloud login page</a> and log in to your account.<br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/1a_ContainerRegistry/images/login-page.png" alt="IBM Cloud login page">{ width=840 height=482 }
+        </p>
+      </li>
+    </ol>
+    <p>Congratulations! You can now explore the <a href="https://cloud.ibm.com/catalog?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursescc20117568655-2021-01-01" target="_blank" rel="external">IBM Cloud catalog</a> and provision various services.</p>
+    <h1>Create a Container Registry namespace</h1>
+    <ol>
+      <li>
+        <p>Click the <strong>Catalog</strong> button in the top navigation to go to the <a href="https://cloud.ibm.com/catalog?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursescc20117568655-2021-01-01" target="_blank" rel="external">IBM Cloud catalog</a>.</p>
+      </li>
+      <li>
+        <p>In the <strong>Search the catalog…</strong> box, type <code>Container Registry</code> and press Enter on your keyboard.</p>
+      </li>
+      <li>
+        <p>Click the <strong>Container Registry</strong> tile in the search results.<br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/1a_ContainerRegistry/images/registry-tile.png" alt="Container Registry tile">{ width=626 height=527 }
+        </p>
+      </li>
+      <li>
+        <p>You can now read about the Container Registry service and visit links for API documentation and docs about how to use the service.<br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/1a_ContainerRegistry/images/registry-catalog.png" alt="Registry catalog">{ width=615 height=377 }
+        </p>
+      </li>
+      <li>
+        <p>At the top right, click <strong>Get started</strong>.</p>
+      </li>
+      <li>
+        <p>Ensure that the location is set to <strong>Dallas</strong>.<br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/1a_ContainerRegistry/images/registry-location.png" alt="Container Registry location">{ width=435 height=280 }
+        </p>
+      </li>
+      <li>
+        <p>Click the <strong>Namespaces</strong> tab.<br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/1a_ContainerRegistry/images/registry-namespaces-menu.png" alt="Container Registry namespaces menu">{ width=295 height=340 }
+        </p>
+      </li>
+      <li>
+        <p>On the right side of the Namespaces panel, click <strong>Create</strong>. A <strong>Create namespace</strong> panel opens.</p>
+      </li>
+      <li>
+        <p>In the <strong>Resource group</strong> field, select the name of the resource group you would like this namespace to reside in. For this lab, you can simply leave the selection as <strong>default</strong>.</p>
+      </li>
+      <li>
+        <p>In the <strong>Name</strong> field, type a unique name for the namespace. The name must be unique across all users of the Container Registry service in this region.<br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/1a_ContainerRegistry/images/registry-namespace-create.png" alt="Container Registry namespace create">{ width=445 height=514 }
+        </p>
+      </li>
+      <li>
+        <p>Click <strong>Create</strong> at the bottom of the panel to create the namespace.</p>
+      </li>
+    </ol>
+    <p>You now have a namespace to which you can push images.</p>
+    <p>Congratulations! You have completed the first lab for the first module of this course.</p>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>
