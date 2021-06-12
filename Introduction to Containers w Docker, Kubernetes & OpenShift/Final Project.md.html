@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <center>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/5_FinalProject_Coursera/images/labs_module_1_images_IDSNlogo.png" width="300">
+    </center>
+    <h1>Final Project</h1>
+    <h2>Objectives</h2>
+    <p>In this lab, you will:</p>
+    <ul>
+      <li>Build and deploy a simple guestbook application</li>
+      <li>Use OpenShift image streams to roll out an update</li>
+      <li>Deploy a multi-tier version of the guestbook application</li>
+      <li>Create a Watson Tone Analyzer service instance on IBM Cloud</li>
+      <li>Bind the Tone Analyzer service instance to your application</li>
+      <li>Autoscale the guestbook app</li>
+    </ul>
+    <h1>Project Overview</h1>
+    <h2>Guestbook application</h2>
+    <p>Guestbook is a simple, multi-tier web application that we will build and deploy with Docker and Kubernetes. The application consists of a web front end, a Redis master for storage, a replicated set of Redis slaves, and an analyzer that will analyze the tone of the comments left in the guestbook. For all of these we will create Kubernetes Deployments, Pods, and Services.</p>
+    <p>There are two versions of this application. Version 1 (in the v1 directory) is the simple application itself, while version 2 (in the v2 directory) extends the application by adding additional features that leverage the Watson Tone Analyzer service.</p>
+    <p>We will deploy and manage this entire application on OpenShift.</p>
+    <h1>Verify the environment and command line tools</h1>
+    <ol>
+      <li>
+        <p>
+          If a terminal is not already open, open a terminal window by using the menu in the editor: <code>Terminal > New Terminal</code>.
+          
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/5_FinalProject_Coursera/images/new-terminal.png" alt="New terminal">
+        </p>
+      </li>
+      <li>
+        <p>Change to your project folder.</p>
+      </li>
+    </ol>
+    <pre><code class="hljs language-gradle">cd <span class="hljs-regexp">/home/</span><span class="hljs-keyword">project</span>
+</code></pre>
+    <p></p>
+    <ol start="3">
+      <li>Clone the git repository that contains the artifacts needed for this lab.</li>
+    </ol>
+    <pre><code class="hljs language-awk">git clone https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/ajp-io/gu</span>estbook.git
+</code></pre>
+    <p></p>
+    <ol start="4">
+      <li>Change to the directory for this lab.</li>
+    </ol>
+    <pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> guestbook
+</code></pre>
+    <p></p>
+    <ol start="5">
+      <li>List the contents of this directory to see the artifacts for this lab.</li>
+    </ol>
+    <pre><code class="hljs language-ebnf"><span class="hljs-attribute">ls</span>
+</code></pre>
+    <p></p>
+    <h1>Build the guestbook app</h1>
+    <p>To begin, we will build and deploy the web front end for the guestbook app.</p>
+    <ol>
+      <li>Change to the <code>v1/guestbook</code> directory.</li>
+    </ol>
+    <pre><code class="hljs language-apache"><span class="hljs-attribute">cd</span> v<span class="hljs-number">1</span>/guestbook
+</code></pre>
+    <p></p>
+    <ol start="2">
+      <li>Run the following command or open the Dockerfile in the Explorer to familiarize yourself with it. The path to this file is <code>guestbook/v1/guestbook/Dockerfile</code>. This Dockerfile incorporates a more advanced strategy called multi-stage builds, so feel free to read more about that <a href="https://docs.docker.com/develop/develop-images/multistage-build/?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursescc20117568655-2021-01-01" target="_blank" rel="external">here</a>.</li>
+    </ol>
+    <pre><code class="hljs language-ebnf"><span class="hljs-attribute">cat Dockerfile</span>
+</code></pre>
+    <p></p>
+    <ol start="3">
+      <li>Export your namespace as an environment variable so that it can be used in subsequent commands.</li>
+    </ol>
+    <pre><code class="hljs language-reasonml">export MY_NAMESPACE=<span class="hljs-constructor">$(<span class="hljs-params">ibmcloud</span> <span class="hljs-params">cr</span> <span class="hljs-params">namespaces</span>|<span class="hljs-params">grep</span> <span class="hljs-params">sn</span>-<span class="hljs-params">labs</span>-|<span class="hljs-params">xargs</span>)</span>
+</code></pre>
+    <p></p>
+    <ol start="4">
+      <li>Build the guestbook app.</li>
+    </ol>
+    <pre><code class="hljs language-awk">docker build . -t us.icr.io<span class="hljs-regexp">/$MY_NAMESPACE/gu</span>estbook:v1
+</code></pre>
+    <p></p>
+    <ol start="5">
+      <li>Push the image to IBM Cloud Container Registry.</li>
+    </ol>
+    <pre><code class="hljs language-gradle">docker <span class="hljs-keyword">push</span> us.icr.io<span class="hljs-regexp">/$MY_NAMESPACE/gu</span>estbook:v1
+</code></pre>
+    <p></p>
+    <ol start="6">
+      <li>Verify that the image was pushed successfully.</li>
+    </ol>
+    <pre><code class="hljs language-ebnf"><span class="hljs-attribute">ibmcloud cr images</span>
+</code></pre>
+    <p></p>
+    <h1>Deploy guestbook app from the OpenShift internal registry</h1>
+    <p>As discussed in the course, IBM Cloud Container Registry scans images for common vulnerabilities and exposures to ensure that images are secure. But OpenShift also provides an internal registry -- recall the discussion of image streams and image stream tags. Using the internal registry has benefits too. For example, there is less latency when pulling images for deployments. What if we could use both—use IBM Cloud Container Registry to scan our images and then automatically import those images to the internal registry for lower latency?</p>
+    <ol>
+      <li>Create an image stream that points to your image in IBM Cloud Container Registry.</li>
+    </ol>
+    <pre><code class="hljs language-crmsh">oc <span class="hljs-keyword">tag</span> <span class="hljs-title">us</span>.icr.io/$MY_NAMESPACE/guestbook:v1 guestbook:v1 --<span class="hljs-attr">reference-policy=</span>local --scheduled
+</code></pre>
+    <p></p>
+    <p>With the <code>--reference-policy=local</code> option, a copy of the image from IBM Cloud Container Registry is imported into the local cache of the internal registry and made available to the cluster's projects as an image stream. The <code>--schedule</code> option sets up periodic importing of the image from IBM Cloud Container Registry into the internal registry. The default frequency is 15 minutes.</p>
+    <p>Now let's head over to the OpenShift web console to deploy the guestbook app using this image stream.</p>
+    <ol start="2">
+      <li>
+        <p>Open the OpenShift web console using the link at the top of the lab environment.</p>
+      </li>
+      <li>
+        <p>From the Developer perspective, click the <strong>+Add</strong> button to add a new application to this project.</p>
+      </li>
+      <li>
+        <p>Click the <strong>Container Image</strong> option so that we can deploy the application using an image in the internal registry.</p>
+      </li>
+      <li>
+        <p>Under <strong>Image</strong>, switch to "Image name from internal registry".</p>
+      </li>
+      <li>
+        <p>Select your project, and the image stream and tag you just created (<code>guestbook</code> and <code>v1</code>, respectively). You should have only have one option for each of these fields anyway since you only have access to a single project and you only created one image stream and one image stream tag.</p>
+      </li>
+      <li>
+        <p>Keep all the default values and hit <strong>Create</strong> at the bottom. This will create the application and take you to the Topology view.</p>
+      </li>
+      <li>
+        <p>From the Topology view, click the <code>guestbook</code> Deployment. This should take you to the <strong>Resources</strong> tab for this Deployment, where you can see the Pod that is running the application as well as the Service and Route that expose it.</p>
+      </li>
+      <li>
+        <p>Click the Route location (the link) to view the guestbook in action.</p>
+      </li>
+      <li>
+        <p>Try out the guestbook by putting in a few entries. You should see them appear above the input box after you hit <strong>Submit</strong>.</p>
+      </li>
+    </ol>
+    <h1>Update the guestbook</h1>
+    <p>Let's update the guestbook and see how OpenShift's image streams can help us update our apps with ease.</p>
+    <ol>
+      <li>
+        <p>Use the Explorer to edit <code>index.html</code> in the <code>public</code> directory. The path to this file is <code>guestbook/v1/guestbook/public/index.html</code>.</p>
+      </li>
+      <li>
+        <p>Let's edit the title to be more specific. On the line that says <code>&#x3C;h1>Guestbook - v1&#x3C;/h1></code>, change it to include your name. Something like <code>&#x3C;h1>Alex's Guestbook - v1&#x3C;/h1></code>. Make sure to save the file when you're done.</p>
+      </li>
+      <li>
+        <p>Build and push the app again using the same tag. This will overwrite the previous image.</p>
+      </li>
+    </ol>
+    <pre><code class="hljs language-gradle">docker build . -t us.icr.io<span class="hljs-regexp">/$MY_NAMESPACE/gu</span>estbook:v1 &#x26;&#x26; docker <span class="hljs-keyword">push</span> us.icr.io<span class="hljs-regexp">/$MY_NAMESPACE/gu</span>estbook:v1
+</code></pre>
+    <p></p>
+    <ol start="4">
+      <li>Recall the <code>--schedule</code> option we specified when we imported our image into the OpenShift internal registry. As a result, OpenShift will regularly import new images pushed to the specified tag. Since we pushed our newly built image to the same tag, OpenShift will import the updated image within about 15 minutes. If you don't want to wait for OpenShift to automatically import the image, run the following command.</li>
+    </ol>
+    <pre><code class="hljs language-gradle">oc <span class="hljs-keyword">import</span>-image guestbook:v1 --<span class="hljs-keyword">from</span>=us.icr.io<span class="hljs-regexp">/$MY_NAMESPACE/gu</span>estbook:v1 --confirm
+</code></pre>
+    <p></p>
+    <ol start="5">
+      <li>
+        <p>Switch to the Administrator perspective so that you can view image streams.</p>
+      </li>
+      <li>
+        <p>Click <strong>Builds</strong> > <strong>Image Streams</strong> in the navigation.</p>
+      </li>
+      <li>
+        <p>Click the <code>guestbook</code> image stream.</p>
+      </li>
+      <li>
+        <p>Click the <strong>History</strong> menu. If you only see one entry listed here, it means OpenShift hasn't imported your new image yet. Wait a few minutes and refresh the page. Eventually you should see a second entry, indicating that a new version of this image stream tag has been imported. This can take some time as the default frequency for importing is 15 minutes.</p>
+      </li>
+      <li>
+        <p>Return to the Developer perspective.</p>
+      </li>
+      <li>
+        <p>View the guestbook in the browser again. If you still have the tab open, go there. If not, click the Route again from the <code>guestbook</code> Deployment. You should see your new title on this page! OpenShift imported the new version of our image, and since the Deployment points to the image stream, it began running this new version as well.</p>
+      </li>
+    </ol>
+    <h1>Guestbook storage</h1>
+    <ol>
+      <li>
+        <p>From the guestbook in the browser, click the <code>/info</code> link beneath the input box. This is an information endpoint for the guestbook. Notice that it says "In-memory datastore (not redis)". Currently, we have only deployed the guestbook web front end, so it is using in-memory datastore to keep track of the entries. This is not very resilient, however, because any update or even a restart of the Pod will cause the entries to be lost. But let's confirm this.</p>
+      </li>
+      <li>
+        <p>Return to the guestbook application in the browser by clicking the Route location again. You should see that your previous entries appear no more. This is because the guestbook was restarted when your update was deployed in the last section. We need a way to persist the guestbook entries even after restarts.</p>
+      </li>
+    </ol>
+    <h1>Delete the guestbook</h1>
+    <p>In order to deploy a more complex version of the guestbook, delete this simple version.</p>
+    <ol>
+      <li>
+        <p>From the Topology view, click the <code>guestbook-app</code> application. This is the light gray circle that surrounds the <code>guestbook</code> Deployment.</p>
+      </li>
+      <li>
+        <p>Click <strong>Actions</strong> > <strong>Delete Application</strong>.</p>
+      </li>
+      <li>
+        <p>Type in the application name and click <strong>Delete</strong>.</p>
+      </li>
+    </ol>
+    <h1>Deploy Redis master and slave</h1>
+    <p>We've demonstrated that we need persistent storage in order for the guestbook to be effective. Let's deploy Redis so that we get just that. Redis is an open source, in-memory data structure store, used as a database, cache and message broker.</p>
+    <p>This application uses the v2 version of the guestbook web front end and adds on 1) a Redis master for storage, 2) a replicated set of Redis slaves, and 3) a Python Flask application that calls a Watson Tone Analyzer service deployed in IBM Cloud. For all of these components, there are Kubernetes Deployments, Pods, and Services. One of the main concerns with building a multi-tier application on Kubernetes is resolving dependencies between all of these separately deployed components.</p>
+    <p>In a multi-tier application, there are two primary ways that service dependencies can be resolved. The <code>v2/guestbook/main.go</code> code provides examples of each. For Redis, the master endpoint is discovered through environment variables. These environment variables are set when the Redis services are started, so the service resources need to be created before the guestbook Pods start. For the analyzer service, an HTTP request is made to a hostname, which allows for resource discovery at the time when the request is made. Consequently, we'll follow a specific order when creating the application components. First, the Redis components will be created, then the guestbook application, and finally the analyzer microservice.</p>
+    <ol>
+      <li>From the terminal in the lab environment, change to the v2 directory.</li>
+    </ol>
+    <pre><code class="hljs language-awk">cd ..<span class="hljs-regexp">/../</span>v2
+</code></pre>
+    <p></p>
+    <ol start="2">
+      <li>Run the following command or open the <code>redis-master-deployment.yaml</code> in the Explorer to familiarize yourself with the Deployment configuration for the Redis master.</li>
+    </ol>
+    <pre><code class="hljs language-crmsh">cat redis-<span class="hljs-literal">master</span>-deployment.yaml
+</code></pre>
+    <p></p>
+    <ol start="3">
+      <li>Create the Redis master Deployment.</li>
+    </ol>
+    <pre><code class="hljs language-coq">oc <span class="hljs-built_in">apply</span> -f redis-master-deployment.yaml
+</code></pre>
+    <p></p>
+    <ol start="4">
+      <li>Verify that the Deployment was created.</li>
+    </ol>
+    <pre><code class="hljs language-routeros">oc <span class="hljs-builtin-name">get</span> deployments
+</code></pre>
+    <p></p>
+    <ol start="5">
+      <li>List Pods to see the Pod created by the Deployment.</li>
+    </ol>
+    <pre><code class="hljs language-routeros">oc <span class="hljs-builtin-name">get</span> pods
+</code></pre>
+    <p></p>
+    <p>You can also return to the Topology view in the OpenShift web console and see that the Deployment has appeared there.</p>
+    <ol start="6">
+      <li>Run the following command or open the <code>redis-master-service.yaml</code> in the Explorer to familiarize yourself with the Service configuration for the Redis master.</li>
+    </ol>
+    <pre><code class="hljs language-crmsh">cat redis-<span class="hljs-literal">master</span>-service.yaml
+</code></pre>
+    <p></p>
+    <p>Services find the Pods to load balance based on Pod labels. The Pod that you created in previous step has the labels <code>app=redis</code> and <code>role=master</code>. The selector field of the Service determines which Pods will receive the traffic sent to the Service.</p>
+    <ol start="7">
+      <li>Create the Redis master Service.</li>
+    </ol>
+    <pre><code class="hljs language-coq">oc <span class="hljs-built_in">apply</span> -f redis-master-service.yaml
+</code></pre>
+    <p></p>
+    <p>If you click on the <code>redis-master</code> Deployment in the Topology view, you should now see the <code>redis-master</code> Service in the <strong>Resources</strong> tab.</p>
+    <ol start="8">
+      <li>Run the following command or open the <code>redis-slave-deployment.yaml</code> in the Explorer to familiarize yourself with the Deployment configuration for the Redis slave.</li>
+    </ol>
+    <pre><code class="hljs language-crmsh">cat redis-<span class="hljs-literal">slave</span>-deployment.yaml
+</code></pre>
+    <p></p>
+    <ol start="9">
+      <li>Create the Redis slave Deployment.</li>
+    </ol>
+    <pre><code class="hljs language-coq">oc <span class="hljs-built_in">apply</span> -f redis-slave-deployment.yaml
+</code></pre>
+    <p></p>
+    <ol start="10">
+      <li>Verify that the Deployment was created.</li>
+    </ol>
+    <pre><code class="hljs language-routeros">oc <span class="hljs-builtin-name">get</span> deployments
+</code></pre>
+    <p></p>
+    <ol start="11">
+      <li>List Pods to see the Pod created by the Deployment.</li>
+    </ol>
+    <pre><code class="hljs language-routeros">oc <span class="hljs-builtin-name">get</span> pods
+</code></pre>
+    <p></p>
+    <p>You can also return to the Topology view in the OpenShift web console and see that the Deployment has appeared there.</p>
+    <ol start="12">
+      <li>Run the following command or open the <code>redis-slave-service.yaml</code> in the Explorer to familiarize yourself with the Service configuration for the Redis slave.</li>
+    </ol>
+    <pre><code class="hljs language-crmsh">cat redis-<span class="hljs-literal">slave</span>-service.yaml
+</code></pre>
+    <p></p>
+    <ol start="13">
+      <li>Create the Redis slave Service.</li>
+    </ol>
+    <pre><code class="hljs language-coq">oc <span class="hljs-built_in">apply</span> -f redis-slave-service.yaml
+</code></pre>
+    <p></p>
+    <p>If you click on the <code>redis-slave</code> Deployment in the Topology view, you should now see the <code>redis-slave</code> Service in the <strong>Resources</strong> tab.</p>
+    <h1>Deploy v2 guestbook app</h1>
+    <p>Now it's time to deploy the second version of the guestbook app, which will leverage Redis for persistent storage.</p>
+    <ol>
+      <li>Click the <strong>+Add</strong> button to add a new application to this project.</li>
+    </ol>
+    <p>To demonstrate the various options available in OpenShift, we'll deploy this guestbook app using an OpenShift build and the Dockerfile from the repo.</p>
+    <ol start="2">
+      <li>
+        <p>Click the <strong>From Dockerfile</strong> option.</p>
+      </li>
+      <li>
+        <p>Paste the URL <a href="https://github.com/ajp-io/guestbook" target="_blank" rel="external">https://github.com/ajp-io/guestbook</a> in the <strong>Git Repo URL</strong> box. You should see a validated checkmark once you click out of the box.</p>
+      </li>
+      <li>
+        <p>Click <strong>Show Advanced Git Options</strong>.</p>
+      </li>
+      <li>
+        <p>Since the Dockerfile isn't at the root of the repository, we need to tell OpenShift where it is. Enter <code>/v2/guestbook</code> in the <strong>Context Dir</strong> box.</p>
+      </li>
+      <li>
+        <p>Under <strong>Container Port</strong>, enter 3000.</p>
+      </li>
+      <li>
+        <p>
+          Leave the rest of the default options and click <strong>Create</strong>.
+          Since we gave OpenShift a Dockerfile, it will create a BuildConfig and a Build that will build an image using the Dockerfile, push it to the internal registry, and use that image for a Deployment.
+        </p>
+      </li>
+      <li>
+        <p>From the Topology view, click the <code>guestbook</code> Deployment. In the <strong>Resources</strong> tab, click the Route location to load the guestbook in the browser. Notice that the header says "Guestbook - v2" instead of "Guestbook - v1".</p>
+      </li>
+      <li>
+        <p>From the guestbook in the browser, click the <code>/info</code> link beneath the input box. Notice that it now gives information on Redis since we're no longer using the in-memory datastore.</p>
+      </li>
+    </ol>
+    <p>But remember that we still need a Watson Tone Analyzer service to complete the application.</p>
+    <h1>Create a Tone Analyzer service instance</h1>
+    <ol>
+      <li>
+        <p>Go to the <a href="https://cloud.ibm.com/catalog?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursescc20117568655-2021-01-01" target="_blank" rel="external">IBM Cloud catalog</a>.</p>
+      </li>
+      <li>
+        <p>Sign in with your personal account. You should have created one during a lab in the first module of this course.</p>
+      </li>
+      <li>
+        <p>
+          In the search box, type "tone analyzer". A dropdown should show appear and show services. Click the "Tone Analyzer" service as seen in the image below.
+          
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/5_FinalProject_Coursera/images/catalog-search-tone-analyzer.png" alt="Catalog search Tone Analyzer">
+        </p>
+      </li>
+      <li>
+        <p>You'll create an instance on the Lite plan, which is free. Take note of the resource group, as you'll need this later. It may be something like "Default". Leave all the default options and click <strong>Create</strong>. This will take you to a details page for the service instance.</p>
+      </li>
+      <li>
+        <p>Now that you have an instance, you need credentials with which you can access it. Click <strong>Service credentials</strong> on the left navigation to view credentials that are automatically generated for you.</p>
+      </li>
+      <li>
+        <p>We need to store these credentials in a Kubernetes secret in order for our analyzer microservice to utilize them. From the terminal in the lab environment, login to your IBM Cloud account.</p>
+      </li>
+    </ol>
+    <pre><code class="hljs language-ebnf"><span class="hljs-attribute">ibmcloud login</span>
+</code></pre>
+    <p></p>
+    <p>If you have a federated ID, use the <code>--sso</code> option. Use the provided URL in your CLI output to retrieve your one-time passcode. You know you have a federated ID when the login fails without the <code>--sso</code> and succeeds with the <code>--sso</code> option. If you don't have a federated ID, use the <code>-u</code> and <code>-p</code> options for your username and password.</p>
+    <ol start="7">
+      <li>Ensure that you target the resource group in which you created the Tone Analyzer service. Remember that you noted this resource group in a previous step.</li>
+    </ol>
+    <pre><code class="hljs language-xml">ibmcloud target -g <span class="hljs-tag">&#x3C;<span class="hljs-name">resource_group</span>></span>
+</code></pre>
+    <p></p>
+    <ol start="8">
+      <li>
+        <p>Use the Explorer to edit <code>binding-hack.sh</code>. The path to this file is <code>guestbook/v2/binding-hack.sh</code>. You need to insert your OpenShift project where it says <code>&#x3C;my_project></code>. If you don't remember your project name, run <code>oc project</code>. Make sure to save the file when you're done.</p>
+      </li>
+      <li>
+        <p>Run the script to create a Secret containing credentials for your Tone Analyzer service.</p>
+      </li>
+    </ol>
+    <pre><code class="hljs language-glsl">./<span class="hljs-keyword">binding</span>-hack.sh
+</code></pre>
+    <p></p>
+    <p>You should see the following output: <code>secret/tone-binding created</code>.</p>
+    <ol start="10">
+      <li>Log back into the lab account.</li>
+    </ol>
+    <pre><code class="hljs language-pgsql">ibmcloud <span class="hljs-keyword">login</span> <span class="hljs-comment">--apikey $IBMCLOUD_API_KEY</span>
+</code></pre>
+    <p></p>
+    <h1>Deploy the analyzer microservice</h1>
+    <p>Now that the Tone Analyzer service is created and its credentials are provided in a Kubernetes Secret, we can deploy the analyzer microservice.</p>
+    <ol>
+      <li>Change to the <code>analyzer</code> directory.</li>
+    </ol>
+    <pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> analyzer
+</code></pre>
+    <p></p>
+    <ol start="2">
+      <li>Build and push the analyzer image.</li>
+    </ol>
+    <pre><code class="hljs language-gradle">docker build . -t us.icr.io<span class="hljs-regexp">/$MY_NAMESPACE/</span>analyzer:v1 &#x26;&#x26; docker <span class="hljs-keyword">push</span> us.icr.io<span class="hljs-regexp">/$MY_NAMESPACE/</span>analyzer:v1
+</code></pre>
+    <p></p>
+    <ol start="3">
+      <li>Return to the <code>v2</code> directory.</li>
+    </ol>
+    <pre><code class="hljs language-gams"><span class="hljs-function"><span class="hljs-title">cd</span></span> ..
+</code></pre>
+    <p></p>
+    <ol start="4">
+      <li>
+        <p>Use the Explorer to edit <code>analyzer-deployment.yaml</code>. The path to this file is <code>guestbook/v2/analyzer-deployment.yaml</code>. You need to insert your Container Registry namespace where it says <code>&#x3C;my_namespace></code>. If you don't remember your namespace, run <code>echo $MY_NAMESPACE</code>. Make sure to save the file when you're done. Also notice the <code>env</code> section, which indicates that environment variables will be set using the <code>binding-tone</code> Secret you created.</p>
+      </li>
+      <li>
+        <p>Create the <code>analyzer</code> Deployment.</p>
+      </li>
+    </ol>
+    <pre><code class="hljs language-coq">oc <span class="hljs-built_in">apply</span> -f analyzer-deployment.yaml
+</code></pre>
+    <p></p>
+    <ol start="6">
+      <li>Create the <code>analyzer</code> Service.</li>
+    </ol>
+    <pre><code class="hljs language-coq">oc <span class="hljs-built_in">apply</span> -f analyzer-service.yaml
+</code></pre>
+    <p></p>
+    <ol start="7">
+      <li>Return to the guestbook in the browser, refresh the page, and submit a new entry. You should see your entry appear along with a tone analysis.</li>
+    </ol>
+    <h1>Autoscale guestbook</h1>
+    <p>Now that guestbook is successfully up and running, let's set up a horizontal pod autoscaler (HPA) so that it can handle any load that comes its way. Make sure to keep the guestbook open in a browser tab so that it continues to make requests and consume resources so that it can be successfully autoscaled.</p>
+    <p>First, we need to set resource requests and limits for the containers that will run. If a container requests a resource like CPU or memory, Kubernetes will only schedule it on a node that can give it that resource. On the other hand, limits prevent a container from consuming more than a certain amount of a resource.</p>
+    <p>In this case, we're going to request 3 millicores of CPU and 40 MB of RAM. We'll limit the containers to 30 millicores and 100 MB. These numbers are contrived in order to ensure that the app scales.</p>
+    <ol>
+      <li>
+        <p>From the Topology view, click the <code>guestbook</code> Deployment. Then click <strong>Actions</strong> > <strong>Edit Deployment</strong>.</p>
+      </li>
+      <li>
+        <p>In the <strong>template.spec.containers</strong> section, find <code>resources: {}</code>. Replace that with the following text. Make sure the spacing is correct as YAML uses strict indentation.</p>
+      </li>
+    </ol>
+    <pre><code class="hljs language-dts"><span class="hljs-symbol">          resources:</span>
+<span class="hljs-symbol">            limits:</span>
+<span class="hljs-symbol">              cpu:</span> <span class="hljs-number">30</span>m
+<span class="hljs-symbol">              memory:</span> <span class="hljs-number">100</span>Mi
+<span class="hljs-symbol">            requests:</span>
+<span class="hljs-symbol">              cpu:</span> <span class="hljs-number">3</span>m
+<span class="hljs-symbol">              memory:</span> <span class="hljs-number">40</span>Mi
+</code></pre>
+    <p></p>
+    <ol start="3">
+      <li>
+        <p>Click <strong>Save</strong>.</p>
+      </li>
+      <li>
+        <p>Switch to the Administrator perspective.</p>
+      </li>
+      <li>
+        <p>Select <strong>Workloads</strong> > <strong>Horizontal Pod Autoscalers</strong>.</p>
+      </li>
+      <li>
+        <p>Click <strong>Create Horizontal Pod Autoscaler</strong>.</p>
+      </li>
+      <li>
+        <p>Paste the following YAML into the editor.</p>
+      </li>
+    </ol>
+    <pre><code class="hljs language-yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">autoscaling/v2beta1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">HorizontalPodAutoscaler</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">guestbook-hpa</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">scaleTargetRef:</span>
+    <span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+    <span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">guestbook</span>
+  <span class="hljs-attr">minReplicas:</span> <span class="hljs-number">1</span>
+  <span class="hljs-attr">maxReplicas:</span> <span class="hljs-number">3</span>
+  <span class="hljs-attr">metrics:</span>
+    <span class="hljs-bullet">-</span> <span class="hljs-attr">type:</span> <span class="hljs-string">Resource</span>
+      <span class="hljs-attr">resource:</span>
+        <span class="hljs-attr">name:</span> <span class="hljs-string">cpu</span>
+        <span class="hljs-attr">targetAverageUtilization:</span> <span class="hljs-number">1</span>
+</code></pre>
+    <p></p>
+    <p>This HPA indicates that we're going to scale based on CPU usage. Generally you want to scale when your CPU utilization is in the 50-90% range. For this example, we're going to use 1% so that the app is more likely to need scaling. The <code>minReplicas</code> and <code>maxReplicas</code> fields indicate that the Deployment should have between one and three replicas at any given time depending on load.</p>
+    <ol start="8">
+      <li>
+        <p>Click <strong>Create</strong>.</p>
+      </li>
+      <li>
+        <p>If you wait, you'll see both <strong>Current Replicas</strong> and <strong>Desired Replicas</strong> become three. This is because the HPA detected sufficient load to trigger a scale up to the maximum number of Pods, which is three. You can also view the <strong>Last Scale Time</strong> as well as the current and target CPU utilization. The target is obviously 1% since that's what we set it to. Note that it can take a few minutes to trigger the scale up.</p>
+      </li>
+      <li>
+        <p>If you click the <code>guestbook</code> Deployment under <strong>Scale Target</strong>, you'll be directed to the Deployment where you can verify that there are now three Pods.</p>
+      </li>
+    </ol>
+    <p>Congratulations! You have completed the final project for this course. Do not log out of the lab environment (you can close the browser though) or delete any of the artifacts created during the lab, as these will be needed for grading.</p>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>
