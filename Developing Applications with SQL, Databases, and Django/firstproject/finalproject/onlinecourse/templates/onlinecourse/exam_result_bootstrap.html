@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+ <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="navbar-header">
+              <a class="navbar-brand" href="{% url 'onlinecourse:index' %}">Home</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+            <li>
+                <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                <a class="btn btn-link" href="{% url 'onlinecourse:logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li>
+                <form class="form-inline" action="{% url 'onlinecourse:login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Username" name="username" >
+                        <input type="password" class="form-control" placeholder="Username" name="psw" >
+                        <button class="btn btn-primary" type="submit">Login</button>
+                        <a class="btn btn-link" href="{% url 'onlinecourse:registration' %}">Sign Up</a>
+                    </div>
+                </form>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    {% if grade > 80 %}
+    <div class="alert alert-success">
+       <!--HINT Display passed info -->
+       <b>Congratulations, {{ user.username }}!</b>   You have passed the exam and compleeted thhe course with score <b>{{ total_user}}/{{ total }}</b></b>
+    </div>
+        {% else %}
+        <div class="alert alert-danger">
+            <!--HINT Display failed info -->
+            <b>Failed.</b> Sorry, {{ user.username }}! You have failed exam with score <b>{{ total_user}}/{{ total }}</b></b>
+        </div>
+        <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>
+        {% endif %}
+        <div class="card-columns-vertical mt-1">
+        <h5 class="">Exam results</h5>
+            <!--HINT Display exam results-->
+            <h2>{{ course.name }}  </h2>
+            Total points: {{ total_user }} / {{ total }} 
+        </center>    
+            {% for  question in course.question_set.all %}
+        
+            <table class='table table-bordered table-striped' style='width:500px; margin:auto'>                          
+                        
+
+
+                       <tr>
+                           <th colspan="1">
+                           {{ question.question_text }} </th>
+                           
+                        <th>                       
+                        {% for key, value in q_results.items %}
+                                {% if question.id == key %}
+                                    {{ value }}
+                                {% endif %}
+                            {% endfor %}
+                        
+                        / {{ question.grade }} points   </th>                        
+                        </tr>
+                       {% for choice in question.choice_set.all %}
+                       <tr >
+                           <td>{{ choice.choice_text }}  </td>
+                           
+                           
+                          <td style='background-color:{% for key, value in c_results.items %}
+                                    {% if choice.id == key %}
+                                    {% if value == True %}
+                                    palegreen
+                                    {% else %}
+                                    lightpink
+  
+                                 {% endif %}
+                                        {% endif %}
+                                {% endfor %}'
+                           
+                           
+                          >Right choice:<b> {{ choice.is_correct}} </b>
+
+                          <br> Your choice: <b>
+                            {% for key, value0 in c_submits.items %}
+                                    {% if choice.id == key %}
+                                        {{ value0 }}
+
+
+                                        
+                                    {% endif %}
+                                {% endfor %}
+                                </b>
+                           <br>
+                            
+                           </td>
+                           
+                    </tr> 
+                    
+                {% endfor %}
+            </table>    <BR></BR>             
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
