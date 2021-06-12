@@ -1,4 +1,3 @@
-# IBMFullStackCloudDev
 # IBM Full Stack Cloud Developer Professional Certificate
 
 ## About this Professional Certificate
