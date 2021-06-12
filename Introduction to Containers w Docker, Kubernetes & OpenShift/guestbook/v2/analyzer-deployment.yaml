@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analyzer
+  labels:
+    app: analyzer
+spec:
+  selector:
+    matchLabels:
+      app: analyzer
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: analyzer
+    spec:
+      containers:
+      - name: analyzer
+        image: us.icr.io/sn-labs-u7mxhi35yba/analyzer:v1
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: TONE_ANALYZER_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: binding-tone
+              key: apikey
+        - name: TONE_ANALYZER_SERVICE_API
+          valueFrom:
+            secretKeyRef:
+              name: binding-tone
+              key: url
+        ports:
+        - containerPort: 5000
+          name: http
