@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_3_backend_services/images/IDSNlogo.png" width="200" height="200">
+    <h1>Create Django Proxy Services Of Cloud Functions</h1>
+    <p><strong>Estimated time needed:</strong> 150 minutes</p>
+    <p>
+      In previous labs, you created car model and car make Django models residing in a local SQLite repository.
+      You also created dealer and review models in a remote Cloudant repository (served by IBM Cloud Function actions).
+    </p>
+    <p>
+      Now, you need to integrate those models and services to manage all entities such as dealers, reviews, and cars, and
+      present the results in Django templates.
+    </p>
+    <p>
+      To integrate external dealer and review data, you need to call the cloud function APIs from the Django app and
+      process the API results in Django views. Such Django views can be seen as proxy services to the end user because
+      they fetch data from external resources per users' requests.
+    </p>
+    <p>In this lab, you will create such Django views as proxy services.</p>
+    <h1>Environment setup</h1>
+    <p>
+      If your Theia workspace has been reset and you want to continue from what you have done previously,
+      please <code>git clone</code> or pull from your created GitHub repository.
+    </p>
+    <ul>
+      <li>Set up the Python runtime if Theia workspace has been reset.</li>
+    </ul>
+    <pre><code class="hljs language-basic">pip3 install -r requi<span class="hljs-comment">rements.txt</span>
+</code></pre>
+    <p></p>
+    <p>Note: You may need to perform models migrations for a new Theia environment.</p>
+    <h1>Create a <code>get_dealerships</code> Django view to get dealer list</h1>
+    <p>
+      In the previous lab, you would have created a cloud function service called <code>dealer-get</code> to return a list of dealerships.
+      Next, let's see how to call that <code>dealer-get</code> service from the Django app.
+    </p>
+    <p>
+      Before you learn how to make REST calls in Django, let's create a dealer model in <code>models.py</code> to
+      represent and store a dealer entity.
+    </p>
+    <ul>
+      <li>
+        Open <code>/models.py</code>, add a <code>CarDealer</code> class. Note that this is a plain Python class instead of a subclass
+        of Django model.
+      </li>
+    </ul>
+    <p>
+      An instance of <code>CarDealer</code> is used as a plain data object for storing a dealer object returned from
+      <code>dealer-get</code> service:
+    </p>
+    <pre><code class="hljs language-python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CarDealer</span>:</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span>(<span class="hljs-params">self, address, city, full_name, <span class="hljs-built_in">id</span>, lat, long, short_name, st, <span class="hljs-built_in">zip</span></span>):</span>
+        <span class="hljs-comment"># Dealer address</span>
+        self.address = address
+        <span class="hljs-comment"># Dealer city</span>
+        self.city = city
+        <span class="hljs-comment"># Dealer Full Name</span>
+        self.full_name = full_name
+        <span class="hljs-comment"># Dealer id</span>
+        self.<span class="hljs-built_in">id</span> = <span class="hljs-built_in">id</span>
+        <span class="hljs-comment"># Location lat</span>
+        self.lat = lat
+        <span class="hljs-comment"># Location long</span>
+        self.long = long
+        <span class="hljs-comment"># Dealer short name</span>
+        self.short_name = short_name
+        <span class="hljs-comment"># Dealer state</span>
+        self.st = st
+        <span class="hljs-comment"># Dealer zip</span>
+        self.<span class="hljs-built_in">zip</span> = <span class="hljs-built_in">zip</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__str__</span>(<span class="hljs-params">self</span>):</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-string">"Dealer name: "</span> + self.full_name
+
+</code></pre>
+    <p></p>
+    <p>
+      The actual instance attributes may be different from the object returned by the service you created. Update them in
+      above <code>CarDealer</code> class accordingly.
+    </p>
+    <p>Now we can start calling <code>review-get</code> cloud function service and load the JSON results into a list of <code>CarDealer</code> objects.</p>
+    <p>
+      There are many ways to make HTTP requests in Django.
+      Here we use a very popular and easy-to-use Python library called <code>requests</code>.
+    </p>
+    <ul>
+      <li>
+        Create a new Python file called <code>restapis.py</code> under <code>djangoapp/</code> folder and
+        add a sample <code>get_request</code> method:
+      </li>
+    </ul>
+    <pre><code class="hljs language-python"><span class="hljs-keyword">import</span> requests
+<span class="hljs-keyword">import</span> json
+<span class="hljs-keyword">from</span> .models <span class="hljs-keyword">import</span> CarDealer
+<span class="hljs-keyword">from</span> requests.auth <span class="hljs-keyword">import</span> HTTPBasicAuth
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_request</span>(<span class="hljs-params">url, **kwargs</span>):</span>
+    <span class="hljs-built_in">print</span>(kwargs)
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"GET from {} "</span>.<span class="hljs-built_in">format</span>(url))
+    <span class="hljs-keyword">try</span>:
+        <span class="hljs-comment"># Call get method of requests library with URL and parameters</span>
+        response = requests.get(url, headers={<span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>},
+                                    params=kwargs)
+    <span class="hljs-keyword">except</span>:
+        <span class="hljs-comment"># If any error occurs</span>
+        <span class="hljs-built_in">print</span>(<span class="hljs-string">"Network exception occurred"</span>)
+    status_code = response.status_code
+    <span class="hljs-built_in">print</span>(<span class="hljs-string">"With status {} "</span>.<span class="hljs-built_in">format</span>(status_code))
+    json_data = json.loads(response.text)
+    <span class="hljs-keyword">return</span> json_data
+
+</code></pre>
+    <p></p>
+    <p>
+      The <code>get_request</code> method has two arguments, the URL to be requested, and a Python keyword arguments representing
+      all URL parameters to be associated with the get call.
+    </p>
+    <p>
+      The <code>requests.get(url, headers={'Content-Type': 'application/json'}, params=kwargs)</code> calls a <code>GET</code> method in <code>requests</code> library with a URL and any URL
+      parameters such as <code>dealerId</code> or <code>state</code>.
+    </p>
+    <p>The content of the response will be a JSON object to be consumed by other methods such as a Django view.</p>
+    <p>Next, let's parse the dealership JSON result returned by the <code>get_request</code> call.</p>
+    <ul>
+      <li>
+        Create a <code>get_dealers_from_cf</code> method to call <code>get_request</code> and parse its JSON result.
+        One example method may look like the following:
+      </li>
+    </ul>
+    <pre><code class="hljs language-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_dealers_from_cf</span>(<span class="hljs-params">url, **kwargs</span>):</span>
+    results = []
+    <span class="hljs-comment"># Call get_request with a URL parameter</span>
+    json_result = get_request(url)
+    <span class="hljs-keyword">if</span> json_result:
+        <span class="hljs-comment"># Get the row list in JSON as dealers</span>
+        dealers = json_result[<span class="hljs-string">"rows"</span>]
+        <span class="hljs-comment"># For each dealer object</span>
+        <span class="hljs-keyword">for</span> dealer <span class="hljs-keyword">in</span> dealers:
+            <span class="hljs-comment"># Get its content in `doc` object</span>
+            dealer_doc = dealer[<span class="hljs-string">"doc"</span>]
+            <span class="hljs-comment"># Create a CarDealer object with values in `doc` object</span>
+            dealer_obj = CarDealer(address=dealer_doc[<span class="hljs-string">"address"</span>], city=dealer_doc[<span class="hljs-string">"city"</span>], full_name=dealer_doc[<span class="hljs-string">"full_name"</span>],
+                                   <span class="hljs-built_in">id</span>=dealer_doc[<span class="hljs-string">"id"</span>], lat=dealer_doc[<span class="hljs-string">"lat"</span>], long=dealer_doc[<span class="hljs-string">"long"</span>],
+                                   short_name=dealer_doc[<span class="hljs-string">"short_name"</span>],
+                                   st=dealer_doc[<span class="hljs-string">"st"</span>], <span class="hljs-built_in">zip</span>=dealer_doc[<span class="hljs-string">"zip"</span>])
+            results.append(dealer_obj)
+
+    <span class="hljs-keyword">return</span> results
+
+</code></pre>
+    <p></p>
+    <p>
+      You can see parsing JSON in Python is very similar to accessing data with Python dictionary (key-value pair).
+      You just need to get values from keys. A value could be an object or a collection of objects such as list or dictionary.
+    </p>
+    <p>Next, let's create a Django view to call <code>get_dealers_from_cf</code> and return the result as a HTTPResponse to browser.</p>
+    <ul>
+      <li>Find the <code>get_dealerships</code> view method in <code>djangoapp/views.py</code>, update the method with following:</li>
+    </ul>
+    <pre><code class="hljs language-python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_dealerships</span>(<span class="hljs-params">request</span>):</span>
+    <span class="hljs-keyword">if</span> request.method == <span class="hljs-string">"GET"</span>:
+        url = <span class="hljs-string">"your-cloud-function-domain/dealerships/dealer-get"</span>
+        <span class="hljs-comment"># Get dealers from the URL</span>
+        dealerships = get_dealers_from_cf(url)
+        <span class="hljs-comment"># Concat all dealer's short name</span>
+        dealer_names = <span class="hljs-string">' '</span>.join([dealer.short_name <span class="hljs-keyword">for</span> dealer <span class="hljs-keyword">in</span> dealerships])
+        <span class="hljs-comment"># Return a list of dealer short name</span>
+        <span class="hljs-keyword">return</span> HttpResponse(dealer_names)
+</code></pre>
+    <p></p>
+    <ul>
+      <li>Configure the route for <code>get_dealerships</code> view method in <code>url.py</code>:</li>
+    </ul>
+    <pre><code class="hljs language-python"><span class="hljs-keyword">from</span> django.urls <span class="hljs-keyword">import</span> path
+<span class="hljs-keyword">from</span> django.conf.urls.static <span class="hljs-keyword">import</span> static
+<span class="hljs-keyword">from</span> django.conf <span class="hljs-keyword">import</span> settings
+<span class="hljs-keyword">from</span> . <span class="hljs-keyword">import</span> views
+
+app_name = <span class="hljs-string">'djangoapp'</span>
+urlpatterns = [
+    <span class="hljs-comment"># route is a string contains a URL pattern</span>
+    <span class="hljs-comment"># view refers to the view function</span>
+    <span class="hljs-comment"># name the URL</span>
+    path(route=<span class="hljs-string">''</span>, view=views.get_dealerships, name=<span class="hljs-string">'index'</span>)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+</code></pre>
+    <p></p>
+    <ul>
+      <li>
+        <p>Test the <code>get_dealerships</code> view in Theia by clicking <code>Launch Application</code> and enter the port for the development server <code>8000</code>:</p>
+      </li>
+      <li>
+        <p>
+          Go to <code>https://userid-8000.theiadocker-1.proxy.cognitiveclass.ai/djangoapp</code>.
+          You should see a list of dealership names.
+        </p>
+      </li>
+    </ul>
+    <p>More details about how to create Django view and configure URL can be found in this lab:</p>
+    <p><a href="https://cocl.us/1K9kO?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank">Views and templates</a></p>
+    <p>You will find more detailed references about <code>requests</code> package at the end of this lab.</p>
+    <p>
+      Coding practice: create a <code>get_dealer_by_id</code> or <code>get_dealers_by_state</code> method in <code>restapis.py</code>.
+      HINT, the only difference from the <code>get_dealers_from_cf</code> method is adding a dealer id or state URL parameter argument when
+      calling the <code>def get_request(url, **kwargs):</code> method such as <code>get_request(url, dealerId=dealerId)</code>.
+    </p>
+    <h1>Create a Django <code>get_dealer_details</code> view to get reviews of a dealer</h1>
+    <p>
+      By now, you should understand how to call a cloud function using <code>requests</code> library in Django and
+      convert the JSON results into Python objects.
+    </p>
+    <p>Next, let's create another <code>get</code> call to the <code>revew-get</code> cloud function to get reviews for a dealer.</p>
+    <ul>
+      <li>Define a <code>DealerReview</code> class in <code>models.py</code>, it may contain the following attributes:
+        <ul>
+          <li>dealership</li>
+          <li>name</li>
+          <li>purchase</li>
+          <li>review</li>
+          <li>purchase_date</li>
+          <li>car_make</li>
+          <li>car_model</li>
+          <li>car_year</li>
+          <li>sentiment</li>
+          <li>id</li>
+        </ul>
+      </li>
+    </ul>
+    <p>
+      The value of <code>sentiment</code> attribute will be determined by Watson NLU service. It could be <code>positive</code>, <code>neutral</code>, or <code>negative</code>.
+      You will make a Watson NLU call in the next step.
+    </p>
+    <ul>
+      <li>
+        <p>
+          Create a <code>get_dealer_reviews_from_cf</code> method in <code>restapis.py</code>. It makes a <code>get_request(url, dealerId=dealer_id)</code> method call
+          to get all reviews by dealer's id. Then it converts the JSON result into a list of <code>DealerReview</code> objects.
+        </p>
+      </li>
+      <li>
+        <p>
+          Define a <code>def get_dealer_details(request, dealer_id):</code> view method in <code>views.py</code> to
+          call <code>get_dealer_reviews_from_cf</code> method in <code>restapis.py</code>,
+          and append a list of reviews to context and return a <code>HttpResponse</code>, similar to the dealer names in previous step.
+        </p>
+      </li>
+    </ul>
+    <p>Here we need to define <code>dealer_id</code> argument to specify which dealer you want to get reviews from.</p>
+    <ul>
+      <li>
+        <p>
+          Configure the route for <code>get_dealer_details</code> view in <code>url.py</code>.
+          For example, <code>path('dealer/&#x3C;int:dealer_id>/', views.get_dealer_details, name='dealer_details'),</code>.
+        </p>
+      </li>
+      <li>
+        <p>
+          Test the <code>get_dealer_details</code> view in Theia by clicking <code>Launch Application</code> and enter the port for the development server <code>8000</code>.
+          You should see a list of reviews for a specific dealer.
+        </p>
+      </li>
+    </ul>
+    <h1>Update the <code>get_dealer_reviews_from_cf</code> view to call Watson NLU for analyzing the sentiment/tone for each review</h1>
+    <p>
+      Now that you get a list of reviews for a dealer, you could use Watson NLU to analyze their sentiment/tone.
+      Since Watson NLU is not public, you will need to add authentication argument to <code>requests.get()</code> method.
+    </p>
+    <ul>
+      <li>
+        Open <code>restapis.py</code>, update <code>get_request(url, **kwargs)</code> by providing an <code>auth</code> argument
+        with an API key you created in IBM Watson NLU.
+      </li>
+    </ul>
+    <pre><code class="hljs language-routeros">requests.<span class="hljs-builtin-name">get</span>(url, <span class="hljs-attribute">params</span>=params, headers={<span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>},
+                                    <span class="hljs-attribute">auth</span>=HTTPBasicAuth('apikey', api_key))
+</code></pre>
+    <p>You may use a <code>if</code> statement to check if <code>api_key</code> was provided and call <code>requests.get()</code> differently.</p>
+    <pre><code class="hljs language-routeros"> <span class="hljs-keyword">if</span> api_key:
+   # Basic authentication <span class="hljs-builtin-name">GET</span>
+   request.<span class="hljs-builtin-name">get</span>(url, <span class="hljs-attribute">params</span>=params, <span class="hljs-attribute">auth</span>=, <span class="hljs-built_in">..</span>.)
+ <span class="hljs-keyword">else</span>:
+   # <span class="hljs-literal">no</span> authentication <span class="hljs-builtin-name">GET</span>
+   request.<span class="hljs-builtin-name">get</span>(url, <span class="hljs-attribute">params</span>=params)
+</code></pre>
+    <ul>
+      <li>In <code>restapis.py</code> file, create a new <code>analyze_review_sentiments(dealerreview)</code>.</li>
+    </ul>
+    <p>In the method, make a call to the updated <code>get_request(url, **kwargs)</code> method with following parameters:</p>
+    <pre><code class="hljs language-python">...
+  params = <span class="hljs-built_in">dict</span>()
+  params[<span class="hljs-string">"text"</span>] = kwargs[<span class="hljs-string">"text"</span>]
+  params[<span class="hljs-string">"version"</span>] = kwargs[<span class="hljs-string">"version"</span>]
+  params[<span class="hljs-string">"features"</span>] = kwargs[<span class="hljs-string">"features"</span>]
+  params[<span class="hljs-string">"return_analyzed_text"</span>] = kwargs[<span class="hljs-string">"return_analyzed_text"</span>]
+  response = requests.get(url, params=params, headers={<span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>},
+                                    auth=HTTPBasicAuth(<span class="hljs-string">'apikey'</span>, api_key))
+...
+</code></pre>
+    <p>You can find more detailed references about Watson NLU text analysis at the end of this lab.</p>
+    <ul>
+      <li>
+        In <code>restapis.py</code> file, update <code>get_dealer_reviews_from_cf</code> method by assigning the Watson NLU result
+        to the <code>sentiment</code> attribute of a <code>DealerReview</code> object:
+      </li>
+    </ul>
+    <pre><code class="hljs language-reasonml">...
+review_obj.sentiment = analyze<span class="hljs-constructor">_review_sentiments(<span class="hljs-params">review_obj</span>.<span class="hljs-params">review</span>)</span>
+</code></pre>
+    <ul>
+      <li>
+        <p>Update <code>get_dealer_details</code> view to also print sentiment for each review:</p>
+      </li>
+      <li>
+        <p>
+          Test the updated <code>get_dealer_details</code> in Theia by clicking <code>Launch Application</code> and
+          enter the port for the development server <code>8000</code>.
+        </p>
+      </li>
+    </ul>
+    <h1>Create a <code>add_review</code> Django view to post a dealer review</h1>
+    <p>By now you have learned how to make various GET calls.</p>
+    <p>Next, you will be creating a POST call to the <code>review-post</code> cloud function to add a review to a specific dealer.</p>
+    <ul>
+      <li>
+        Open <code>restapis.py</code>, create a new <code>post_request(url, json_payload, **kwargs):</code> method.
+        The key statement in this method is calling <code>post</code> method in <code>requests</code> package.
+      </li>
+    </ul>
+    <p>For example, <code>requests.post(url, params=kwargs, json=json_payload)</code>.</p>
+    <p>The key difference from the <code>get()</code> method is you need to add a <code>json</code> argument with a Python dictionary-like object as request body.</p>
+    <ul>
+      <li>
+        <p>Open <code>views.py</code>, create a new <code>def add_review(request, dealer_id):</code> method to handle review post request.</p>
+      </li>
+      <li>
+        <p>In the <code>add_review</code> view method:</p>
+        <ul>
+          <li>First check if user is authenticated because only authenticated users can post reviews for a dealer.</li>
+          <li>
+            Create a dictionary object called <code>review</code> to append keys like
+            (<code>time</code>, <code>name</code>, <code>dealership</code>, <code>review</code>, <code>purchase</code>) and
+            any attributes you defined in your <code>review-post</code> cloud function.
+          </li>
+        </ul>
+        <p>For example:</p>
+        <pre><code class="hljs language-json">review[<span class="hljs-string">"time"</span>] = datetime.utcnow().isoformat()
+review[<span class="hljs-string">"dealership"</span>] = <span class="hljs-number">11</span>
+review[<span class="hljs-string">"review"</span>] = <span class="hljs-string">"This is a great car dealer"</span>
+</code></pre>
+        <ul>
+          <li>
+            Create another dictionary object called <code>json_payload</code> with one key called <code>review</code>. Like
+            <code>json_payload["review"] = review</code>. The <code>json_payload</code> will be used as the request body.
+          </li>
+          <li>Call the <code>post_request</code> method with the payload</li>
+        </ul>
+        <p><code>post_request(url, json_payload, dealerId=dealer_id)</code>.</p>
+        <ul>
+          <li>
+            Return the result of <code>post_request</code> to <code>add_review</code> view method. You may print the post response
+            in console or append it to HTTPResponse and render it on browser.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Configure the route for <code>add_review</code> view in <code>url.py</code>.</p>
+      </li>
+    </ul>
+    <p>For example, <code>path('dealer/&#x3C;int:dealer_id>/', views.get_dealer_details, name='dealer_details')</code>.</p>
+    <ul>
+      <li>
+        Test the <code>add_review</code> view in Theia. So when you make an add review post request, the <code>add_view</code>
+        method will create a JSON payload contains a review object and post it to your <code>review-post</code> cloud function action.
+      </li>
+    </ul>
+    <h1>Commit your updated project to GitHub</h1>
+    <p>Commit all updates to the GitHub repository you created so that you can save your work.</p>
+    <h1>External References</h1>
+    <ul>
+      <li>
+        <p><a href="https://requests.readthedocs.io/en/latest/api/?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01#main-interface" target="_blank">Requests Developer Interface</a></p>
+      </li>
+      <li>
+        <p><a href="https://cloud.ibm.com/apidocs/natural-language-understanding?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01#analyzeget" target="_blank">Watson NLU API Reference</a></p>
+      </li>
+    </ul>
+    <h1>Summary</h1>
+    <p>
+      In this lab, you have learned how to create proxy services to call the cloud functions in Django,
+      convert their JSON results into Python objects such as <code>CarDealer</code> or <code>DealerReview</code>, and return the objects as a HTTPResonse.
+    </p>
+    <p>In the next lab, you will create Django templates to present those objects.</p>
+    <h2>Author(s)</h2>
+    <h4>Yan Luo</h4>
+    <h4></h4>
+    <h3>Other Contributor(s)</h3>
+    <p>Upkar Lidder</p>
+    <p>Priya</p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-02-22</td>
+          <td>1.0</td>
+          <td>Yan Luo</td>
+          <td>Created new instructions for Capstone project</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2021. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

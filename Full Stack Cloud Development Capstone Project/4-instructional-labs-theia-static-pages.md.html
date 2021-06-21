@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_1_static_pages/images/IDSNlogo.png" width="200" height="200">
+    <h1>Add static pages</h1>
+    <p><strong>Estimated time needed:</strong> 1 hour</p>
+    <p>Congratulations on your new role as the Lead Cloud Application Developer at <code>Best Cars</code> dealership.</p>
+    <p>
+      As part of the project, your first task is to build and deploy a Django application on IBM Cloud.
+      You are given a skeleton Django application as a starting point.
+      You need to complete the following steps to add additional static pages and deploy the application.
+    </p>
+    <details>
+      <summary>Click here for an important Note</summary>
+      <blockquote>
+        <p>Theia lab environment doesn't store you changes. If you are going to leave you workspace in between, it is highly recommended that you push any changes you make to git.</p>
+      </blockquote>
+      <pre><code class="hljs language-verilog">git <span class="hljs-keyword">config</span> --<span class="hljs-keyword">global</span> user<span class="hljs-variable">.email</span> <span class="hljs-string">"yourgithub@email.com"</span>
+</code></pre>
+      <p></p>
+      <pre><code class="hljs language-verilog">git <span class="hljs-keyword">config</span> --<span class="hljs-keyword">global</span> user<span class="hljs-variable">.name</span> <span class="hljs-string">"name"</span>
+</code></pre>
+      <p></p>
+      <pre><code class="hljs language-routeros">git <span class="hljs-builtin-name">add</span> .
+</code></pre>
+      <p></p>
+      <pre><code class="hljs language-nginx"><span class="hljs-attribute">git</span> commit -m<span class="hljs-string">"Adding temporary changes to Github"</span>
+</code></pre>
+      <p></p>
+      <pre><code class="hljs language-armasm"><span class="hljs-symbol">git</span> <span class="hljs-keyword">push</span>
+</code></pre>
+      <p></p>
+    </details>
+    <h1>Part - 1 : Clone the repository</h1>
+    <ol>
+      <li>Copy the clone URL of the skeleton repository that you forked into your account.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_1_static_pages/images/clone_copy_fullstack.png" width="100%" style="border: solid 1px grey">
+    <ol start="2">
+      <li>Open a new terminal.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_1_static_pages/images/new-terminal.png" width="100%" style="border: solid 1px grey">
+    <ol start="3">
+      <li>
+        <p>Clone the URL you copied in step 1, in the local theia environment.</p>
+        <pre><code class="hljs language-crmsh">git <span class="hljs-keyword">clone</span> <span class="hljs-title">&#x3C;your_repo_name</span>>
+</code></pre>
+      </li>
+    </ol>
+    <h1>Part - 2 Run the Django app on development server</h1>
+    <ol>
+      <li>Observe the folder structure of the Django app skeleton structure. You will see <code>server</code> folder with an app called <code>djangoapp</code>.</li>
+    </ol>
+    <p>Next, let's setup the Python runtime in Theia and test the app.</p>
+    <ol start="2">
+      <li>
+        <p>Change to the <code>server</code> directory.</p>
+        <pre><code class="hljs language-axapta">cd agfzb-CloudAppDevelopment_Capstone/<span class="hljs-keyword">server</span>
+</code></pre>
+        <p></p>
+      </li>
+      <li>
+        <p>Install the necessary Python packages.</p>
+        <pre><code class="hljs language-basic">pip3 install -r requi<span class="hljs-comment">rements.txt</span>
+
+</code></pre>
+        <p></p>
+      </li>
+      <li>
+        <p>Perform migrations to create necessary tables.</p>
+        <pre><code class="hljs language-vim"><span class="hljs-keyword">python3</span> manage.<span class="hljs-keyword">py</span> makemigrations
+</code></pre>
+        <p></p>
+      </li>
+      <li>
+        <p>Run migration to activate models for the app.</p>
+        <pre><code class="hljs language-vim"><span class="hljs-keyword">python3</span> manage.<span class="hljs-keyword">py</span> migrate
+</code></pre>
+        <p></p>
+      </li>
+      <li>
+        <p>Start the local development server.</p>
+        <pre><code class="hljs language-vim"><span class="hljs-keyword">python3</span> manage.<span class="hljs-keyword">py</span> runserver
+
+</code></pre>
+        <p></p>
+      </li>
+      <li>
+        <p>Click <code>Launch Application</code> from the menu and enter the port for the development server <code>8000</code>.</p>
+      </li>
+      <li>
+        <p>When the browser tab opens, add the <strong>/djangoapp</strong> path. Your full URL should look like the following:</p>
+        <p><code>https://userid-8000.theiadocker-1.proxy.cognitiveclass.ai/djangoapp</code></p>
+        <blockquote>
+          <p><em>Note that <code>userid</code> in the URL is a placeholder. You will need to replace it with your actual Theia id.</em></p>
+        </blockquote>
+      </li>
+    </ol>
+    <p>Great! You should have the Django app running now. Next, you will add some static pages to your application.</p>
+    <h1>3. Add static pages</h1>
+    <p>Let's begin by creating a Bootstrap navigation bar to the index page.</p>
+    <blockquote>
+      <p>More details about adding Bootstrap navigation bar can be found in this lab:<a href="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0251EN-SkillsNetwork/labs/m5_django_advanced/lab3_bootstrap.md.html" target="_blank" rel="external">Bootstrap Integration</a></p>
+    </blockquote>
+    <ol>
+      <li>
+        <p>Open <code>./server/djangoapp/templates/djangoapp/index.html</code> from the explorer. Add a navigation bar <code>&#x3C;nav></code> to the HTML template.</p>
+      </li>
+      <li>
+        <p>Create a static Django template under the <code>templates</code> folder.</p>
+      </li>
+      <li>
+        <p>Create a simple Django view with <code>render()</code> method to render the static Django template.</p>
+      </li>
+      <li>
+        <p>Configure the Django view route in <code>urls.py</code> under the folder <code>djangoapp</code>.</p>
+        <blockquote>
+          <p>More details about other ways of creating views and templates can be found in this <a href="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0251EN-SkillsNetwork/labs/m4_django_app/lab3_views_templates.md.html" target="_blank" rel="external">lab</a></p>
+        </blockquote>
+      </li>
+    </ol>
+    <h2>Add <code>About Us</code> page</h2>
+    <ol>
+      <li>
+        <p>Open <code>./server/djangoapp/templates/djangoapp/</code> folder and add an <code>about.html</code> for an <code>About Us</code> page.</p>
+      </li>
+      <li>
+        <p>Add the <code>About Us</code> page to the application. Users should be able to get to this page by visiting a URL such as <code>.../djangoapp/about</code>.</p>
+      </li>
+    </ol>
+    <p>The page should include the following paragraph. You may style the page as you wish.</p>
+    <pre><code class="hljs language-html"><span class="hljs-tag">&#x3C;<span class="hljs-name">html</span>></span>
+<span class="hljs-tag">&#x3C;<span class="hljs-name">h1</span>></span>
+Welcome to Best Cars dealership, home to the best cars in North America. We sell domestic and imported cars at reasonable prices.
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">h1</span>></span>
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">html</span>></span>
+</code></pre>
+    <blockquote>
+      <p>You can add additional information that might be relevant to this page.</p>
+    </blockquote>
+    <p>Users should be able to access the About Us page from a home link in <code>&#x3C;nav></code>, a button, a menu link, or any other element you choose to use.</p>
+    <h2>Add <code>Contact Us</code> page</h2>
+    <ol>
+      <li>
+        <p>Similarly, add the <code>Contact Us</code> page to the application. Users should able to get to this page by visiting a URL such as <code>.../djangoapp/contact</code>. The page should include the address and the telephone number of the company.</p>
+      </li>
+      <li>
+        <p>Users should be able to access the Contact Us page from a footer, a button, a menu link, or any other element you choose to use.</p>
+      </li>
+    </ol>
+    <h2>Test the static pages</h2>
+    <ul>
+      <li>Test the static pages you have created in Theia by clicking <code>Launch Application</code> and entering the port for the development server <code>8000</code>.</li>
+    </ul>
+    <ol>
+      <li>Go to <code>https://userid-8000.theiadocker-1.proxy.cognitiveclass.ai/djangoapp/about</code> to test your About Us page.</li>
+      <li>Go to <code>https://userid-8000.theiadocker-1.proxy.cognitiveclass.ai/djangoapp/contact</code> to test your Contact Us page.</li>
+    </ol>
+    <h1>4. Deploy your application</h1>
+    <h2>4.1 Setup IBM Cloud account</h2>
+    <ol>
+      <li>Let's sign into IBM Cloud in the terminal using the following command:</li>
+    </ol>
+    <pre><code class="hljs language-bash">ibmcloud login -u email
+</code></pre>
+    <p>
+      Replace <code>email</code> with the email you used to sign up for IBM Cloud.
+      You will be asked for your password. Once you're logged in, you will see the following message:
+    </p>
+    <pre><code class="hljs language-scss">theia<span class="hljs-keyword">@theiadocker-ulidder</span>:/home/project/cazgi-IBM-Watson-NLU-Project$ ibmcloud login -u cloudappdevs<span class="hljs-keyword">@gmail</span>.com
+API <span class="hljs-attribute">endpoint</span>: <span class="hljs-attribute">https</span>://cloud.ibm.com
+<span class="hljs-attribute">Region</span>: us-south
+
+Password> 
+Authenticating...
+OK
+
+Targeted account Cloudapp Devs (c1efa0d5bbda462dac88a908e27570cd)
+
+                      
+API <span class="hljs-attribute">endpoint</span>:      <span class="hljs-attribute">https</span>://cloud.ibm.com   
+<span class="hljs-attribute">Region</span>:            us-south   
+<span class="hljs-attribute">User</span>:              cloudappdevs<span class="hljs-keyword">@gmail</span>.com   
+<span class="hljs-attribute">Account</span>:           Cloudapp Devs (c1efa0d5bbda462dac88a908e27570cd)   
+Resource <span class="hljs-attribute">group</span>:    No resource group targeted, use <span class="hljs-string">'ibmcloud target -g RESOURCE_GROUP'</span>   
+CF API <span class="hljs-attribute">endpoint</span>:      
+<span class="hljs-attribute">Org</span>:                  
+<span class="hljs-attribute">Space</span>:                
+</code></pre>
+    <blockquote>
+      <p><em>If you see a message from IBM Cloud to collect your statistics, you can respond with <code>y</code> for yes or <code>n</code> for no.</em></p>
+    </blockquote>
+    <ol start="2">
+      <li>Get your account details by running the following command.</li>
+    </ol>
+    <pre><code class="hljs language-ebnf"><span class="hljs-attribute">ibmcloud account orgs</span>
+</code></pre>
+    <p>
+      This will give you details about your account.
+      Note down the <code>Region</code> and the <code>Account owner</code> details as we will use these in the next step.
+    </p>
+    <ol start="3">
+      <li>The next step is to target IBM Cloud Foundry as follows:</li>
+    </ol>
+    <pre><code class="hljs language-vim">ibmcloud target --<span class="hljs-keyword">cf</span>-api http<span class="hljs-variable">s:</span>//api.REGION.<span class="hljs-keyword">cf</span>.cloud.ibm.<span class="hljs-keyword">com</span> -r REGION -<span class="hljs-keyword">o</span> ACCOUNTOWNER
+</code></pre>
+    <p>In the above command, replace REGION and ACCOUNTOWNER with the values noted in the step above.</p>
+    <pre><code class="hljs language-less">  <span class="hljs-selector-tag">theia</span>@<span class="hljs-selector-tag">theiadocker-ulidder</span>:/<span class="hljs-selector-tag">home</span>/<span class="hljs-selector-tag">project</span>/<span class="hljs-selector-tag">cazgi-IBM-Watson-NLU-Project</span>$ <span class="hljs-selector-tag">ibmcloud</span> <span class="hljs-selector-tag">target</span> <span class="hljs-selector-tag">--cf-api</span> <span class="hljs-selector-tag">https</span>:<span class="hljs-comment">//api.us-south.cf.cloud.ibm.com -r us-south -o cloudappdevs@gmail.com</span>
+
+
+  <span class="hljs-selector-tag">Targeted</span> <span class="hljs-selector-tag">Cloud</span> <span class="hljs-selector-tag">Foundry</span> (<span class="hljs-attribute">https</span>:<span class="hljs-comment">//api.us-south.cf.cloud.ibm.com)</span>
+
+  Targeted org cloudappdevs<span class="hljs-variable">@gmail</span>.com
+
+  Targeted space dev
+
+
+                        
+  API <span class="hljs-attribute">endpoint</span>:      <span class="hljs-attribute">https</span>:<span class="hljs-comment">//cloud.ibm.com   </span>
+  <span class="hljs-attribute">Region</span>:            us-south   
+  <span class="hljs-attribute">User</span>:              cloudappdevs<span class="hljs-variable">@gmail</span>.com   
+  <span class="hljs-attribute">Account</span>:           Cloudapp Devs (c1efa0d5bbda462dac88a908e27570cd)   
+  Resource <span class="hljs-attribute">group</span>:    No resource group targeted, use <span class="hljs-string">'ibmcloud target -g RESOURCE_GROUP'</span>   
+  CF API <span class="hljs-attribute">endpoint</span>:   <span class="hljs-attribute">https</span>:<span class="hljs-comment">//api.us-south.cf.cloud.ibm.com (API version: 2.156.0)   </span>
+  <span class="hljs-attribute">Org</span>:               cloudappdevs<span class="hljs-variable">@gmail</span>.com   
+  <span class="hljs-attribute">Space</span>:             dev   
+  
+</code></pre>
+    <ol start="4">
+      <li>
+        <p>You might have to optionally install the <code>cf</code> plugin as follows:</p>
+        <pre><code class="hljs language-cmake">ibmcloud cf <span class="hljs-keyword">install</span>
+</code></pre>
+        <p></p>
+      </li>
+      <li>
+        <p>If you are running this code for the first time and don't have an account space created, run the following command to create an account space.</p>
+      </li>
+    </ol>
+    <pre><code class="hljs language-livecodeserver">ibmcloud account <span class="hljs-literal">space</span>-<span class="hljs-built_in">create</span> djangoserver-<span class="hljs-literal">space</span>
+</code></pre>
+    <p></p>
+    <ol start="6">
+      <li>We should now set the space that we just created as the target space for our application deployment.</li>
+    </ol>
+    <pre><code class="hljs language-applescript">ibmcloud target -s djangoserver-<span class="hljs-literal">space</span>
+</code></pre>
+    <p></p>
+    <h2>4.2 Prepare the app for deployment</h2>
+    <ol>
+      <li>
+        <p>View <code>manifest.yml</code> file under <code>/server</code> folder with the following configuration entries.</p>
+        <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_1_static_pages/images/manifestymlview.png" width="75%">
+      </li>
+      <li>
+        <p>The <code>manifest.yml</code> file defines two applications: <code>djangoapp</code> and <code>djangoapp-nginx</code>. You can change these names to something more meaningful to you.</p>
+      </li>
+      <li>
+        <p>Additionally, you need to specify the following in the routes section of both the applications.</p>
+      </li>
+    </ol>
+    <ul>
+      <li>
+        <p><strong>$DOMAIN</strong></p>
+        <p>IBM Cloud provides a set of domains to host your application. To see the list of domains available in your region, run the following command.</p>
+        <pre><code class="hljs language-ebnf"><span class="hljs-attribute">  ibmcloud cf domains</span>     
+</code></pre>
+        <p>
+          {: codeblock}
+          You can replace $DOMAIN in the manifest.yml file with any of the non-internal domains listed in your output.
+        </p>
+      </li>
+      <li>
+        <p><strong>$HOST</strong></p>
+        <p>You need to specify a host such that the <code>$HOST.$DOMAIN</code> combination is unique on IBM Cloud.</p>
+      </li>
+    </ul>
+    <ol start="4">
+      <li>
+        <p>Finally, with the route configured in the manifest file, you need to add <code>$DOMAIN.$HOST</code> into the allowed hosts in <code>djangoproject/settings.py</code>.</p>
+      </li>
+      <li>
+        <p>
+          Find <code>ALLOWED_HOSTS</code> list in <code>djangoproject/settings.py</code> and append the host using the <code>route</code> entry
+          in <code>manifest.yml</code>. If I used the host of <code>myapp</code> and the domain of <code>us-east.mybluemix.net</code>, my entry in the file will look as follows:
+        </p>
+        <pre><code class="hljs language-ini"><span class="hljs-attr">ALLOWED_HOSTS</span> = [<span class="hljs-string">"myapp.us-east.mybluemix.net"</span>]
+</code></pre>
+        <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_1_static_pages/images/settingspy.png" width="75%">
+      </li>
+    </ol>
+    <h2>4.3 Deploy your app</h2>
+    <ol>
+      <li>Run the following command to push the app and start the deployment pipeline.
+        <pre><code class="hljs language-maxima">ibmcloud <span class="hljs-built_in">cf</span> <span class="hljs-built_in">push</span>
+</code></pre>
+      </li>
+    </ol>
+    <p>After the deployment is done, you can go to IBM Cloud <a href="https://cloud.ibm.com/resources?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank" rel="external">Resource list</a> to check the deployed app.</p>
+    <p><a href="https://cocl.us/vI01j" target="_blank" rel="external">More details related to Django app deployment</a></p>
+    <h1>Submission</h1>
+    <p>Please note down the URLs of your GitHub repo and deployed app for submission later.</p>
+    <h1>Summary</h1>
+    <p>
+      In this lab, you prepared your GitHub repository and cloned an app skeleton to start building the dealer review app.
+      As a warm-up task, you have created several static pages, tested the app, and deployed it to IBM Cloud Foundry.
+    </p>
+    <p>Now, you are ready to start some actual design and development work.</p>
+    <h2>Author(s)</h2>
+    <h4>Upkar Lidder</h4>
+    <h4></h4>
+    <h3>Other Contributor(s)</h3>
+    <p>
+      Yan Luo
+      Priya
+      Lavanya
+    </p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-05-26</td>
+          <td>1.1</td>
+          <td>Lavanya</td>
+          <td>Made changes to the instructions and included images</td>
+        </tr>
+        <tr>
+          <td>2021-01-28</td>
+          <td>1.0</td>
+          <td>Upkar Lidder</td>
+          <td>Created new instructions for Capstone project</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2021. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

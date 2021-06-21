@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_3_backend_services/images/IDSNlogo.png" width="200" height="200">
+    <h1>Implement IBM Cloud Function Endpoints</h1>
+    <p><strong>Estimated time needed:</strong> 90 minutes</p>
+    <p>Congratulations! You are one step closer to finishing the capstone project. You created a web application and added user authentication using the Django framework in the previous modules. Additionally, you set up continuous integration and continuous deployment so when you commit code to your repo, it automatically kicks off a new build of your web application. Take a pause and pat yourself on the back. However, we are not done yet! In this module, you are asked to create the backend services for your application.</p>
+    <p>The Django application will talk to the database using backend services hosted on IBM Cloud. You are asked to create these services in Python and JavaScript. You will write these services on the IBM Cloud Functions serverless platform. Finally, you will add an API gateway in front of the functions.</p>
+    <h1>1. Load data into the database</h1>
+    <p>You have been provided the dealership data as a JSON file <code>./data/dealerships.json</code>. Your first task is to upload this data into your Cloudant database. There are multiple ways to do this programmitcally. You will need the your service credentials.</p>
+    <ol>
+      <li>Navigate to the resources page - <a href="https://cloud.ibm.com/resources" target="_blank" rel="external">https://cloud.ibm.com/resources</a>.</li>
+      <li>Click on the Cloudant service. If you don't have one already, create one here - <a href="https://cloud.ibm.com/catalog/services/cloudant" target="_blank" rel="external">https://cloud.ibm.com/catalog/services/cloudant</a>.</li>
+      <li>Click on <code>Service credentials</code> on the left bar.</li>
+      <li>Click <code>New credential</code>. You can leave the default options on the popup.</li>
+      <li>Expand the newly created credentials and take note of the <code>apikey</code> and the <code>url</code>.</li>
+    </ol>
+    <p>You can use the npm package <code>couchimport</code> to load data into your database.</p>
+    <ol start="6">
+      <li>
+        <p>Before you import the data, create two databases using the Cloudant UI, <code>dealerships</code> and <code>reviews</code>.</p>
+      </li>
+      <li>
+        <p>Set the following environment variables using the credentials:</p>
+        <pre><code class="hljs language-routeros"><span class="hljs-builtin-name">export</span> <span class="hljs-attribute">IAM_API_KEY</span>=<span class="hljs-string">""</span>
+<span class="hljs-builtin-name">export</span> <span class="hljs-attribute">COUCH_URL</span>=<span class="hljs-string">""</span>
+</code></pre>
+      </li>
+      <li>
+        <p>Change into the <code>data</code> folder and use the following command to import the JSON data into the database:</p>
+        <pre><code class="hljs language-jboss-cli"><span class="hljs-keyword">cd</span> cloudant/data 
+cat <span class="hljs-string">./dealerships.json</span> | couchimport <span class="hljs-params">--type</span> <span class="hljs-string">"json"</span> <span class="hljs-params">--jsonpath</span> <span class="hljs-string">"dealerships.*"</span>  
+</code></pre>
+      </li>
+      <li>
+        <p>Do the same for existing reviews.</p>
+        <pre><code class="hljs language-jboss-cli"><span class="hljs-keyword">cd</span> cloudant/data 
+cat <span class="hljs-string">./reviews.json</span> | couchimport <span class="hljs-params">--type</span> <span class="hljs-string">"json"</span> <span class="hljs-params">--jsonpath</span> <span class="hljs-string">"reviews.*"</span> <span class="hljs-params">--database</span> reviews
+</code></pre>
+      </li>
+    </ol>
+    <p>You should now have two databases, <code>dealerships</code> and <code>reviews</code> with sample data in each database.</p>
+    <h1>2. Create backend services</h1>
+    <p>Use IBM Cloud functions and API Gateway to create the following endpoints:</p>
+    <ol>
+      <li>Get all dealerships.</li>
+    </ol>
+    <ul>
+      <li>
+        <p>Language: Node.js</p>
+      </li>
+      <li>
+        <p>Endpoint: <code>/api/dealership</code></p>
+      </li>
+      <li>
+        <p>Method: GET</p>
+      </li>
+      <li>
+        <p>Parameters: None</p>
+      </li>
+      <li>
+        <p>Output: List of dealerships with details</p>
+        <pre><code class="hljs language-json">[
+    {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-number">1</span>,
+        <span class="hljs-attr">"city"</span>: <span class="hljs-string">"Worcester"</span>,
+        <span class="hljs-attr">"state"</span>: <span class="hljs-string">"Massachusetts"</span>,
+        <span class="hljs-attr">"st"</span>: <span class="hljs-string">"MA"</span>,
+        <span class="hljs-attr">"address"</span>: <span class="hljs-string">"96 Mariners Cove Place"</span>,
+        <span class="hljs-attr">"zip"</span>: <span class="hljs-string">"01654"</span>,
+        <span class="hljs-attr">"lat"</span>: <span class="hljs-number">42.3648</span>,
+        <span class="hljs-attr">"long"</span>: <span class="hljs-number">-71.8969</span>
+    },
+    {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-number">2</span>,
+        <span class="hljs-attr">"city"</span>: <span class="hljs-string">"Topeka"</span>,
+        <span class="hljs-attr">"state"</span>: <span class="hljs-string">"Kansas"</span>,
+        <span class="hljs-attr">"st"</span>: <span class="hljs-string">"KS"</span>,
+        <span class="hljs-attr">"address"</span>: <span class="hljs-string">"3 Schlimgen Street"</span>,
+        <span class="hljs-attr">"zip"</span>: <span class="hljs-string">"66667"</span>,
+        <span class="hljs-attr">"lat"</span>: <span class="hljs-number">39.0429</span>,
+        <span class="hljs-attr">"long"</span>: <span class="hljs-number">-95.7697</span>
+    }
+]
+</code></pre>
+      </li>
+    </ul>
+    <p>Error:</p>
+    <ul>
+      <li>404: The database is empty</li>
+      <li>500: Something went wrong on the server</li>
+    </ul>
+    <ol start="2">
+      <li>Get all dealerships for a given state. You can enhance the previous function to add this functionality.</li>
+    </ol>
+    <ul>
+      <li>
+        <p>Language: Node.js</p>
+      </li>
+      <li>
+        <p>Endpoint: <code>/api/dealership?state=""</code></p>
+      </li>
+      <li>
+        <p>Parameters:</p>
+        <ul>
+          <li>state: the abbreviated state name</li>
+        </ul>
+      </li>
+      <li>
+        <p>Output: List of dealerships from the state. If the call was <code>/api/dealership?state="CA"</code>, the output would be:</p>
+        <pre><code class="hljs language-json">[
+    {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-number">8</span>,
+        <span class="hljs-attr">"city"</span>: <span class="hljs-string">"San Jose"</span>,
+        <span class="hljs-attr">"state"</span>: <span class="hljs-string">"California"</span>,
+        <span class="hljs-attr">"st"</span>: <span class="hljs-string">"CA"</span>,
+        <span class="hljs-attr">"address"</span>: <span class="hljs-string">"83 Reinke Hill"</span>,
+        <span class="hljs-attr">"zip"</span>: <span class="hljs-string">"95173"</span>,
+        <span class="hljs-attr">"lat"</span>: <span class="hljs-number">37.3352</span>,
+        <span class="hljs-attr">"long"</span>: <span class="hljs-number">-121.8938</span>
+    },
+    {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-number">17</span>,
+        <span class="hljs-attr">"city"</span>: <span class="hljs-string">"Inglewood"</span>,
+        <span class="hljs-attr">"state"</span>: <span class="hljs-string">"California"</span>,
+        <span class="hljs-attr">"st"</span>: <span class="hljs-string">"CA"</span>,
+        <span class="hljs-attr">"address"</span>: <span class="hljs-string">"4 Glacier Hill Court"</span>,
+        <span class="hljs-attr">"zip"</span>: <span class="hljs-string">"90305"</span>,
+        <span class="hljs-attr">"lat"</span>: <span class="hljs-number">33.9583</span>,
+        <span class="hljs-attr">"long"</span>: <span class="hljs-number">-118.3258</span>
+    },
+    {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-number">30</span>,
+        <span class="hljs-attr">"city"</span>: <span class="hljs-string">"San Francisco"</span>,
+        <span class="hljs-attr">"state"</span>: <span class="hljs-string">"California"</span>,
+        <span class="hljs-attr">"st"</span>: <span class="hljs-string">"CA"</span>,
+        <span class="hljs-attr">"address"</span>: <span class="hljs-string">"0 Loeprich Drive"</span>,
+        <span class="hljs-attr">"zip"</span>: <span class="hljs-string">"94164"</span>,
+        <span class="hljs-attr">"lat"</span>: <span class="hljs-number">37.7848</span>,
+        <span class="hljs-attr">"long"</span>: <span class="hljs-number">-122.7278</span>
+    },
+    ...
+]
+</code></pre>
+      </li>
+    </ul>
+    <p>Error:</p>
+    <ul>
+      <li>404: The state does not exist</li>
+      <li>500: Something went wrong on the server</li>
+    </ul>
+    <ol start="3">
+      <li>Get all reviews for a dealership.</li>
+    </ol>
+    <ul>
+      <li>
+        <p>Language: Python</p>
+      </li>
+      <li>
+        <p>Endpoint: <code>/api/review?dealerId=""</code></p>
+      </li>
+      <li>
+        <p>Method: GET</p>
+      </li>
+      <li>
+        <p>Parameters:</p>
+        <ul>
+          <li>dealerId: the unique id of the dealership</li>
+        </ul>
+      </li>
+      <li>
+        <p>Output: List of reviews for the given dealership</p>
+        <pre><code class="hljs language-json">    [
+        {
+            <span class="hljs-attr">"id"</span>: <span class="hljs-number">1</span>,
+            <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Berkly Shepley"</span>,
+            <span class="hljs-attr">"dealership"</span>: <span class="hljs-number">15</span>,
+            <span class="hljs-attr">"review"</span>: <span class="hljs-string">"some review"</span>,
+            <span class="hljs-attr">"purchase"</span>: <span class="hljs-literal">true</span>,
+            <span class="hljs-attr">"purchase_date"</span>: <span class="hljs-string">"07/11/2020"</span>,
+            <span class="hljs-attr">"car_make"</span>: <span class="hljs-string">"Audi"</span>,
+            <span class="hljs-attr">"car_model"</span>: <span class="hljs-string">"A6"</span>,
+            <span class="hljs-attr">"car_year"</span>: <span class="hljs-number">2010</span>
+        },
+        {
+            <span class="hljs-attr">"id"</span>: <span class="hljs-number">2</span>,
+            <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Gwenora Zettoi"</span>,
+            <span class="hljs-attr">"dealership"</span>: <span class="hljs-number">15</span>,
+            <span class="hljs-attr">"review"</span>: <span class="hljs-string">"some review"</span>,
+            <span class="hljs-attr">"purchase"</span>: flase
+        }
+    ]
+</code></pre>
+      </li>
+    </ul>
+    <p>Error:</p>
+    <ul>
+      <li>404: dealerId does not exist</li>
+      <li>500: Something went wrong on the server</li>
+    </ul>
+    <ol start="4">
+      <li>Post review for dealership</li>
+    </ol>
+    <ul>
+      <li>Language: Python</li>
+      <li>Endpoint: <code>/api/review</code></li>
+      <li>Method: POST</li>
+      <li>Parameters:
+        <ul>
+          <li>JSON of the review as follows:
+            <pre><code class="hljs language-json">{
+<span class="hljs-attr">"review"</span>: 
+    {
+        <span class="hljs-attr">"id"</span>: <span class="hljs-number">1114</span>,
+        <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Upkar Lidder"</span>,
+        <span class="hljs-attr">"dealership"</span>: <span class="hljs-number">15</span>,
+        <span class="hljs-attr">"review"</span>: <span class="hljs-string">"Great service!"</span>,
+        <span class="hljs-attr">"purchase"</span>: <span class="hljs-literal">false</span>,
+        <span class="hljs-attr">"another"</span>: <span class="hljs-string">"field"</span>,
+        <span class="hljs-attr">"purchase_date"</span>: <span class="hljs-string">"02/16/2021"</span>,
+        <span class="hljs-attr">"car_make"</span>: <span class="hljs-string">"Audi"</span>,
+        <span class="hljs-attr">"car_model"</span>: <span class="hljs-string">"Car"</span>,
+        <span class="hljs-attr">"car_year"</span>: <span class="hljs-number">2021</span>
+    }
+}
+</code></pre>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <p>Error:</p>
+    <ul>
+      <li>500: Something went wrong on the server</li>
+    </ul>
+    <h1>Submission</h1>
+    <p>Take a note of the following URLs to submit for peer review:</p>
+    <ol>
+      <li>URL of github repo of your solution code.</li>
+      <li>URL of the GET dealership endpoint <code>/api/dealership</code>.</li>
+      <li>URL of the GET reviews endpoint <code>api/review</code>.</li>
+      <li>URL of the POST endpoint <code>/api/review</code>.</li>
+    </ol>
+    <h1>Summary</h1>
+    <p>In this lab, you uploaded the dealership data provided to you as a JSON file into the Cloudant database. You then created the different IBM Cloud Function actions served by the API gateway.</p>
+    <h2>Author(s)</h2>
+    <h4>Upkar Lidder</h4>
+    <h4></h4>
+    <h3>Other Contributor(s)</h3>
+    <p>Yan Luo</p>
+    <p>Priya</p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-01-28</td>
+          <td>1.0</td>
+          <td>Upkar Lidder</td>
+          <td>Created new instructions for Capstone project</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2021. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

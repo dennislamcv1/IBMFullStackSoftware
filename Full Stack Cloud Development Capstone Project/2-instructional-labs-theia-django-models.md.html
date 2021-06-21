@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_3_backend_services/images/IDSNlogo.png" width="200" height="200">
+    <h1>Build CarModel and CarMake Django Models</h1>
+    <p><strong>Estimated time needed:</strong> 90 minutes</p>
+    <p>
+      A dealership typically manages cars from one or more makes,
+      and customers should be allowed to review the cars they purchased from a dealer.
+    </p>
+    <p>In this lab, you will create the car model and car make related models in the Django app.</p>
+    <ul>
+      <li>A car model includes basic information such as its make, year, type, and dealer id.</li>
+      <li>A car make includes basic information such as name and description.</li>
+    </ul>
+    <h1>Environment setup</h1>
+    <p>
+      If your Theia workspace has been reset and you want to continue from what you have done previously,
+      <code>git clone</code> or pull from your created GitHub repository.
+    </p>
+    <ul>
+      <li>Set up the Python runtime if Theia workspace has been reset.</li>
+    </ul>
+    <pre><code class="hljs language-basic">pip3 install -r requi<span class="hljs-comment">rements.txt</span>
+</code></pre>
+    <p></p>
+    <p>Note: You may need to perform models migrations for a new Theia environment.</p>
+    <h1>To build Car Model and Car Make models</h1>
+    <p>You will need to create two new models in <code>djangoapp/models.py</code>:</p>
+    <ul>
+      <li>A <code>CarMake</code> model to save some data about a car make.</li>
+      <li>A <code>CarModel</code> model to save some data about a car model.</li>
+    </ul>
+    <p>You could find some hints in the code comments with the tag <code>&#x3C;HINT></code>.</p>
+    <ul>
+      <li>
+        <p>Create a car make Django model <code>class CarMake(models.Model):</code>:</p>
+        <ul>
+          <li>Name</li>
+          <li>Description</li>
+          <li>Any other fields you would like to include in a car make</li>
+          <li>A <code>__str__</code> method to print a car make object</li>
+        </ul>
+      </li>
+      <li>
+        <p>Create a car model Django model <code>class CarModel(models.Model)</code>:</p>
+        <ul>
+          <li>Many-To-One relationship to <code>CarMake</code> model (One car make has many car models, using a ForeignKey field)</li>
+          <li>Dealer Id (IntegerField) refers to a dealer created in Cloudant database</li>
+          <li>Name</li>
+          <li>Type (CharField with a choices argument to provide limited choices such as Sedan, SUV, and WAGON)</li>
+          <li>Year (DateField)</li>
+          <li>Any other fields you would like to include in a car model</li>
+          <li>A <code>__str__</code> method to print the car model object</li>
+        </ul>
+      </li>
+      <li>
+        <p>Run migrations for the models.</p>
+      </li>
+    </ul>
+    <p><code>python3 manage.py makemigrations onlinecourse</code></p>
+    <p>and</p>
+    <p><code>python3 manage.py migrate</code></p>
+    <p>
+      Note: If you see any errors related to model migrations, you could choose to delete the existing
+      database <code>db.sqlite3</code> and re-run above migration again.
+    </p>
+    <p>Refer to the previous Django ORM lab for more details:</p>
+    <p><a href="https://cocl.us/8Z1B5?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank">CRUD on Django Model Objects</a></p>
+    <h1>To register CarMake and CarModel models with the admin site</h1>
+    <ul>
+      <li>First, you need to have a superuser for the admin site, if not created before.</li>
+    </ul>
+    <p>Please use <code>root</code> as user name and <code>root</code> as password for your reviewer to login your app.</p>
+    <ul>
+      <li>
+        <p>
+          You need to register the <code>CarMake</code> and <code>CarModel</code> in the admin site so you can conveniently
+          manage their content (i.e., perform CRUD operations).
+        </p>
+      </li>
+      <li>
+        <p>
+          You will also need to create <code>CarModelInline</code> so that you could manage <code>CarModel</code> and <code>CarMake</code>
+          together on one page in the Admin site.
+        </p>
+      </li>
+    </ul>
+    <p>
+      Note that for the dealer id field, you need to enter the integer dealer id you created in IBM Cloudant database.
+      So that the car model can be associated with a dealer in the Cloudant database.
+    </p>
+    <ul>
+      <li>After you register the new models, you can create a new car make with several cars for testing.</li>
+    </ul>
+    <p>Refer to the previous Admin site lab for more details:</p>
+    <p><a href="https://cocl.us/TzAvw?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank">Django Admin Site</a></p>
+    <h1>Commit your updated project to GitHub</h1>
+    <p>Commit all updates to the GitHub repository you created so that you can save your work.</p>
+    <h1>Summary</h1>
+    <p>In this lab, you have created the car model and car make related models in your Django app.</p>
+    <h2>Author(s)</h2>
+    <h4>Yan Luo</h4>
+    <h4></h4>
+    <h3>Other Contributor(s)</h3>
+    <p>Upkar Lidder</p>
+    <p>Priya</p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-02-15</td>
+          <td>1.0</td>
+          <td>Yan Luo</td>
+          <td>Created new instructions for Capstone project</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2021. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

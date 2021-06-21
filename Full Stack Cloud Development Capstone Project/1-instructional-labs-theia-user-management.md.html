@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/IDSNlogo.png" width="200" height="200">
+    <h1>User Management</h1>
+    <p><strong>Estimated time needed:</strong> 1 hour and 20 mins</p>
+    <p>
+      The admins of your app will need to manage users and user access based on users' types, such as,
+      visitors and registered users. Your task is to add a standard user management feature to your app.
+    </p>
+    <h1>Environment setup</h1>
+    <p>
+      If your Theia workspace has been reset and you want to continue from where you left off previously, you can
+      <code>git clone</code> or pull the latest code from your GitHub repository.
+    </p>
+    <ul>
+      <li>Set up the Python runtime again if Theia workspace has been reset.</li>
+    </ul>
+    <pre><code class="hljs language-basic">pip3 install -r requi<span class="hljs-comment">rements.txt</span>
+</code></pre>
+    <p></p>
+    <p>Note: You may need to perform migrations for a new Theia environment.</p>
+    <h1>Create a superuser for your app</h1>
+    <p>Let's create a superuser first.</p>
+    <ul>
+      <li>Stop the server, if started. <code>cd</code> to <code>/server</code> folder and run:</li>
+    </ul>
+    <pre><code class="hljs language-vim"><span class="hljs-keyword">python3</span> manage.<span class="hljs-keyword">py</span> createsuperuser
+
+</code></pre>
+    <p></p>
+    <p>With <code>Username</code>, <code>Email</code>, <code>Password</code> entered, you should see a message indicating that the superuser has been created:</p>
+    <pre><code class="hljs language-ebnf"><span class="hljs-attribute">Superuser created successfully</span>.
+
+</code></pre>
+    <p>Start the server again and log in to the Admin site as the superuser.</p>
+    <pre><code class="hljs language-vim"><span class="hljs-keyword">python3</span> manage.<span class="hljs-keyword">py</span> runserver
+</code></pre>
+    <p></p>
+    <ul>
+      <li>Click <code>Launch Application</code> and enter the port for the development server <code>8000</code>.</li>
+    </ul>
+    <p>After the browser tab opens, add the <code>/admin</code> path. Your full URL should look like the following:</p>
+    <p><code>https://userid-8000.theiadocker-1.proxy.cognitiveclass.ai/admin</code></p>
+    <ul>
+      <li>
+        <p>Log in to the admin site with the credentials you just created for the superuser.</p>
+      </li>
+      <li>
+        <p>
+          Click <code>Users</code> under the <code>AUTHENTICATION AND AUTHORIZATION</code> section. You should be able to view the superuser
+          you just created.
+        </p>
+      </li>
+    </ul>
+    <h1>Add user login/logout and signup menu items</h1>
+    <p>
+      First, let's add login/logout and signup menu items to the navigation bar <code>&#x3C;nav></code> created in
+      the previous lab.
+    </p>
+    <ul>
+      <li>Open <code>./templates/djangoapp/index.html</code> and find the created navigation bar <code>&#x3C;nav></code> to the html template.</li>
+    </ul>
+    <p>Add the following menu items to <code>&#x3C;nav></code>:</p>
+    <ul>
+      <li>A form with one text input to accept user name and one password text input to accept password.</li>
+      <li>A login submission button/link pointing to a Django login view, to be created later.</li>
+      <li>A signup link/button pointing to a Django signup view, to be created later.</li>
+    </ul>
+    <p>
+      The created <code>&#x3C;nav></code> bar for login and signup may look like the following screenshot:
+      
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/1-user-management-login.png" alt="image">
+    </p>
+    <ul>
+      <li>Add the following navigation bar items after user has been authenticated:</li>
+      <li>A text label to display user's first name or username.</li>
+      <li>A signout submission button/link pointing to a signout view, to be created later.</li>
+    </ul>
+    <p>The <code>&#x3C;nav></code> bar for an authenticated user may look like the following screenshot:</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/2-user-management-logout.png" alt="image">
+    </p>
+    <p>More details about adding Bootstrap navigation bar with login/logout and signup menu items could be found in this lab:</p>
+    <p><a href="https://cocl.us/qwjF4?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank">Bootstrap Integration</a></p>
+    <h1>Add a new login view</h1>
+    <p>Next, you need to create a new login Django view to handle a login request.</p>
+    <ul>
+      <li>
+        <p>Open <code>djangoapp/views.py</code> and add a new login view to authenticate user.</p>
+      </li>
+      <li>
+        <p>Configure a route for the login view by adding a path entry in <code>djangoapp/urls.py</code>.</p>
+      </li>
+    </ul>
+    <p>You may refer to this lab to get more details about Django authentication:</p>
+    <p><a href="https://cocl.us/jHlDe?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank">Django Authentication System</a></p>
+    <h1>Add a new logout view</h1>
+    <p>After the user can login, you need to create a new logout Django view to handle the logout request.</p>
+    <ul>
+      <li>
+        <p>Open <code>djangoapp/views.py</code> and add a new logout view to handle a logout request.</p>
+      </li>
+      <li>
+        <p>Configure a route for the logout view by adding a path entry in <code>djangoapp/urls.py</code>.</p>
+      </li>
+    </ul>
+    <p>You may refer to this lab to get more details about Django authentication:</p>
+    <p><a href="https://cocl.us/jHlDe?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank">Django Authentication System</a></p>
+    <h1>Add a sign-up template</h1>
+    <p>At this point, you should be able to log in and log out with the superuser you created earlier.</p>
+    <p>Next, you will create a signup or registration page to create new regular users.</p>
+    <ul>
+      <li>Open <code>./templates/djangoapp/registration.html</code> and add a registration form with:
+        <ul>
+          <li>A text input to receive first name.</li>
+          <li>A text input to receive last name.</li>
+          <li>A text input to receive username.</li>
+          <li>A password text input to receive password.</li>
+          <li>A submission button pointing to a signup view, to be created later.</li>
+        </ul>
+      </li>
+    </ul>
+    <p>
+      The new signup page may look like the following screenshot:
+      
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/3-user-management-signup.png" alt="image">
+    </p>
+    <h1>Add a new sign-up view</h1>
+    <p>You also need to create a new signup Django view in order to register(create) a new user and then log in the user.</p>
+    <ul>
+      <li>
+        <p>Open <code>djangoapp/views.py</code>, add a new sign-up view.</p>
+      </li>
+      <li>
+        <p>Configure a route for the signup view by adding a path entry in <code>djangoapp/urls.py</code>.</p>
+      </li>
+    </ul>
+    <p>You may refer to this lab to get more details about Django authentication:</p>
+    <p><a href="https://cocl.us/jHlDe?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank">Django Authentication System</a></p>
+    <h1>Test the updated app</h1>
+    <p>Now you may want to test the updated Django app with signup, login, and logout end-to-end.</p>
+    <h1>Submission</h1>
+    <p>Commit and push the changes to your GitHub repository.</p>
+    <h1>Summary</h1>
+    <p>
+      In this lab, you have added user management related templates and views to the app.
+      In the next lab, you will start to create car/make related models, templates, and views.
+    </p>
+    <h2>Author(s)</h2>
+    <h4>Yan Luo</h4>
+    <h4></h4>
+    <h3>Other Contributor(s)</h3>
+    <p>Upkar Lidder</p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-01-28</td>
+          <td>1.0</td>
+          <td>Yan Luo</td>
+          <td>Created new instructions for Capstone project</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2021. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

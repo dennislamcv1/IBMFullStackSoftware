@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/IDSNlogo.png" width="200" height="200">
+    <h1>Add Continuous Integration and Continuous Deployment</h1>
+    <p><strong>Estimated time needed:</strong> 60 minutes</p>
+    <p>Your team is growing! Management has decided to hire a designer to help style the look of the application you are developing. You are tasked with writing the code to implement the business logic, and the designer will add CSS. This means you need a way to work independently and merge your work so management can see the results on an ongoing basis on the Cloud. Recall that you used <strong>IBM Cloud Continuous</strong> in the previous course to automatically kick off builds when a pull request was merged. In this lab, you will use <strong>GitHub Actions</strong> to build, test, and deploy your application in a repeatable way. Before we dive into the lab, here is a primer on GitHub Actions.</p>
+    <h1>GitHub Actions</h1>
+    <p>GitHub actions provide an event-driven way to automate tasks in your project. There are several kinds of events you can listen to. Here are a few examples:</p>
+    <ul>
+      <li><strong>push</strong>: Runs tasks when someone pushes to a repository branch.</li>
+      <li><strong>pull_request</strong>: Runs tasks when someone creates a pull request. You can also start tasks when certain activities happen, such as:
+        <ul>
+          <li>PR opened</li>
+          <li>PR closed</li>
+          <li>PR reopened</li>
+        </ul>
+      </li>
+      <li><strong>create</strong>: Run tasks when someone creates a branch or a tag.</li>
+      <li><strong>delete</strong>: Run tasks when someone deletes a branch or a tag.</li>
+      <li><strong>manually</strong>: Jobs are kicked off manually.</li>
+    </ul>
+    <h2>GitHub Action Components</h2>
+    <p>You will use one or more of the following components in this lab:</p>
+    <ul>
+      <li><strong>Workflows</strong>: Collection of jobs you can add to your repository.</li>
+      <li><strong>Events</strong>: Activity that launches a workflow.</li>
+      <li><strong>Jobs</strong>: Sequence of one or more steps. Jobs are run in parallel by default.</li>
+      <li><strong>Steps</strong>: Individual tasks that can run in a job. A step my be an action or a command.</li>
+      <li><strong>Actions</strong>: Smallest block of a workflow.</li>
+    </ul>
+    <p>We have provided a workflow template in this file: <code>.github/workflows/push-cf.yml</code>. Let's examine this file.</p>
+    <pre><code class="hljs language-yaml"><span class="hljs-attr">name:</span> <span class="hljs-string">Build</span> <span class="hljs-string">and</span> <span class="hljs-string">deploy</span> <span class="hljs-string">to</span> <span class="hljs-string">IBM</span> <span class="hljs-string">Cloud</span> <span class="hljs-string">Foundry</span>
+
+<span class="hljs-attr">on:</span> <span class="hljs-string">workflow_dispatch</span>
+
+<span class="hljs-comment"># Environment variables available to all jobs and steps in this workflow</span>
+<span class="hljs-attr">env:</span>
+  <span class="hljs-attr">IBM_CLOUD_REGION:</span> <span class="hljs-string">us-south</span>
+  <span class="hljs-attr">IBM_CLOUD_GROUP:</span> <span class="hljs-string">default</span>
+  <span class="hljs-attr">IBM_CLOUD_SPACE:</span> <span class="hljs-string">dev</span>
+  <span class="hljs-attr">IBM_CLOUD_ORG:</span> <span class="hljs-string">ulidder@us.ibm.com</span>
+  <span class="hljs-attr">MANIFEST_NAME:</span> <span class="hljs-string">manifest.yml</span>
+  <span class="hljs-attr">IBM_CLOUD_API:</span> <span class="hljs-string">${{secrets.IBM_CLOUD_API_KEY}}</span>
+
+<span class="hljs-attr">defaults:</span>
+  <span class="hljs-attr">run:</span>
+    <span class="hljs-attr">working-directory:</span> <span class="hljs-string">server</span>
+
+<span class="hljs-attr">jobs:</span>
+  <span class="hljs-attr">setup-build-publish-deploy:</span>
+    <span class="hljs-attr">name:</span> <span class="hljs-string">Setup,</span> <span class="hljs-string">Build,</span> <span class="hljs-string">Publish,</span> <span class="hljs-string">and</span> <span class="hljs-string">Deploy</span>
+    <span class="hljs-attr">runs-on:</span> <span class="hljs-string">ubuntu-latest</span>
+
+    <span class="hljs-attr">steps:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">uses:</span> <span class="hljs-string">actions/checkout@v2</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">IBM</span> <span class="hljs-string">CLI</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
+          ibmcloud --version
+          ibmcloud config --check-version=false
+</span>        <span class="hljs-attr">shell:</span> <span class="hljs-string">bash</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Install</span> <span class="hljs-string">CF</span> <span class="hljs-string">plugin</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">ibmcloud</span> <span class="hljs-string">cf</span> <span class="hljs-string">install</span> <span class="hljs-string">-f</span>
+        <span class="hljs-attr">shell:</span> <span class="hljs-string">bash</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Log</span> <span class="hljs-string">into</span> <span class="hljs-string">IBM</span> <span class="hljs-string">Cloud</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">|
+          ibmcloud login --apikey "$IBM_CLOUD_API" -r "$IBM_CLOUD_REGION" -g "$IBM_CLOUD_GROUP"
+</span>        <span class="hljs-attr">shell:</span> <span class="hljs-string">bash</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Target</span> <span class="hljs-string">CF</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">ibmcloud</span> <span class="hljs-string">target</span> <span class="hljs-string">--cf-api</span> <span class="hljs-string">https://api.$IBM_CLOUD_REGION.cf.cloud.ibm.com</span> <span class="hljs-string">-r</span> <span class="hljs-string">$IBM_CLOUD_REGION</span> <span class="hljs-string">-o</span> <span class="hljs-string">$IBM_CLOUD_ORG</span> <span class="hljs-string">-s</span> <span class="hljs-string">$IBM_CLOUD_SPACE</span>
+        <span class="hljs-attr">shell:</span> <span class="hljs-string">bash</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">List</span> <span class="hljs-string">all</span> <span class="hljs-string">applications</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">ibmcloud</span> <span class="hljs-string">cf</span> <span class="hljs-string">apps</span>
+        <span class="hljs-attr">shell:</span> <span class="hljs-string">bash</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">name:</span> <span class="hljs-string">Deploy</span> <span class="hljs-string">manifest</span> <span class="hljs-string">file</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">ibmcloud</span> <span class="hljs-string">cf</span> <span class="hljs-string">push</span> <span class="hljs-string">-f</span> <span class="hljs-string">./$MANIFEST_NAME</span>
+        <span class="hljs-attr">shell:</span> <span class="hljs-string">bash</span>
+</code></pre>
+    <ol>
+      <li>The first line names the workflow.</li>
+      <li>The next line defines when this workflow will run. In this case, the file specifies <code>on: workflow_dispatch</code>, which means the workflow will be triggered when someone manually clicks on the Run button.</li>
+      <li>Next, we define some environment variables that will be available to all jobs in the workflow. It is also possible to define environment variables for each job.</li>
+      <li>The <code>defaults</code> line defines a working directory. For us, all server code is present in the <code>server</code> directory.</li>
+      <li>We then define all the jobs. In this workflow, we have just one job called <code>setup-build-publish-deploy</code>.</li>
+      <li>The job consists of the following steps:
+        <ol>
+          <li>Checkout the current branch using an action called <code>checkout@v2</code> provided by GitHub.</li>
+          <li>Install the IBM CLI using <code>Install IBM CLI</code>.</li>
+          <li>Install the Cloud Foundry CLI in the <code>Install CF plugin</code> step.</li>
+          <li>Log into IBM Cloud using the CLI we just installed. This step is called <code>Log into IBM Cloud</code>.</li>
+          <li>Target the Cloud Foundry instance in the <code>Target CF</code> step.</li>
+          <li>Define the <code>Deploy manifest file</code> step to install our application to IBM Cloud.</li>
+        </ol>
+      </li>
+    </ol>
+    <h1>Enable GitHub Actions</h1>
+    <p>To enable GitHub action, log into GitHub and open your forked repo. Next, go to the <code>Actions</code> tab and click on <code>I understand my workflows, go ahead and enable them</code>.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/1-cicd-githubaction-enable.png" alt="">{ width=800}
+    </p>
+    <p>You should see the <code>Build and deploy to IBM Cloud Foundry</code> workflow on the left hand panel. Notice that no workflows have been run yet, as indicated in the center of the screen.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/2-cicd-githubaction-workflowscreen-empty.png" alt="">{ width=800}
+    </p>
+    <h1>Create IBM API secret</h1>
+    <p>You need to generate an IBM Cloud API Key so the CLI is able to log in. The key is used as <code>${{secrets.IBM_CLOUD_API_KEY}}</code> in the GitHub action. Generate the IBM API Key on the <a href="https://cloud.ibm.com/iam/apikeys?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank" rel="external">API keys page</a>. You may have to log in using your IBM Cloud credentials, if you are not already logged in. Click on <code>Create an IBM Cloud API key</code>.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/4-cicd-githubaction-iamkey.png" alt="">{ width=800}
+    </p>
+    <p>Next, enter name of the API key, and click on <code>Create</code>.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/5-cicd-githubaction-iamkey2.png" alt="">{ width=800}
+    </p>
+    <p>The page will generate a key for you in a new dialog. Click on <code>Copy</code> and paste the key in an accessible place. You will need this key later. Once you click outside the dialog box or click on the cross button in the dialog box, this key will not be visible to you again. So make sure you copy it somewhere safe.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/6-cicd-githubaction-iamkey3.png" alt="">{ width=800}
+    </p>
+    <p>We need to create the <code>IBM_CLOUD_API_KEY</code> secret next. Go to the <code>Settings</code> tab and click on <code>Secrets</code> on the left bar. Finally, click on <code>New repository secret</code>.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/3-cicd-githubaction-secret-1.png" alt="">{ width=800}
+    </p>
+    <p>Enter a name for <code>IBM_CLOUD_API_KEY</code> and the API key you copied earlier as the value.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/7-cicd-githubaction-secret-2.png" alt="">{ width=800}
+    </p>
+    <p>Click on <code>Add Secret</code> to finish adding the secret. You should now see the newly created secret on the page.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/8-cicd-githubaction-secret-3.png" alt="">{ width=800}
+    </p>
+    <h1>Configure your workflow</h1>
+    <p>
+      Now that actions are enabled, and the secret has been added, open the file <code>.github/workflows/push-cf.yml</code> in the Theia editor and fill out the environment variables. This is what the final file looks like for me:
+      
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/9-cicd-githubaction-env.png" alt="">{ width=800}
+    </p>
+    <h1>Test the updated app</h1>
+    <p>To test the application, commit change to the GitHub repository. This should kick off a new build and your changes will be visible on the application URL.</p>
+    <h1>Run the workflow</h1>
+    <p>Let's run the workflow now. Open the <code>Actions</code> tab again and click on the <code>Build and deploy to IBM Cloud Foundry</code> action. Then, click on <code>Run workflow</code> dropdown and the <code>Run workflow</code> button.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/10-cicd-githubaction-run-workflow.png" alt="">{ width=800}
+    </p>
+    <p>You should see the output logs in the same window. If you don't see anything, click on <code>Actions</code> tab again to refresh the page.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/11-cicd-githubaction-logs.png" alt="">{ width=800}
+    </p>
+    <p>If the workflow completes, you will see the URL of your application in the logs at the end.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_2_user_management/images/12-cicd-githubaction-appurl.png" alt="">{ width=800}
+    </p>
+    <h1>Submission</h1>
+    <p>Copy the URL of your forked repo to submit for peer review.</p>
+    <h1>Summary</h1>
+    <p>In this lab, you added a continuous integration and continuous deployment service to your application. As a result, you application will automatically get deployed once you commit your code to the GitHub repository.</p>
+    <h2>Author(s)</h2>
+    <h4>Upkar Lidder</h4>
+    <h4></h4>
+    <h3>Other Contributor(s)</h3>
+    <p>Yan Luo</p>
+    <p>Priya</p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-01-28</td>
+          <td>1.0</td>
+          <td>Upkar Lidder</td>
+          <td>Created new instructions for Capstone project</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2021. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>
