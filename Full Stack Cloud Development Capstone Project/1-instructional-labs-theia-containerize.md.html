@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_5_containerize/images/IDSNlogo.png" width="200" height="200">
+    <h1>Containerize your application</h1>
+    <p><strong>Estimated time needed:</strong> 60 mins</p>
+    <p>You have made good progress in your assignment thus far! Your Django application is running on IBM Cloud, and your team is happy. However, your boss has a new ask. The company is looking at using containers to manage and deploy the application. Furthermore, the management is interested in using the hybrid cloud strategy where some applications and services reside on a private cloud and others on a public cloud. To provide a more robust development experience, you are asked to look at Kubernetes. So, let's containerize your application now.</p>
+    <h1>Add Dockerfile</h1>
+    <p>Create a <code>Dockerfile</code> in the root directory. The file will have the following steps listed:</p>
+    <ol>
+      <li>Add base image.</li>
+      <li>Add requirements.txt file.</li>
+      <li>Install and update Python.</li>
+      <li>Change working directory.</li>
+      <li>Expose port.</li>
+      <li>Run command to start application.</li>
+    </ol>
+    <p>Here is an example file to get you started:</p>
+    <pre><code class="hljs language-basic">    FROM python:<span class="hljs-number">3.8</span>.<span class="hljs-number">2</span>
+
+    ENV PYTHONBUFFERED <span class="hljs-number">1</span>
+    ENV PYTHONWRITEBYTECODE <span class="hljs-number">1</span>
+
+    <span class="hljs-keyword">RUN</span> apt-<span class="hljs-keyword">get</span> update \
+        &#x26;&#x26; apt-<span class="hljs-keyword">get</span> install -y netcat
+
+    ENV APP=/app
+
+    # Change the workdir.
+    WORKDIR $APP
+
+    # Install the requi<span class="hljs-comment">rements</span>
+    COPY requi<span class="hljs-comment">rements.txt $APP</span>
+    <span class="hljs-keyword">RUN</span> pip install --upgrade pip
+    <span class="hljs-keyword">RUN</span> pip install -r requi<span class="hljs-comment">rements.txt</span>
+
+    # Copy the rest of the <span class="hljs-keyword">files</span>
+    COPY . $APP
+
+    EXPOSE <span class="hljs-number">8000</span>
+
+    <span class="hljs-keyword">RUN</span> chmod +x /app/entrypoint.sh
+    ENTRYPOINT [<span class="hljs-string">"/app/entrypoint.sh"</span>]
+
+    CMD [<span class="hljs-string">"gunicorn"</span>, <span class="hljs-string">"--bind"</span>, <span class="hljs-string">":8000"</span>, <span class="hljs-string">"--workers"</span>, <span class="hljs-string">"3"</span>, <span class="hljs-string">"djangobackend.wsgi"</span>]
+</code></pre>
+    <p>Notice that the the second to last command in Dockerfile refers to entrypoint.sh. This file should have the following content:</p>
+    <pre><code class="hljs language-bash">    <span class="hljs-comment">#!/bin/sh</span>
+
+    <span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$DATABASE</span>"</span> = <span class="hljs-string">"postgres"</span> ]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"Waiting for postgres..."</span>
+
+        <span class="hljs-keyword">while</span> ! nc -z <span class="hljs-variable">$DATABASE_HOST</span> <span class="hljs-variable">$DATABASE_PORT</span>; <span class="hljs-keyword">do</span>
+        sleep 0.1
+        <span class="hljs-keyword">done</span>
+
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"PostgreSQL started"</span>
+    <span class="hljs-keyword">fi</span>
+
+    <span class="hljs-comment"># Make migrations and migrate the database.</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Making migrations and migrating the database. "</span>
+    python manage.py makemigrations main --noinput 
+    python manage.py migrate --noinput 
+    <span class="hljs-built_in">exec</span> <span class="hljs-string">"<span class="hljs-variable">$@</span>"</span>
+</code></pre>
+    <p>Make sure to use the command <code>chmod +x ./entrypoint.sh</code> to make this file executable.</p>
+    <h1>Push built image to container registry</h1>
+    <p>If you remember from the previous course in this certification, you were asked to build your image and push to IBM Cloud Image Registry (ICR). You need to do the same here and then refer to this image in your Kubernetes deployment file. Replace $MY_NAMESPACE in commands below with your namespace.</p>
+    <pre><code class="hljs language-awk">    docker build -t us.icr.io<span class="hljs-regexp">/$MY_NAMESPACE/</span>dealership .
+</code></pre>
+    <p>Next, push the image to the container registry:</p>
+    <pre><code class="hljs language-gradle">    docker <span class="hljs-keyword">push</span> us.icr.io<span class="hljs-regexp">/$MY_NAMESPACE/</span>dealership
+</code></pre>
+    <h1>Add deployment artifacts</h1>
+    <p>Create <code>deployment.yaml</code> file to create the deployment and the service. It should look something like:</p>
+    <pre><code class="hljs language-yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">apps/v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Deployment</span>
+<span class="hljs-attr">metadata:</span>
+  <span class="hljs-attr">labels:</span>
+    <span class="hljs-attr">run:</span> <span class="hljs-string">dealership</span>
+  <span class="hljs-attr">name:</span> <span class="hljs-string">dealership</span>
+<span class="hljs-attr">spec:</span>
+  <span class="hljs-attr">replicas:</span> <span class="hljs-number">1</span>
+  <span class="hljs-attr">selector:</span>
+    <span class="hljs-attr">matchLabels:</span>
+      <span class="hljs-attr">run:</span> <span class="hljs-string">dealership</span>
+  <span class="hljs-attr">strategy:</span>
+    <span class="hljs-attr">rollingUpdate:</span>
+      <span class="hljs-attr">maxSurge:</span> <span class="hljs-number">25</span><span class="hljs-string">%</span>
+      <span class="hljs-attr">maxUnavailable:</span> <span class="hljs-number">25</span><span class="hljs-string">%</span>
+    <span class="hljs-attr">type:</span> <span class="hljs-string">RollingUpdate</span>
+  <span class="hljs-attr">template:</span>
+    <span class="hljs-attr">metadata:</span>
+      <span class="hljs-attr">labels:</span>
+        <span class="hljs-attr">run:</span> <span class="hljs-string">dealership</span>
+    <span class="hljs-attr">spec:</span>
+      <span class="hljs-attr">containers:</span>
+      <span class="hljs-bullet">-</span> <span class="hljs-attr">image:</span> <span class="hljs-string">us.icr.io/$MY_NAMESPACE/dealership:latest</span>
+        <span class="hljs-attr">imagePullPolicy:</span> <span class="hljs-string">Always</span>
+        <span class="hljs-attr">name:</span> <span class="hljs-string">dealership</span>
+        <span class="hljs-attr">ports:</span>
+        <span class="hljs-bullet">-</span> <span class="hljs-attr">containerPort:</span> <span class="hljs-number">8000</span>
+          <span class="hljs-attr">protocol:</span> <span class="hljs-string">TCP</span>
+      <span class="hljs-attr">restartPolicy:</span> <span class="hljs-string">Always</span>
+  <span class="hljs-attr">replicas:</span> <span class="hljs-number">1</span>
+</code></pre>
+    <h1>Deploy the application</h1>
+    <p>Create the deployment using the following command and your deployment file:</p>
+    <pre><code class="hljs language-coq">kubectl <span class="hljs-built_in">apply</span> -f deployment.yaml
+</code></pre>
+    <p>Normally, we would add a service to our deployment, however, we are going to use port-forwarding in this environment to see the running application.</p>
+    <pre><code class="hljs language-apache"><span class="hljs-attribute">kubectl</span> port-forward  us.icr.io/$MY_NAMESPACE/dealership <span class="hljs-number">8000</span>:<span class="hljs-number">8000</span>
+</code></pre>
+    <p>You can now use the <code>Launch Application</code> link on the top of the page to see the runnning application. You will get an error from the home page. Add <code>/djangoapp</code> at the end of the URL to see your application.</p>
+    <h2>Submission</h2>
+    <p>Submit the publicly available URL for the application running in the lab Kubernetes cluster.</p>
+    <h2>Author(s)</h2>
+    <h4>Upkar Lidder</h4>
+    <h4></h4>
+    <h3>Other Contributor(s)</h3>
+    <p>Upkar Lidder</p>
+    <p>Priya</p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-01-28</td>
+          <td>1.0</td>
+          <td>Upkar Lidder</td>
+          <td>Created new instructions for Capstone project</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2021. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

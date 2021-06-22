@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_4_dynamic_pages/images/IDSNlogo.png" width="200" height="200">
+    <h1>Add dynamic pages</h1>
+    <p><strong>Estimated time needed:</strong> 2 hour</p>
+    <p>
+      In the previous module, you created the necessary backend services to manage dealerships, reviews, and cars.
+      It's time to create user-friendly and aesthetic frontend pages to present these services to the end users.
+    </p>
+    <h1>Environment setup</h1>
+    <p>If your Theia workspace has been reset and you want to continue from what you have done previously, you can <code>git clone</code> or pull the latest code from your GitHub repository.</p>
+    <ul>
+      <li>Set up the Python runtime if your Theia workspace has been reset.</li>
+    </ul>
+    <pre><code class="hljs language-basic">pip3 install -r requi<span class="hljs-comment">rements.txt</span>
+</code></pre>
+    <p></p>
+    <p>Note that you may need to perform models migrations for a new Theia environment.</p>
+    <h1>Create a dealership Bootstrap table</h1>
+    <p>
+      In the <code>get_dealerships</code> view method you created in the previous lab, we simply returned the dealer names as a simple string in
+      a HTTPResponse.
+    </p>
+    <p>
+      In fact, a dealer object has multiple attributes and it would be better to be present it in a table with each row representing a dealer
+      and each column representing one attribute.
+    </p>
+    <p>First, we need to update the <code>get_dealerships</code> view to render a Django template to present dealers in a Bootstrap table.</p>
+    <ul>
+      <li>
+        <p>Open <code>djangoapp/views.py</code>, find <code>get_dealerships(request):</code> view method and create an empty <code>context</code> dictionary.</p>
+      </li>
+      <li>
+        <p>Add the <code>dealerships</code> list returned by <code>get_dealers_from_cf</code> method to the <code>context</code>.</p>
+      </li>
+      <li>
+        <p>Update the return statement to use <code>render(request, 'djangoapp/index.html', context)</code>.</p>
+      </li>
+    </ul>
+    <p>Now we can update <code>index.html</code> to display the dealership list appended in the context.</p>
+    <ul>
+      <li>
+        <p>Open <code>templates/djangoapp/index.html</code>, create a Bootstrap table <code>&#x3C;table></code> under <code>&#x3C;nav></code> bar.</p>
+      </li>
+      <li>
+        <p>For the table head <code>&#x3C;thead></code>, add a table row <code>&#x3C;tr></code> with following table header cells <code>&#x3C;th></code> represents the dealer attribute names:</p>
+        <ul>
+          <li><code>ID</code></li>
+          <li><code>Dealer Name</code></li>
+          <li><code>City</code></li>
+          <li><code>Address</code></li>
+          <li><code>Zip</code></li>
+          <li><code>State</code></li>
+        </ul>
+      </li>
+      <li>
+        <p>For the table body <code>&#x3C;tbody></code>, add a <code>&#x3C;tr></code> for each dealer object in <code>dealership_list</code>.</p>
+      </li>
+      <li>
+        <p>An example table code snippet would look like the following:</p>
+      </li>
+    </ul>
+    <pre><code class="hljs language-html"> <span class="hljs-tag">&#x3C;<span class="hljs-name">table</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"table"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"table"</span>></span>
+        <span class="hljs-tag">&#x3C;<span class="hljs-name">thead</span>></span>
+            <span class="hljs-tag">&#x3C;<span class="hljs-name">tr</span>></span>
+                <span class="hljs-tag">&#x3C;<span class="hljs-name">th</span> <span class="hljs-attr">data-field</span>=<span class="hljs-string">"id"</span>></span>ID<span class="hljs-tag">&#x3C;/<span class="hljs-name">th</span>></span>
+                ...
+            <span class="hljs-tag">&#x3C;/<span class="hljs-name">tr</span>></span>
+        <span class="hljs-tag">&#x3C;/<span class="hljs-name">thead</span>></span>
+        <span class="hljs-tag">&#x3C;<span class="hljs-name">tbody</span>></span>
+            {% for dealer in dealership_list %}
+                <span class="hljs-tag">&#x3C;<span class="hljs-name">tr</span>></span>
+                    <span class="hljs-tag">&#x3C;<span class="hljs-name">td</span>></span>{{dealer.id}}<span class="hljs-tag">&#x3C;/<span class="hljs-name">td</span>></span>
+                    ...
+                <span class="hljs-tag">&#x3C;/<span class="hljs-name">tr</span>></span>
+            {% endfor %}
+        <span class="hljs-tag">&#x3C;/<span class="hljs-name">tbody</span>></span>
+    <span class="hljs-tag">&#x3C;/<span class="hljs-name">table</span>></span>
+</code></pre>
+    <p></p>
+    <ul>
+      <li>
+        For the dealer name table cell, add a link pointing to <code>dealer_details</code> view
+        <code>&#x3C;td>&#x3C;a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}&#x3C;/a>&#x3C;/td></code>.
+      </li>
+    </ul>
+    <p>As such, users can click a dealer name to drill down to the dealer details page with reviews.</p>
+    <p>A finished dealership table may look like the following:</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_4_dynamic_pages/images/dealer_table.png" alt="image">
+    </p>
+    <ul>
+      <li>
+        <p>Next, let's try to add a filter to the state column so that user can filter dealers by state.</p>
+      </li>
+      <li>
+        <p>Update the Bootstrap <code>&#x3C;table></code> element by adding a <code>data-filter-control="true"</code> option to enable filtering.</p>
+      </li>
+    </ul>
+    <p>Now the <code>&#x3C;table></code> element becomes <code>&#x3C;table class="table" id="table" data-filter-control="true"></code></p>
+    <ul>
+      <li>
+        <p>
+          For the <code>state</code> head cell in <code>&#x3C;thead></code>, add a <code>data-filter-control="select"</code> option so it becomes
+          <code>&#x3C;th data-field="state" data-filter-control="select">State&#x3C;/th></code>. This will add a dropdown filter to <code>state</code> column.
+        </p>
+      </li>
+      <li>
+        <p>Add a JavaScript snippet to turn-on filter control for the <code>table</code> element.</p>
+      </li>
+    </ul>
+    <pre><code class="hljs language-xml">...
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">body</span>></span>
+
+<span class="hljs-tag">&#x3C;<span class="hljs-name">script</span>></span><span class="javascript">
+  $(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    $(<span class="hljs-string">'#table'</span>).bootstrapTable()
+  })
+</span><span class="hljs-tag">&#x3C;/<span class="hljs-name">script</span>></span>
+
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">html</span>></span>
+</code></pre>
+    <ul>
+      <li>
+        Now user should be able to filter the dealer list by the <code>state</code> column, like the following screenshot:
+        
+        <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_4_dynamic_pages/images/dealer_table_filter.png" alt="image">
+      </li>
+    </ul>
+    <p>You will find more detailed references about Bootstrap table with a filter near the end of this lab.</p>
+    <h1>Create a dealer details/reviews page</h1>
+    <p>By now, you should have finished the dealers table on the index page.</p>
+    <p>When a user clicks a dealer name on the table, a detailed dealer page should be rendered to show all reviews for the dealer.</p>
+    <p>Let's start making the dealer details page now.</p>
+    <p>First, we need to update <code>get_dealer_details</code> view to return a list of reviews for a specific dealer.</p>
+    <ul>
+      <li>
+        <p>Open <code>djangoapp/views.py</code> file and find <code>get_dealer_details</code> view method you created before.</p>
+      </li>
+      <li>
+        <p>Create an empty <code>context</code> dictionary and append the reviews list from <code>get_dealer_reviews_from_cf</code> method to context.</p>
+      </li>
+      <li>
+        <p>Update the return statement to use <code>render(request, 'djangoapp/dealer_details.html', context)</code>.</p>
+      </li>
+    </ul>
+    <p>Next, let's display each review as a Bootstrap card on the <code>dealer_details.html</code> page.</p>
+    <ul>
+      <li>
+        Open <code>dealer_details.html</code>, copy the <code>&#x3C;nav></code> bar in the <code>index.html</code>.
+        Then under <code>{% if user.is_authenticated %}</code>, add a link pointing to <code>add_review</code> view (GET request).
+      </li>
+    </ul>
+    <p>An authenticated user should be able to click on this link and add a review for the dealer. We will create a review submission page and update the <code>add_review</code> view later.</p>
+    <ul>
+      <li>
+        <p>In the <code>dealer_details.html</code>, add a <code>&#x3C;div class="card-columns"></code> element to organize review cards.</p>
+      </li>
+      <li>
+        <p>For each review in reviews list, create a <code>&#x3C;div class="card"></code> with the following child elements:</p>
+        <ul>
+          <li>
+            A <code>&#x3C;img class="card-img-left"></code> to visualize the sentiment using three provided emoji images in <code>static/media/emoji</code> folder.
+            For example, if the review sentiment is positive, set the <code>src="{{MEDIA_URL}}/emoji/positive.png"</code>
+          </li>
+          <li>
+            A <code>&#x3C;div class="card-body"></code> with several <code>card-title</code> text labels to show the car model name, make, and purchase year. In addition,
+            add another <code>card-text</code> to show review content
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>You could use the <code>add_review</code> view method created in previous lab to manually post some mockup reviews for a dealer.</p>
+      </li>
+    </ul>
+    <p>The completed dealer detail page may look like the following screenshot:</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_4_dynamic_pages/images/dealer_reviews.png" alt="image">
+    </p>
+    <h1>Create a review submission page</h1>
+    <p>Next, let's create a real review submission page to allow user create a review for a dealer. This page works similar to the signup page you created before.</p>
+    <ul>
+      <li>Open <code>templates/djangoapp/add_review.html</code> and add a <code>&#x3C;form></code> with action pointing to <code>djangoapp:add_review</code> (POST request).</li>
+    </ul>
+    <p>
+      Note that you need to add the dealer id as URL parameter here. For example, <code>action="{% url 'djangoapp:add_review' dealer_id%}"</code>.
+      The <code>dealer_id</code> could be sent back within the context or you may call get dealer cloud function to get the dealer object and append it into context.
+    </p>
+    <ul>
+      <li>
+        <p>Add the following child elements to the <code>&#x3C;form></code>:</p>
+        <ul>
+          <li>A <code>&#x3C;textarea class="form-control" id="content" name="content" rows="2" required>&#x3C;/textarea></code> to receive review content.</li>
+          <li>
+            A <code>&#x3C;input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck"></code> to ask if users purchased car from
+            this dealer before or not.
+          </li>
+          <li>
+            A Bootstrap dropdown <code>&#x3C;select name="car" id="car" class="form-select" required></code> to ask user select a car owned by this dealer.
+            (which you created using Django admin site).
+          </li>
+        </ul>
+        <p>Each select <code>&#x3C;option></code> represents a car with make and produce year information. For example:</p>
+        <pre><code class="hljs language-handlebars"><span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">select</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"car"</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"car"</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"form-select"</span> <span class="hljs-attr">required</span>></span>
+     {% for car in cars %}
+         <span class="hljs-tag">&#x3C;<span class="hljs-name">option</span> <span class="hljs-attr">selected</span> <span class="hljs-attr">value</span>=</span></span><span class="hljs-template-variable">{{<span class="hljs-name">car.id</span>}}</span><span class="xml"><span class="hljs-tag">></span></span><span class="hljs-template-variable">{{<span class="hljs-name">car.name</span>}}</span><span class="xml">-</span><span class="hljs-template-variable">{{<span class="hljs-name">car.make.name</span>}}</span><span class="xml">-</span><span class="hljs-template-variable">{{ <span class="hljs-name">car.year</span>|date:<span class="hljs-string">"Y"</span> }}</span><span class="xml"><span class="hljs-tag">&#x3C;/<span class="hljs-name">option</span>></span>
+     {% endfor %}
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">select</span>></span>
+</span></code></pre>
+        <ul>
+          <li>
+            A date input <code>&#x3C;input class="date-own form-control" type="text" name="purchasedate" id="purchasedate"></code> to ask users pick a purchase date.
+            You may also add the following script to define the purchase date format.
+          </li>
+        </ul>
+        <pre><code class="hljs language-xml">  <span class="hljs-tag">&#x3C;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">"text/javascript"</span>></span><span class="javascript">
+      $(<span class="hljs-string">'.date-own'</span>).datepicker({
+         <span class="hljs-attr">format</span>: <span class="hljs-string">'mm/dd/yyyy'</span>
+       });
+ </span><span class="hljs-tag">&#x3C;/<span class="hljs-name">script</span>></span>
+</code></pre>
+        <ul>
+          <li>A Submit button to post the form data to <code>add_review</code> view.</li>
+        </ul>
+      </li>
+    </ul>
+    <p>
+      The completed review form may look like the following screenshot:
+      
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0321EN-SkillsNetwork/labs/module_4_dynamic_pages/images/add_review.png" alt="image">
+    </p>
+    <p>You can find some detailed references about Bootstrap forms near the end of this lab.</p>
+    <p>Next, you will need to update <code>add_review</code> view to handle both <code>GET</code> and <code>POST</code> request.</p>
+    <ul>
+      <li>
+        <p>Open <code>djangoapp/views.py</code>, find <code>add_review</code> view method.</p>
+      </li>
+      <li>
+        <p>
+          When <code>request.method ==</code>GET<code> </code>, first query the cars with the dealer id to be reviewed. The queried cars will be used in the <code>&#x3C;select></code> dropdown.
+          Then append the queried cars into context and call render method to render <code>add_review.html</code>.
+        </p>
+      </li>
+      <li>
+        <p>When <code>request.method ==</code>POST<code> </code>, you need to update the <code>json_payload["review"]</code> to use the actual values obtained from the review form.</p>
+        <ul>
+          <li>
+            For review time, you may use some Python datetime formatting method such as <code>datetime.utcnow().isoformat()</code> to convert it into ISO format to be consistent with the format in
+            Cloudant.
+          </li>
+          <li>For purchase, you may use <code>car.year.strftime("%Y")</code> to only get the year from the date field.</li>
+        </ul>
+      </li>
+      <li>
+        <p>
+          Update return statement to redirect user to the dealer details page once the review post is done for example.
+          <code>redirect("djangoapp:dealer_details", dealer_id=dealer_id)</code>
+        </p>
+      </li>
+    </ul>
+    <p>Now test your templates and updated views to make sure you can add a review for a dealer and see the created review on the dealer details page.</p>
+    <h1>External References</h1>
+    <ul>
+      <li><a href="https://bootstrap-table.com/docs/extensions/filter-control/?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank" rel="external">Table Filter Control</a></li>
+      <li><a href="https://getbootstrap.com/docs/4.0/components/card/?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank" rel="external">Bootstrap Cards</a></li>
+      <li><a href="https://getbootstrap.com/docs/4.0/components/forms/?utm_medium=Exinfluencer&#x26;utm_source=Exinfluencer&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_id=NA-SkillsNetwork-Channel-SkillsNetworkCoursesIBMCD0321ENSkillsNetwork23970854-2021-01-01" target="_blank" rel="external">Bootstrap Forms</a></li>
+    </ul>
+    <h1>Summary</h1>
+    <p>
+      In this lab, you have created dealer list and dealer details. You have added dealer review Django templates and updated corresponding views
+      to append service results into the context object and render the dynamic pages.
+    </p>
+    <p>At this point, you have completed the main app development work. Next, you just need to containerize the app and deploy it on Kubernetes.</p>
+    <h2>Author(s)</h2>
+    <h4>Yan Luo</h4>
+    <h4></h4>
+    <h4>Upkar Lidder</h4>
+    <h4></h4>
+    <h3>Other Contributor(s)</h3>
+    <p>Lavanya</p>
+    <p>Priya</p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-02-23</td>
+          <td>1.0</td>
+          <td>Yan Luo</td>
+          <td>Completed the initial version</td>
+        </tr>
+        <tr>
+          <td>2021-01-28</td>
+          <td>1.0</td>
+          <td>Upkar Lidder</td>
+          <td>Created new instructions for Capstone project</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2021. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>
