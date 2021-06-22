@@ -1,0 +1,11 @@
+  applications:
+  - name: dealerreiew
+    routes:
+      - route: dennislamcv.mybluemix.net
+    memory: 128M
+    buildpack: python_buildpack
+  - name: dealerreiew-nginx
+    routes:
+      - route: dennislamcv.mybluemix.net/static
+    memory: 128M
+    buildpack: staticfile_buildpack
