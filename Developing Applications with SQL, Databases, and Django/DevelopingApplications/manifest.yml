@@ -1,0 +1,11 @@
+  applications:
+  - name: onlinecourse
+    routes:
+      - route: dennislamcv1.us-south.cf.appdomain.cloud
+    memory: 128M
+    buildpack: python_buildpack
+  - name: onlinecourse-nginx
+    routes:
+      - route: dennislamcv1.us-south.cf.appdomain.cloud/static
+    memory: 128M
+    buildpack: staticfile_buildpack
