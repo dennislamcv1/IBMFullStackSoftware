@@ -1,0 +1,51 @@
+{
+  "reviews": [
+    {
+      "id": 1,
+      "name": "Berkly Shepley",
+      "dealership": 15,
+      "review": "Total grid-enabled service-desk",
+      "purchase": true,
+      "purchase_date": "07/11/2020",
+      "car_make": "Audi",
+      "car_model": "A6",
+      "car_year": 2010
+    },
+    {
+      "id": 2,
+      "name": "Gwenora Zettoi",
+      "dealership": 23,
+      "review": "Future-proofed foreground capability",
+      "purchase": true,
+      "purchase_date": "09/17/2020",
+      "car_make": "Pontiac",
+      "car_model": "Firebird",
+      "car_year": 1995
+    },
+    {
+      "id": 3,
+      "name": "Lion Reames",
+      "dealership": 29,
+      "review": "Expanded global groupware",
+      "purchase": true,
+      "purchase_date": "10/20/2020",
+      "car_make": "Mazda",
+      "car_model": "MX-5",
+      "car_year": 2003
+    },
+    {
+      "id": 4,
+      "name": "Iorgos Colley",
+      "dealership": 13,
+      "review": "Optional heuristic software",
+      "purchase": false
+    },
+    {
+      "id": 5,
+      "name": "Kissee Noirel",
+      "dealership": 46,
+      "review": "Diverse client-server success",
+      "purchase": false
+    }
+  ]
+}
