@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <h2>Lab: Getting started with GitHub</h2>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/IDSNlogo.png" width="200" height="200">
+    <p><strong>Estimated time</strong>: 10 minutes</p>
+    <p>In this lab, you will get started with GitHub by creating a GitHub account and project. You will then add a file to the project using the GitHub web interface.</p>
+    <h2>Objectives</h2>
+    <p>After completing this lab, you will be able to:</p>
+    <ol>
+      <li>Describe GitHub</li>
+      <li>Create a GitHub account</li>
+      <li>Add a project / repository</li>
+      <li>Create and edit a file</li>
+      <li>Upload and commit a file</li>
+    </ol>
+    <h2>GitHub overview</h2>
+    <p>Before we learn to use GitHub, let's first review Git. <em>Git</em> is an open source version-control system for software development. It is simply a place where you can collect all your folders and files for a project. This collection of folders and files is usually called a repository.</p>
+    <p><em>GitHub</em> is a Git repository hosting service, but it adds many of its own features. While Git is a command-line tool and you also need to host and maintain a server using the command line, GitHub provides the Git server for you, as well as a web-based graphical interface. It also provides access control and several collaboration features, such as wikis and basic task management tools, for every project.</p>
+    <p>GitHub provides cloud storage for source code, supports all popular programming languages, and streamlines the iteration process. GitHub includes a free plan for individual developers and for hosting open source projects.</p>
+    <h2>1. Creating a GitHub account</h2>
+    <p>To create an account in GitHub, complete the following steps:</p>
+    <ol>
+      <li>
+        <p>Go to the <a href="https://github.com/join" target="_blank" rel="external">Join GitHub page</a> and create an account. <strong>Note</strong>: If you already have a GitHub account, log in now.</p>
+      </li>
+      <li>
+        <p>Provide the necessary details to create an account as shown below. When you have finished, click <strong>Create account</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Create_account.PNG" alt="image">
+        </p>
+      </li>
+      <li>
+        <p>Click <strong>Verify</strong> to verify the account and then click <strong>Done</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Verify.PNG" alt="image" title="Verify">
+        </p>
+      </li>
+      <li>
+        <p>After you have verified, click <strong>Join a Free Plan</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/JoinFreePlan.PNG" alt="image" title="Join Free Plan">
+        </p>
+      </li>
+      <li>
+        <p>Select your reasons for joining GitHub and click <strong>Complete Setup</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/CompleteSetup.PNG" alt="image" title="Complete Setup">
+        </p>
+      </li>
+      <li>
+        <p>You will receive a verification email from GitHub. Click the enclosed link to verify your email. <strong>Note</strong>: If you do not receive a verification email, click <strong>Resend verification email</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/VerifyEmailAddress.PNG" alt="image" title="Verify Email Address">
+        </p>
+        <p>When you have verified your email, you will see a screen that looks like this:</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/EmailVerfied.png" alt="image" title="Email Verified">
+        </p>
+      </li>
+    </ol>
+    <h2>2: Add a project / repository</h2>
+    <p>To add a new repository, complete the following steps:</p>
+    <ol>
+      <li>
+        <p>At the top right of the GitHub home page, click on the "+" icon and select <strong>New repository</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Create_repo.png" alt="image" title="New Repo">
+        </p>
+      </li>
+      <li>
+        <p>Enter a repository name and select the <strong>Initialize this repository with a README</strong> check box.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Repo_details.png" alt="image" title="Repo Details">
+        </p>
+      </li>
+      <li>
+        <p>Click <strong>Create repository</strong>. The repository is created and its home page is displayed.</p>
+      </li>
+    </ol>
+    <p>Next, you'll start editing the repository.</p>
+    <h2>3: Create and edit a file</h2>
+    <p><strong>Edit a file</strong></p>
+    <p>Although you will normally create a file before you edit it, in this case the <code>README.md</code> file has already been created for you. To edit that file, complete the following steps:</p>
+    <ol>
+      <li>
+        <p>Your repository root folder contains just one file: <code>README.md</code>. Click the pencil icon at the right to edit the file.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Edit_file.png" alt="image" title="Edit File">
+        </p>
+      </li>
+      <li>
+        <p>Add some text to the file.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Add_text.png" alt="image" title="Add Text">
+        </p>
+      </li>
+      <li>
+        <p>Scroll to the bottom of the file and click <strong>Commit changes</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Commit.png" alt="image" title="Commit">
+        </p>
+      </li>
+      <li>
+        <p>Confirm that the text you added to the file has been saved.</p>
+      </li>
+    </ol>
+    <p><strong>Create a new file</strong></p>
+    <ol>
+      <li>
+        <p>Click on the repository name to go back to the main branch, similar to this repository called <code>testrepo</code>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Add_file1.png" alt="image" title="Add_file1">
+        </p>
+      </li>
+      <li>
+        <p>Click <strong>Add file</strong> and select <strong>Create new file</strong> to create a new file in the repository.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Create_new_file.png" alt="image" title="Create New File">
+        </p>
+      </li>
+      <li>
+        <p>Enter a file name and extension; for example, <code>firstpython.py</code>. Add the lines of code displayed in the following image to your file:</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Add_filename.png" alt="image" title="Add filename">
+        </p>
+      </li>
+      <li>
+        <p>Scroll to the bottom of the page. You can optionally add a description of your update (for example, "Adding a new file"). Click <strong>Commit</strong> to create your new file.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/commit_newfile.png" alt="image" title="Commit New file">
+        </p>
+        <p>Your file is now added to your repository and the repository listing shows when the file was added or last revised.</p>
+      </li>
+    </ol>
+    <h2>4. Upload and commit a file</h2>
+    <p>To upload a local file and commit it to your repository, complete the following steps:</p>
+    <ol>
+      <li>
+        <p>On your repository page, click <strong>Add file</strong> and then select <strong>Upload files</strong> to upload a file.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/upload.png" alt="image" title="Upload">
+        </p>
+      </li>
+      <li>
+        <p>Click <strong>choose your files</strong> and choose a file from your computer. You can upload any file (for example, a .txt, .ipynb, or .png file) to the repository.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/select_files.png" alt="image" title="Select files">
+        </p>
+      </li>
+      <li>
+        <p>When the file finishes uploading, click <strong>Commit changes</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/commit_upload.png" alt="image" title="Commit Uplaod">
+        </p>
+        <p>Your file is uploaded in the repository.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/check_change.png" alt="image" title="Check change">
+        </p>
+      </li>
+    </ol>
+    <h2>Summary</h2>
+    <p>Congratulations! In this lab, you have learned how to create a new repository, add a new file, edit a file, upload a file, and commit your changes. We encourage you to continue to update your repository to become familiar with the processes that you have learned.</p>
+    <h2>Tutorial details</h2>
+    <p><strong>Authors:</strong></p>
+    <ul>
+      <li>Romeo Kienzler</li>
+      <li>Malika Singla</li>
+    </ul>
+    <p><strong>Other contributors:</strong></p>
+    <ul>
+      <li>Rav Ahuja</li>
+      <li>Upkar Lidder</li>
+    </ul>
+    <p><strong>Changelog:</strong></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2020-08-18</td>
+          <td>0.6</td>
+          <td>Upkar Lidder</td>
+          <td>Updated GitHub Overview section</td>
+        </tr>
+        <tr>
+          <td>2020-07-16</td>
+          <td>0.5</td>
+          <td>Malika Singla</td>
+          <td>Spell check, step number added</td>
+        </tr>
+        <tr>
+          <td>2020-07-14</td>
+          <td>0.4</td>
+          <td>Rav Ahuja</td>
+          <td>Changed logo, updated effort, title, intro, objectives, added Authors and Changelog</td>
+        </tr>
+        <tr>
+          <td>2020-07-13</td>
+          <td>0.3</td>
+          <td>Malika Singla</td>
+          <td>Added to GitLab and made some formatting changes, added objectives, etc.</td>
+        </tr>
+        <tr>
+          <td>2020-07-03</td>
+          <td>0.2</td>
+          <td>Malika Singla</td>
+          <td>Ported to markdown and added GitHub account signup, new screenshots, etc.</td>
+        </tr>
+        <tr>
+          <td>2020-06-30</td>
+          <td>0.1</td>
+          <td>Romeo Kienzler</td>
+          <td>Drafted initial version</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2020. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

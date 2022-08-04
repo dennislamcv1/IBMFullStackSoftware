@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0131EN-SkillsNetwork/labs/project/images/IDSNlogo.png" width="200" height="200">
+    <h1>Part 2 - GitHub CLI</h1>
+    <p><strong>Estimated Time:</strong> 60 minutes</p>
+    <h2>About This SN Labs Cloud IDE</h2>
+    <p>This Skills Network Labs Cloud IDE provides a hands-on environment for course and project related labs. It utilizes Theia, an open-source IDE (Integrated Development Environment) platform, that can be run on desktop or on the cloud. To complete this lab, we will be using the Cloud IDE based on Theia.</p>
+    <p>
+      <strong>Important Notice about this lab environment</strong>
+      Please be aware that sessions for this lab environment are not persisted. Every time you connect to this lab, a new environment is created for you. Any data you may have saved in the earlier session would get lost. Plan to complete this lab in a single session, to avoid losing your data.
+    </p>
+    <h2>Scenario</h2>
+    <p>Congratulations on starting your company's journey with Git and GitHub by open sourcing the simple interest calculator bash script. Your changes have been accepted and merged into a new global <a href="https://github.com/ibm-developer-skills-network/jbbmo-Introduction-to-Git-and-GitHub" target="_blank" rel="external">repository</a>. Other developers have contributed to this repository over time as well. Your team has found a mistake in one of the markdown files. You are asked to fork this repository and fix the mistake by using Git CLI in the provided lab environment and opening a pull request.</p>
+    <h2>Objectives</h2>
+    <p>After completing this lab you will have demonstrated that you can:</p>
+    <ol>
+      <li>Fork the upstream repository into your own account.</li>
+      <li>Clone the code locally in the lab environment.</li>
+      <li>Create a branch in the repository.</li>
+      <li>Create a Pull Request from the forked repository to the upstream repository.</li>
+      <li>Merge the branch back into the <code>main</code> branch.</li>
+      <li>Revert a change that you made earlier.</li>
+    </ol>
+    <p><strong>Note:</strong> Throughout this lab you will be prompted copy and paste URLs into a notepad and save the notepad on your own device. These URLs will be uploaded for peer review in the Final Submission section of the course. You can use any notepad app to keep note of your URLs.</p>
+    <h2>Task 8: Fork the repository</h2>
+    <ol>
+      <li>
+        <p>Log in to GitHub and fork this project's <a href="https://github.com/ibm-developer-skills-network/jbbmo-Introduction-to-Git-and-GitHub" target="_blank" rel="external">sample source repository</a>.</p>
+      </li>
+      <li>
+        <p><strong>Save the URL of your forked repository in a notepad to submit later for peer review.</strong></p>
+      </li>
+    </ol>
+    <h2>Task 9: Fix the typo and submit the first pull request</h2>
+    <ol>
+      <li>
+        <p>Clone the forked repository in the lab environment.</p>
+      </li>
+      <li>
+        <p>Create a branch named <code>bug-fix-typo</code>.</p>
+      </li>
+      <li>
+        <p>Change the footer in the main README.md file from</p>
+        <pre><code class="hljs language-avrasm">© <span class="hljs-number">2022</span> XYZ, <span class="hljs-keyword">Inc</span>.
+</code></pre>
+        <p>to</p>
+        <pre><code class="hljs language-avrasm">© <span class="hljs-number">2021</span> XYZ, <span class="hljs-keyword">Inc</span>.
+</code></pre>
+      </li>
+      <li>
+        <p>Add and commit your fix with a meaningful message.</p>
+      </li>
+      <li>
+        <p>Push your fix to your forked repository (the origin) in the same branch. You will need to generate a personal access token from GitHub.com to use as your password in this step. Follow the instructions in the lab named <strong><a href="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0131EN-SkillsNetwork/labs/create-personal-token/instructions.md.html" target="_blank" rel="external">Generate GitHub personal access token</a></strong>.</p>
+      </li>
+      <li>
+        <p>Create a pull request to the original upstream repository.</p>
+      </li>
+      <li>
+        <p>Once the PR is closed by the GitHub bot, <strong>save the URL in a notepad to submit later for peer review.</strong></p>
+      </li>
+      <li>
+        <p>Merge the <code>bug-fix-typo</code> branch back into your main branch. This is an important step before you continue with Task 10.</p>
+      </li>
+    </ol>
+    <h2>Task 10: Revert the typo and submit a second pull request</h2>
+    <ol>
+      <li>Check out the main branch. The file should now read:
+        <pre><code class="hljs language-avrasm">© <span class="hljs-number">2021</span> XYZ, <span class="hljs-keyword">Inc</span>.
+</code></pre>
+      </li>
+      <li>Create a new branch named <code>bug-fix-revert</code>.</li>
+      <li>Revert back the change you implemented in the previous task using the <code>git revert</code> command. The file should now read:
+        <pre><code class="hljs language-avrasm">© <span class="hljs-number">2022</span> XYZ, <span class="hljs-keyword">Inc</span>.
+</code></pre>
+      </li>
+      <li>Push the revert to your repository in the <code>bug-fix-revert</code> branch.</li>
+      <li>Create a new pull request. As before, your second PR is closed automatically. <strong>Save the URL of this PR in a notepad to submit later for peer review</strong></li>
+    </ol>
+    <h2>Checklist</h2>
+    <p>Save your notepad file locally for use in your submission later in this course. Check that you have all 3 URLs noted.</p>
+    <h2>Summary</h2>
+    <p>Congratulations! You have completed both parts of the final project. You have demonstrated that you know how to create an open source project in Git, make changes to that project and make it available to the community. You can fork a GitHub repository, clone that repository to your local system, make changes to the local repository, commit the changes locally, push it back to your GitHub fork, and create a pull request to add your update to the original repository.</p>
+    <h2>Author(s)</h2>
+    <h4>Upkar Lidder</h4>
+    <h4></h4>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-12-29</td>
+          <td>0.1</td>
+          <td>Upkar Lidder</td>
+          <td>Initial instructions for the final project</td>
+        </tr>
+        <tr>
+          <td>2022-01-13</td>
+          <td>0.2</td>
+          <td>Alison Woolford</td>
+          <td>Updates to instructions for learner clarity</td>
+        </tr>
+        <tr>
+          <td>2022-01-13</td>
+          <td>1.0</td>
+          <td>Upkar Lidder</td>
+          <td>Final version</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2022. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

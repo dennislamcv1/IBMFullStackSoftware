@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <h2>Hands-on Lab: Cloning, committing and pushing your GitHub repo from the command line.</h2>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/IDSNlogo.png" width="200" height="200">
+    <p><b>Effort</b> : 30 mins</p>
+    <h2>Objectives</h2>
+    <p>After completing this lab you will be able to:</p>
+    <ol>
+      <li>Clone your GitHub repository locally.</li>
+      <li>Make changes to the cloned files.</li>
+      <li>Add a new file.</li>
+      <li>Check the status.</li>
+      <li>Commit changes.</li>
+      <li>Push the changes back to GitHub.</li>
+    </ol>
+    <h2>Pre-requisites</h2>
+    <p>GitHub account, with a project in it, as illustrated in the <a href="GitHub1_Getting_Started.md.html">this lab</a>.</p>
+    <p>GitBash or git installed on your local desktop, as in <a href="GitBash_Install.md.html">this lab</a>.</p>
+    <p>Create ssh keys, as in <a href="SSH_Key.md.html">this lab</a></p>
+    <p>Add SSH Key to GitHub, as in <a href="GitHub_AddSSHtoRepo.md.html">this lab</a></p>
+    <h2>Exercise 1: Clone a repo</h2>
+    <p>To clone a repo, you need the ssh url of the repo.</p>
+    <ol>
+      <li>
+        <p>To get the ssh url, login into GitHub.</p>
+      </li>
+      <li>
+        <p>Navigate to the repo you wish to clone.</p>
+      </li>
+      <li>
+        <p>Click on the 'Code' button.</p>
+      </li>
+      <li>
+        <p>Click on the 'clipboard icon' to copy the url. Paste this url where you can access it later.</p>
+      </li>
+    </ol>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/github-ssh-url-copy.png" alt="ssh url">
+    </p>
+    <ol start="5">
+      <li>
+        <p>On your desktop open a terminal.(gitbash if you are using windows os)</p>
+      </li>
+      <li>
+        <p>Navigate to a directory where you wish to clone the repo.</p>
+      </li>
+      <li>
+        <p>Run the command "git clone 
+          <your repo="" ssh="" url="">"</your>
+        </p>
+      </li>
+    </ol>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/git-clone.png" alt="">
+    </p>
+    <ol start="8">
+      <li>
+        <p>This will clone the repo on GitHub into your current directory.</p>
+      </li>
+      <li>
+        <p>You can see all the downloaded files under a directory named as your repo name.</p>
+      </li>
+    </ol>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/git-clone-output.png" alt="">
+    </p>
+    <p>change to the simple_interest_calulator directory and list the files to verify all the files got downloaded</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/list-files.png" alt="">
+    </p>
+    <h2>Exercise 2: Make changes to cloned files.</h2>
+    <p>Using your favourite editor make the changes to the html file.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/edit-code.png" alt="">
+    </p>
+    <p>git status will show all the modified files.</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/git-status.png" alt="">
+    </p>
+    <h2>Exercise 3: Add a new file to the local repo</h2>
+    <p>Let us add a new file to the local repo.</p>
+    <p>Using a text editor, create a new file "browser-support.txt".</p>
+    <p>Add "Chrome, Firefox, Edge" into the file.</p>
+    <p>Save the file.</p>
+    <h2>Exercise 4: Check the status</h2>
+    <p>Run "git status" to see info on the modified files.</p>
+    <p>Let us add the file for committing.</p>
+    <p>Run "git add browser-support.txt"</p>
+    <h2>Exercise 5: Commit the changes</h2>
+    <p>git commit will record all the changes into the local stating area.</p>
+    <p>To commit the changes you have made. Run git commit with a message like this.</p>
+    <p>git commit -m 'added a new file browser-support.txt'</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/git-commit.png" alt="">
+    </p>
+    <p>Now all the changes you have made thus far, get committed locally.</p>
+    <h2>Excercise 6: Generate Personal Access Token</h2>
+    <ol>
+      <li>
+        <p>Verify your email address if it hasn’t been verified on Github.</p>
+      </li>
+      <li>
+        <p>In the upper-right corner of any page, click your profile photo, then click Settings.</p>
+      </li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/profile_settings.png" style="margin-left:30px;margin-top:10px;margin-bottom:10px;width:75%;border: solid 1px grey">
+    <ol start="3">
+      <li>In the left sidebar, click Developer settings.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/dev_settings.png" style="margin-left:30px;margin-top:10px;margin-bottom:10px;width:75%;border: solid 1px grey">
+    <ol start="4">
+      <li>In the left sidebar, click Personal access tokens and click on <code>Generate Tokens</code></li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/PAT.png" style="margin-left:30px;margin-top:10px;margin-bottom:10px;width:75%;border: solid 1px grey">
+    <ol start="5">
+      <li>Give your token a descriptive name. To give your token an expiration, select the Expiration drop-down menu, then click a default or use the calendar picker. Select the scopes, or permissions, you'd like to grant this token. To use your token to access repositories from the command line, select repo.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/new_personal_token.png" style="margin-left:30px;margin-top:10px;margin-bottom:10px;width:75%;border: solid 1px grey">
+    <ol start="6">
+      <li>Click Generate token and make a note of it.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/generate_token.png" style="margin-left:30px;margin-top:10px;margin-bottom:10px;width:75%;border: solid 1px grey">
+    <ol start="7">
+      <li>Make sure you copy the token and keep it safe. It is not visible to you again.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/copy_token.png" style="margin-left:30px;margin-top:10px;margin-bottom:10px;width:75%;border: solid 1px grey">
+    <blockquote>
+      <p><strong>Treat your tokens like passwords and keep them a secret.</strong></p>
+    </blockquote>
+    <blockquote>
+      <p>Once you have a token, you can enter the Personal Access Token as password when performing Git operations.</p>
+    </blockquote>
+    <h2>Excercise 7: Push the code to GitHub</h2>
+    <p>The git <code>push</code> command will enable you to sync all the changes made locally to the GitHub web repository.</p>
+    <pre><code class="hljs language-sql_more">  1. Run the following command <span class="hljs-keyword">with</span> your actual HTTPS <span class="hljs-keyword">link</span>:
+
+     <span class="hljs-string">`git push [HTTPS link]`</span>
+
+     You will be prompted <span class="hljs-keyword">by</span> git <span class="hljs-keyword">for</span> your username <span class="hljs-keyword">and</span> password.
+
+  <span class="hljs-number">2.</span> <span class="hljs-keyword">Type</span> your GitHub username <span class="hljs-keyword">and</span> <span class="hljs-keyword">for</span> the <span class="hljs-keyword">password</span>, enter the personal <span class="hljs-keyword">access</span> token you <span class="hljs-keyword">generated</span> <span class="hljs-keyword">in</span> the previous task. <span class="hljs-keyword">When</span> you <span class="hljs-keyword">are</span> <span class="hljs-keyword">authenticated</span>, <span class="hljs-keyword">all</span> committed changes <span class="hljs-keyword">are</span> synced <span class="hljs-keyword">with</span> your GitHub repository.
+</code></pre>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/git-push.png" alt="">
+    </p>
+    <p>You can now visit the GitHub repository page and check to ensure that the revised and newly added files are in place.</p>
+    <h2>Summary</h2>
+    <p>In this lab, you have learned how to clone a GitHub repository, make changes to it, commit the changes locally, and push it back to GitHub.</p>
+    <h2>Author(s)</h2>
+    <h4>Ramesh Sannareddy</h4>
+    <h4></h4>
+    <h3>Other Contributor(s)</h3>
+    <p>Rav Ahuja</p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2020-08-23</td>
+          <td>1</td>
+          <td>Ramesh Sannareddy</td>
+          <td>Initia version created.</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

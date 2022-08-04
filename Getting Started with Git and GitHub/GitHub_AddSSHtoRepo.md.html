@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <h1>Lab: Adding an SSH key to GitHub</h1>
+    <img style="float:left;" src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/IDSNlogo.png" width="200" height="200">
+    <p><strong>Estimated time</strong>: 15 minutes</p>
+    <h2>Prerequisites</h2>
+    <p>This hands-on lab requires you to have already generated an SSH key. See the <a href="SSH_Key.md.html">Generating an SSH key</a> lab for instructions.</p>
+    <h2>Steps</h2>
+    <p>To add an SSH key to GitHub, you need to copy the SSH key that you generated in the previous lab. Open a terminal and then complete the following steps:</p>
+    <ol>
+      <li>
+        <p>In the terminal, run the following command:</p>
+        <p><code>cat ~/.ssh/id_rsa.pub | clip</code></p>
+        <p><strong>Note</strong>: If <code>clip</code> doesn't work, run <code>cat ~/.ssh/id_rsa.pub</code> in the command line and the copy the output.</p>
+      </li>
+      <li>
+        <p>Sign in to GitHub. At the top right, click the drop-down menu on your profile image and select <strong>Settings</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/settings.png" alt="image">
+        </p>
+      </li>
+      <li>
+        <p>From the "Personal settings" menu, select <strong>SSH and GPG keys</strong>, as shown in the following image:</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/SSHKey_option_new.png" alt="image">
+        </p>
+      </li>
+      <li>
+        <p>Click <strong>New SSH key</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/AddNewSSH.png" alt="image">
+        </p>
+      </li>
+      <li>
+        <p>Enter a title for the new SSH key. In the <strong>Key</strong> field, paste the key that you copied in step 1, above. The pasted key should include <strong>Your email address</strong> at the end, as shown in the following image:</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/add_ssh_keytoaccount_new.png" alt="image">
+        </p>
+      </li>
+      <li>
+        <p>Click <strong>Add SSH Key</strong>. The SSH key is added to your account.</p>
+      </li>
+    </ol>
+    <h2>Summary</h2>
+    <p>Congratulations! You have now learned how to add an SSH key to GitHub.</p>
+    <h2>Tutorial details</h2>
+    <p><strong>Author:</strong></p>
+    <p>Malika Singla</p>
+    <p><strong>Changelog:</strong></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2020-07-16</td>
+          <td>0.2</td>
+          <td>Malika Singla</td>
+          <td>Spell check, screenshot updated and steps added</td>
+        </tr>
+        <tr>
+          <td>2020-07-15</td>
+          <td>0.1</td>
+          <td>Malika Singla</td>
+          <td>Initial version created</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2020. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

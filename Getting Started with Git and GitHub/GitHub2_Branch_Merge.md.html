@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <h1>Lab: Create and merge a branch in your GitHub repository</h1>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/images/IDSNlogo.png" width="200" height="200">
+    <p><strong>Estimated time</strong>: 15 minutes</p>
+    <h2>Objectives</h2>
+    <p>After completing this lab you will be able to:</p>
+    <ol>
+      <li>Create a branch</li>
+      <li>Commit changes to a child branch</li>
+      <li>Open a pull request</li>
+      <li>Merge a pull request into the main branch</li>
+    </ol>
+    <h2>Prerequisites</h2>
+    <p>This hands-on lab requires you to have created a GitHub account and added a project to it, as covered in the <a href="GitHub1_Getting_Started.md.html">Getting started with GitHub</a> lab.</p>
+    <blockquote>
+      <p>NOTE: In the past the default branch in your GitHub repo used the name <code>master</code>. Effective Oct 1. 2020, all new GitHub repositories use the more inclusive term <code>main</code> as the name of the default branch instead of <code>master</code>.</p>
+    </blockquote>
+    <h2>1. Create a branch</h2>
+    <p>You can create or delete branches using your repository's GitHub web page. To add a branch to your repository, complete the following steps:</p>
+    <ol>
+      <li>
+        <p>Go to you repository's main page. Note that when you created your repository, the <strong>main</strong> branch was created for you:</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Check_Repo.png" alt="image" title="Check Repo">
+        </p>
+      </li>
+      <li>
+        <p>At the top of the file list, locate the <strong>Branch</strong> drop-down menu. (By default, the menu displays <strong>Branch: main</strong>.) Click the drop-down menu, type the name of the branch you want to create, and press Enter on your keyboard.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Enter_branch_name.png" alt="image" title="Enter_branch_name">
+        </p>
+        <p>Your repository now has two branches: <strong>Main</strong> and <strong>Child_Branch</strong>. You can click the drop-down menu to see your branches.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Branch_number_changed.png" alt="image" title="Branch_number_changed">
+        </p>
+      </li>
+    </ol>
+    <p>Any files that were in the <strong>main</strong> branch have now been copied to <strong>Child_Branch</strong>. Note, however, that when you add or edit a file in <strong>Child_Branch</strong>, that change will not automatically be made in the <strong>main</strong> branch.</p>
+    <h2>2. Add a file to a branch</h2>
+    <p>To add a file to your new branch, ensure that <strong>Child_Branch</strong> (or whatever name you gave your branch) is displayed in the <strong>Branch</strong> drop-down menu and complete the following steps:</p>
+    <ol>
+      <li>
+        <p>Click <strong>Add file > Create new file</strong> to create a file in the repository.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Create_file_branch.png" alt="image" title="Create_file_branch">
+        </p>
+      </li>
+      <li>
+        <p>Type a name and extension for the file -- for example, <code>testchild.py</code> -- and add the following lines to the body of the new file:</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Add_content_branch.png" alt="image" title="Add_content_branch">
+        </p>
+      </li>
+      <li>
+        <p>Scroll to the bottom of the page, add a description of the file you are about to add (note that the description is optional), and click <strong>Commit</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Commit_branch_file.png" alt="image" title="Commit_branch_file">
+        </p>
+        <p>The file is added to your child branch.</p>
+      </li>
+    </ol>
+    <h2>3. Open a pull request</h2>
+    <p>The file that you added to your child branch is not automatically added to the <strong>main</strong> branch. (You can check this by using the <strong>Branch</strong> drop-down menu to go to the <strong>main</strong> branch; note that there is no <code>testchild.py</code> file in the file list):</p>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Master_check.png" alt="image" title="Master_check">
+    </p>
+    <p>You can also compare the two branches and open a <em>pull request</em>, which will enable you to copy the changes that you've made in the child branch -- in this case, adding a new file -- to the <strong>main</strong> branch.</p>
+    <ol>
+      <li>
+        <p>In <strong>Child_Branch</strong>, click the <strong>Compare &#x26; pull request</strong> button.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Compare_Pull.png" alt="image" title="Compare_Pull">
+        </p>
+      </li>
+      <li>
+        <p>Scroll to the bottom of the page and note that there is <strong>1 changed file</strong> listed.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/File_Changed.png" alt="image" title="File_Changed">
+        </p>
+      </li>
+      <li>
+        <p>Scroll up and note that GitHub is comparing the <strong>main</strong> and <strong>Child_Branch</strong> branches and that there are no conflicts between the two. Optionally, you can add a comment to the pull request. Click <strong>Create pull request</strong>.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Create_Pull_Request.png" alt="image" title="Create_Pull_Request">
+        </p>
+        <p>The pull request is created and can now be merged by a repository administrator.</p>
+      </li>
+    </ol>
+    <h2>4. Merge a pull request</h2>
+    <p>To merge a pull request into a project, complete the following steps:</p>
+    <ol>
+      <li>
+        <p>Click the <strong>Pull requests</strong> tab. A list of pending pull requests is displayed.</p>
+      </li>
+      <li>
+        <p>Click the pull request that you want to merge into the main project. If you are satisfied with the changes, click <strong>Merge pull request</strong> to accept the pull request and merge the updates. (You can add a comment if you choose.)</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Merge_Request.png" alt="image" title="Merge_Request">
+        </p>
+      </li>
+      <li>
+        <p>When you click <strong>Merge pull request</strong>, a <strong>Confirm merge</strong> button is displayed. Click that button to complete the merge.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Confirm_Merge.png" alt="image" title="Confirm_Merge">
+        </p>
+        <p>The pull request has now been merged successfully. Note that you can delete the child branch because your changes have been incorporated into the <strong>main</strong> branch.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/Merge_Success.png" alt="image" title="Merge_Success">
+        </p>
+        <p>Check the list of files in the <strong>main</strong> branch to confirm that it now includes the file that you added in the pull request.</p>
+        <p>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DS0105EN-Coursera/labs/GitHub/images/File_Add_Master.png" alt="image" title="File_Add_Master">
+        </p>
+      </li>
+    </ol>
+    <h2>Summary</h2>
+    <p>Congratulations! You've now learned how to create a branch, edit and commit changes in that branch, open a pull request, and merge the pull request into your main project. We encourage you to continue to experiment with branches and pull requests to become more familiar with the concepts and processes.</p>
+    <h2>Tutorial details</h2>
+    <p><strong>Author:</strong></p>
+    <ul>
+      <li>Malika Singla</li>
+    </ul>
+    <p><strong>Other contributor:</strong></p>
+    <ul>
+      <li>Rav Ahuja</li>
+    </ul>
+    <p><strong>Changelog:</strong></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2022-01-14</td>
+          <td>0.4</td>
+          <td>Rav Ahuja</td>
+          <td>Added note about main branch</td>
+        </tr>
+        <tr>
+          <td>2020-07-16</td>
+          <td>0.4</td>
+          <td>Malika Singla</td>
+          <td>Spell check, steps added</td>
+        </tr>
+        <tr>
+          <td>2020-07-14</td>
+          <td>0.3</td>
+          <td>Rav Ahuja</td>
+          <td>Changed logo, updated title, intro, objectives, added Effort, Authors and Changelog</td>
+        </tr>
+        <tr>
+          <td>2020-07-13</td>
+          <td>0.2</td>
+          <td>Malika Singla</td>
+          <td>Added to GitLab and made some formatting changes, added objectives, etc.</td>
+        </tr>
+        <tr>
+          <td>2020-06-30</td>
+          <td>0.1</td>
+          <td>Malika Singla</td>
+          <td>Drafted initial version</td>
+        </tr>
+      </tbody>
+    </table>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>
