@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/styles/sn.css">
+  </head>
+  <body>
+    <center>
+      <img src="https://gitlab.com/ibm/skills-network/courses/placeholder101/-/raw/master/labs/module%201/images/IDSNlogo.png" width="300" alt="cognitiveclass.ai logo">
+    </center>
+    <h1>Creating a Python Package</h1>
+    <p>Estimated time needed: <strong>30</strong> minutes</p>
+    <h2>Objectives</h2>
+    <p>In this lab you will :</p>
+    <ul>
+      <li>Create a module named basic</li>
+      <li>Add two functions to the module basic</li>
+      <li>Create a module named stats</li>
+      <li>Add two functions to the module stats</li>
+      <li>Create a python package named mymath</li>
+      <li>Verify that the package is working</li>
+    </ul>
+    <h1>Lab</h1>
+    <h3>Create Package</h3>
+    <ul>
+      <li>
+        <p>On the window to the right, click on the <strong>View</strong> menu and select <strong>Explorer</strong> option, as shown in the image below.<br><br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0222EN-SkillsNetwork/labs/module%206/Lab-%20Creating%20a%20Python%20Package/images/menu_explorer.png">
+        </p>
+      </li>
+      <li>
+        <p>Your IDE now should look like the image below.<br><br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0222EN-SkillsNetwork/labs/module%206/Lab-%20Creating%20a%20Python%20Package/images/explorer_view.png">
+        </p>
+      </li>
+      <li>
+        <p>On the window to the right, click on the <strong>File</strong> menu and select <strong>New Folder</strong> option, as shown in the image below.<br><br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0222EN-SkillsNetwork/labs/module%206/Lab-%20Creating%20a%20Python%20Package/images/menu_new_folder.png">
+        </p>
+      </li>
+      <li>
+        <p>Enter <strong>mymath</strong> and click OK as shown in the image below.<br><br>
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0222EN-SkillsNetwork/labs/module%206/Lab-%20Creating%20a%20Python%20Package/images/new_folder_popup.png">
+        </p>
+      </li>
+    </ul>
+    <h1>Create the first module</h1>
+    <ul>
+      <li>Create a python module named basic</li>
+    </ul>
+    <p>Create a file named <strong>basic.py</strong>.<br><br></p>
+    <p>Copy and paste the below code into basic.py</p>
+    <pre><code>def square(number):
+    """
+    This function returns the square of a given number
+    """
+    return number ** 2
+
+
+def double(number):
+    """
+    This function returns twice the value of a given number
+    """
+    return number * 2
+
+def add(a, b):
+    """
+    This function returns the sum of given numbers
+    """
+    return a + b
+</code></pre>
+    <p>{: codeblock}</p>
+    <p>You should see a screen like this now.</p>
+    <p>Save the file <strong>basic.py</strong></p>
+    <h1>Create the second module</h1>
+    <ul>
+      <li>Create a module named stats</li>
+    </ul>
+    <p>Create a file named <strong>stats.py</strong>.<br><br></p>
+    <p>Copy and paste the below code into stats.py</p>
+    <pre><code>def mean(numbers):
+    """
+    This function returns the mean of the given list of numbers
+    """
+    return sum(numbers)/len(numbers)
+
+
+def median(numbers):
+    """
+    This function returns median of the given list of numbers
+    """
+    numbers.sort()
+   
+    if len(numbers) % 2 == 0:
+       median1 = numbers[len(numbers) // 2]
+       median2 = numbers[len(numbers) // 2 - 1]
+       mymedian = (median1 + median2) / 2
+    else:
+       mymedian = numbers[len(numbers) // 2]
+    return mymedian
+</code></pre>
+    <p>{: codeblock}</p>
+    <p>You should see a screen like this now.</p>
+    <p>Save the file <strong>stats.py</strong></p>
+    <h1>Create <strong>init</strong>.py</h1>
+    <ul>
+      <li>Create the file <code>__init__.py</code></li>
+    </ul>
+    <p>Copy and paste the below code into <code>__init__.py</code></p>
+    <pre><code>from . import basic
+from . import stats
+</code></pre>
+    <p>{: codeblock}</p>
+    <p>Save the file <code>__init__.py</code></p>
+    <p>Now your directory structure should look like</p>
+    <pre><code>mymath
+mymath/__init__.py
+mymath/basic.py
+mymath/statistics.py
+</code></pre>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0222EN-SkillsNetwork/labs/module%206/Lab-%20Creating%20a%20Python%20Package/images/dir_structure.png">
+    </p>
+    <p>You are done creating a package</p>
+    <h1>Verify the package</h1>
+    <ul>
+      <li>On the window to the right, click on the <strong>Terminal</strong> menu and select <strong>New Terminal</strong> option, as shown in the image below.</li>
+      <li>You will see a terminal open up on the bottom of the screen like the one in the image below.<br>
+        <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0222EN-SkillsNetwork/labs/module%206/Lab-%20Creating%20a%20Python%20Package/images/new_terminal.png"><br>
+      </li>
+      <li>At the terminal type <strong>python3</strong> to invoke python interpreter.</li>
+      <li>Once the python interpreter is loaded.</li>
+      <li>At the python prompt type <strong>import mymath</strong></li>
+      <li>If the above command runs without errors, it is an indication that the mymath package is successfully loaded.</li>
+      <li>At the python prompt type <strong>mymath.basic.add(3,4)</strong></li>
+      <li>You should see an output <em>7</em> on the screen.</li>
+      <li>At the python prompt type <strong>mymath.stats.mean([3,4,5])</strong></li>
+      <li>You should see an output <em>4.0</em> on the screen.</li>
+      <li>Type <strong>exit()</strong> to quit python interpreter.</li>
+    </ul>
+    <p>
+      <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0222EN-SkillsNetwork/labs/module%206/Lab-%20Creating%20a%20Python%20Package/images/package_testing.png">
+    </p>
+    <h2>Create a new module named geometry and add to the mymath package.</h2>
+    <ul>
+      <li>Create a module name geometry</li>
+      <li>Add a function named <code>area_of_rectangle</code> that takes length and breadth as input and returns the area of a rectangle.</li>
+      <li>Add a function named <code>area_of_circle</code> that takes radius as input and returns the area of a circle.</li>
+      <li>Modify the <code>__init__.py</code> to include this module.</li>
+      <li>Import and test the function <code>area_of_circle</code> from python terminal.</li>
+    </ul>
+    <h2>Authors</h2>
+    <p>Ramesh Sannareddy</p>
+    <h3>Other Contributors</h3>
+    <p>Rav Ahuja</p>
+    <h2>Change Log</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date (YYYY-MM-DD)</th>
+          <th>Version</th>
+          <th>Changed By</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2020-11-25</td>
+          <td>0.1</td>
+          <td>Ramesh Sannareddy</td>
+          <td>Created initial version of the lab</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Copyright © 2020 IBM Corporation. This notebook and its source code are released under the terms of the <a href="https://cognitiveclass.ai/mit-license?cm_mmc=Email_Newsletter-_-Developer_Ed%2BTech-_-WW_WW-_-SkillsNetwork-Courses-IBM-DA0321EN-SkillsNetwork-21426264&#x26;cm_mmca1=000026UJ&#x26;cm_mmca2=10006555&#x26;cm_mmca3=M12345678&#x26;cvosrc=email.Newsletter.M12345678&#x26;cvo_campaign=000026UJ&#x26;cm_mmc=Email_Newsletter-_-Developer_Ed%2BTech-_-WW_WW-_-SkillsNetwork-Courses-IBM-DA0321EN-SkillsNetwork-21426264&#x26;cm_mmca1=000026UJ&#x26;cm_mmca2=10006555&#x26;cm_mmca3=M12345678&#x26;cvosrc=email.Newsletter.M12345678&#x26;cvo_campaign=000026UJ&#x26;cm_mmc=Email_Newsletter-_-Developer_Ed%2BTech-_-WW_WW-_-SkillsNetwork-Courses-IBM-DA0321EN-SkillsNetwork-21426264&#x26;cm_mmca1=000026UJ&#x26;cm_mmca2=10006555&#x26;cm_mmca3=M12345678&#x26;cvosrc=email.Newsletter.M12345678&#x26;cvo_campaign=000026UJ&#x26;cm_mmc=Email_Newsletter-_-Developer_Ed%2BTech-_-WW_WW-_-SkillsNetwork-Courses-IBM-DA0321EN-SkillsNetwork-21426264&#x26;cm_mmca1=000026UJ&#x26;cm_mmca2=10006555&#x26;cm_mmca3=M12345678&#x26;cvosrc=email.Newsletter.M12345678&#x26;cvo_campaign=000026UJ&#x26;cm_mmc=Email_Newsletter-_-Developer_Ed%2BTech-_-WW_WW-_-SkillsNetwork-Courses-IBMDeveloperSkillsNetwork-PY0222EN-SkillsNetwork-23455715&#x26;cm_mmca1=000026UJ&#x26;cm_mmca2=10006555&#x26;cm_mmca3=M12345678&#x26;cvosrc=email.Newsletter.M12345678&#x26;cvo_campaign=000026UJ&#x26;cm_mmc=Email_Newsletter-_-Developer_Ed%2BTech-_-WW_WW-_-SkillsNetwork-Courses-IBMDeveloperSkillsNetwork-PY0222EN-SkillsNetwork-23455715&#x26;cm_mmca1=000026UJ&#x26;cm_mmca2=10006555&#x26;cm_mmca3=M12345678&#x26;cvosrc=email.Newsletter.M12345678&#x26;cvo_campaign=000026UJ" target="_blank" rel="external">MIT License</a>.</p>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.min.js"></script>
+  </body>
+</html>

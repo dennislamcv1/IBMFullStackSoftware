@@ -1,0 +1,2 @@
+sudo python3 -m pip install --upgrade --force pip
+

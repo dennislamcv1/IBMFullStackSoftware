@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/styles/sn.css">
+  </head>
+  <body>
+    <h1>Hands-on Lab: Static Code Analysis</h1>
+    <center>
+      <img src="https://gitlab.com/ibm/skills-network/courses/placeholder101/-/raw/master/labs/module%201/images/IDSNlogo.png" width="300" alt="cognitiveclass.ai logo">
+    </center>
+    <h2>Static Code Analysis Lab</h2>
+    <p>Estimated time needed: <strong>30</strong> minutes</p>
+    <h2>Objectives</h2>
+    <p>After completing this lab you will be able to:</p>
+    <ul>
+      <li>Install pylint package</li>
+      <li>Run Static Code Analysis on a python program</li>
+      <li>Check the compliance score of a python program.</li>
+      <li>Fix common mistakes and improve the compliance score.</li>
+    </ul>
+    <h1>Install the pylint package</h1>
+    <ul>
+      <li>Open a new terminal</li>
+      <li>At the terminal, run the below command.</li>
+      <li>pip3 install pylint</li>
+      <li>This should install the pylint package.</li>
+    </ul>
+    <h1>Create a sample python file for static code analysis</h1>
+    <p>Create a new file named <strong>sample1.py</strong></p>
+    <p>Copy and paste the below code into <strong>sample1.py</strong></p>
+    <pre><code>def add(number1, number2):
+    return number1 + number2
+
+num1 = 4
+num2 = 5
+total = add(num1, num2)
+print("The sum of {} and {} is {}".format(num1, num2, total))
+</code></pre>
+    <p>{: codeblock}</p>
+    <p>Save the file <strong>sample1.py</strong></p>
+    <h1>Run pylint</h1>
+    <ul>
+      <li>Open a terminal</li>
+      <li>run the below command</li>
+      <li>pylint sample1.py</li>
+      <li>Pylint goes through every line of code and gives you a list all the non-compliant lines.</li>
+      <li>Pylint gives you a compliance score (10 being maximum).</li>
+    </ul>
+    <h1>Correct the mistakes identified by pylint.</h1>
+    <ul>
+      <li>Based on the report given by pylint changes were made to this code to address the following issues.
+        <ul>
+          <li>Exactly one space required after comma</li>
+          <li>Exactly one space required around assignment</li>
+        </ul>
+      </li>
+      <li>Create a new file named <strong>sample2.py</strong></li>
+      <li>Copy and paste the below code into <strong>sample2.py</strong></li>
+    </ul>
+    <pre><code>
+def add(number1, number2):
+    return number1 + number2
+
+NUM1 = 4
+num2 = 5
+total = add(NUM1, num2)
+print("The sum of {} and {} is {}".format(NUM1, num2, total))
+
+</code></pre>
+    <p>{: codeblock}</p>
+    <p>Save the file <strong>sample2.py</strong></p>
+    <h1>Run pylint</h1>
+    <ul>
+      <li>Open a terminal</li>
+      <li>run the below command</li>
+      <li>pylint sample2.py</li>
+      <li>This will give you the compliance score.</li>
+      <li>This time you should see the score improve.</li>
+    </ul>
+    <h1>Your task</h1>
+    <p>Improve the score in sample2.py to a perfect 10 by correcting all the issues pointed out by pylint. If cant figure out how to solve some issues it is helpful to google the pylint message.</p>
+    <h1>Congratulations!</h1>
+    <p>You now know how to perform static code analysis.</p>
+    <h2>Authors</h2>
+    <p>Ramesh Sannareddy</p>
+    <h3>Other Contributors</h3>
+    <p>Rav Ahuja</p>
+    <h2>Change Log</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date (YYYY-MM-DD)</th>
+          <th>Version</th>
+          <th>Changed By</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2020-01-29</td>
+          <td>1.1</td>
+          <td>Rav Ahuja</td>
+          <td>Formatting &#x26; license changes</td>
+        </tr>
+        <tr>
+          <td>2020-11-25</td>
+          <td>1.0</td>
+          <td>Ramesh Sannareddy</td>
+          <td>Created initial version of the lab</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Copyright © 2020 IBM Corporation. All rights reserved.</p>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.min.js"></script>
+  </body>
+</html>

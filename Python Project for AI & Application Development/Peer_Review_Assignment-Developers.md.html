@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/styles/sn.css">
+  </head>
+  <body>
+    <center>
+      <img src="https://gitlab.com/ibm/skills-network/courses/placeholder101/-/raw/master/labs/module%201/images/IDSNlogo.png" width="300" alt="cognitiveclass.ai logo">
+    </center>
+    <h1>Peer Review Assignment - Developers</h1>
+    <p>Estimated time needed: <strong>60</strong> minutes</p>
+    <h2>Objectives</h2>
+    <p>In this assignment you will:</p>
+    <ul>
+      <li>Use Watson APIs to create functions.</li>
+      <li>Create a function that translates English to French.</li>
+      <li>Create a function that translates English to German.</li>
+      <li>Run coding standards check against the functions above.</li>
+      <li>Write unit tests to test the above functions.</li>
+      <li>Run unit tests and interpret the results.</li>
+      <li>Package the above functions and tests as a standard python package.</li>
+    </ul>
+    <h1>Important Notice</h1>
+    <ul>
+      <li>Please keep in mind that sessions for this lab environment are not persisted. If you will not be completing the entire lab in one sitting, please save your code outisde of this environment, so you can resume your work without loss.</li>
+    </ul>
+    <h2>Provision Watson Translation Service</h2>
+    <ul>
+      <li>Before you start, ensure you have provisioned an instance of the Watson Language Translator service and have API information available.</li>
+    </ul>
+    <h1>Create Translation functions</h1>
+    <h2>Create translator.py</h2>
+    <ul>
+      <li>Create a new file called <code>translator.py</code></li>
+    </ul>
+    <h2><strong>Task1:</strong> Write a function that translates English text to French in translator.py</h2>
+    <ul>
+      <li>
+        <p>name the function as <strong>english_to_french</strong></p>
+      </li>
+      <li>
+        <p>Hint : You may refer to the API labs in the Python for Data Science, AI and Development course. Here are links to the Jupyter notebooks for the API labs in that course. <a href="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0101EN-SkillsNetwork/labs/Module%205/PY0101EN-5.1_Intro_API.ipynb">API Lab 1</a> | <a href="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-PY0101EN-SkillsNetwork/labs/Module%205/PY0101EN-5.2_API_2.ipynb">API Lab 2</a></p>
+      </li>
+      <li>
+        <p>You may refer to the IBM Watson Language Translation API documents <a href="https://cloud.ibm.com/apidocs/language-translator?code=python">here.</a></p>
+      </li>
+      <li>
+        <p>Take a screenshot of your function and save it as a .jpg or .png with the filename <code>english_to_french</code>. You will be prompted to upload the screenshot in the Peer Assignement that follows.</p>
+      </li>
+    </ul>
+    <h1>Write unit test for the translation function</h1>
+    <h2>Create tests.py</h2>
+    <ul>
+      <li>Create a new file called <code>tests.py</code></li>
+    </ul>
+    <h2><strong>Task 2:</strong> Write the unit tests for English to French translator function in tests.py</h2>
+    <ul>
+      <li>write at least 3 tests</li>
+      <li>test for null input</li>
+      <li>test for the translation of the world 'Hello</li>
+      <li>Take a screenshot of your unit tests and save it as a .jpg or .png with the filename <code>english_to_french_unittests</code>.</li>
+    </ul>
+    <h1><strong>Task 3:</strong> Write a function that translates English text to German in translator.py</h1>
+    <ul>
+      <li>name the function as <strong>english_to_german</strong></li>
+      <li>Take a screenshot of your function and save it as a .jpg or .png with the filename <code>english_to_german</code>.</li>
+    </ul>
+    <h1><strong>Task 4:</strong> Write the unit tests for English to German translator function in tests.py</h1>
+    <ul>
+      <li>write at least 3 tests</li>
+      <li>test for null input</li>
+      <li>test for the translation of the world 'Hello</li>
+      <li>Take a screenshot of your unit tests and save it as a .jpg or .png with the filename <code>english_to_german_unittests</code>.</li>
+    </ul>
+    <h1><strong>Task 5:</strong> Check your code against python coding standards</h1>
+    <ul>
+      <li>Make sure your rating is at least 7.</li>
+      <li>Take a screenshot of the output of the pylint analysis report showing your score and save it as a .jpg or .png with the filename <code>pylint_score</code>.</li>
+    </ul>
+    <h1><strong>Task 6:</strong> Run tests</h1>
+    <ul>
+      <li>To run tests follow the steps below:</li>
+      <li>Open a new terminal using the Terminal -> New Terminal option from the menu.</li>
+      <li>At the terminal run the command <strong>python3 tests.py</strong></li>
+      <li>Take a screenshot of test results and save it as a .jpg or .png with the filename <code>unit_test_results</code>.</li>
+    </ul>
+    <h1><strong>Task 7:</strong> Package the above functions and tests as a standard python package.</h1>
+    <h3>step 1 - create folder named machinetranslation</h3>
+    <h3>step 2 - create <code>__init__.py</code> file</h3>
+    <h3>step 3 - copy the file with functions</h3>
+    <h3>step 4 - create a folder called tests under the newly created folder</h3>
+    <h3>step 5 - copy the unit tests into the tests folder</h3>
+    <ul>
+      <li>Take a screenshot of the folder structure of the package ( From the menu go to View -> Explorer to set the explorer view) an save it as a .jpg or .png with the filename <code>package_folder_structure</code>.</li>
+    </ul>
+    <h1>Congratulations!</h1>
+    <p>You have completed the tasks for this project. In the peer assignement that follows, you will be required to upload the screenshots you saved in this lab.</p>
+    <h2>Authors</h2>
+    <p>Ramesh Sannareddy</p>
+    <h3>Other Contributors</h3>
+    <p>Rav Ahuja</p>
+    <p>Azim Hirjani</p>
+    <p>Alison Woolford</p>
+    <h2>Change Log</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date (YYYY-MM-DD)</th>
+          <th>Version</th>
+          <th>Changed By</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-01-29</td>
+          <td>1.3</td>
+          <td>Rav Ahuja</td>
+          <td>Additional instructions, formatting, navigation</td>
+        </tr>
+        <tr>
+          <td>2021-01-29</td>
+          <td>1.2</td>
+          <td>Alison Woolford</td>
+          <td>Added prompts for screenshots</td>
+        </tr>
+        <tr>
+          <td>2021-01-29</td>
+          <td>1.1</td>
+          <td>Azim Hirjani</td>
+          <td>Fixed typos and license</td>
+        </tr>
+        <tr>
+          <td>2020-11-25</td>
+          <td>1.0</td>
+          <td>Ramesh Sannareddy</td>
+          <td>Created initial version of the lab</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Copyright © 2020 IBM Corporation. All rights reserved.</p>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.min.js"></script>
+  </body>
+</html>
