@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/images/IDSNlogo.png" width="200" height="200">
+    <p><em>Note: Though this lab is split into multiple parts, it is highly recommended it is all completed in one sitting as the project environment may not be persisted. If for any reason that is not possible, please push your changes to git so that the changes are copied to your remote repository and you can start where you left.</em></p>
+    <details>
+      <summary><i>Click here for instructions to push it into github</i></summary>From the project directory `/home/projects/cazgi-IBM-Watson-NLU-Project` that you cloned, run the following commands one after the other.
+      <pre><code class="hljs language-routeros">git <span class="hljs-builtin-name">add</span> .
+</code></pre>
+      <pre><code class="hljs language-nginx"><span class="hljs-attribute">git</span> commit -m<span class="hljs-string">"Temporary changes"</span>
+</code></pre>
+      <pre><code class="hljs language-armasm"><span class="hljs-symbol">git</span> <span class="hljs-keyword">push</span>
+</code></pre>
+    </details>
+    <h1>Final Project (~3 hours)</h1>
+    <h2>Part A: Fork the Git repository to have the server and client code you need to start</h2>
+    <ol>
+      <li>
+        <p>Go to the <a href="https://github.com/ibm-developer-skills-network/cazgi-IBM-Watson-NLU-Project" target="_blank" rel="external">repository</a> which has the partially developed code for server side and client side.</p>
+      </li>
+      <li>
+        <p>Create a fork of the repository into your own. You will need to have a github account of your own to do so.</p>
+      </li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-forkrepo.png">
+    <ol start="3">
+      <li>Copy the <strong>url</strong> of your repository. <strong>This needs to be submitted as part of the final submission.</strong></li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-repourl.png">
+    <ol start="4">
+      <li>
+        <p>
+          Go to your repository and copy the clone url.
+          
+          <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-clone.png">
+        </p>
+      </li>
+      <li>
+        <p>Open a terminal.</p>
+      </li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/new-terminal.png" width="75%">
+    <ol start="6">
+      <li>Clone the repository by pasting the url you copied from the git repository.</li>
+    </ol>
+    <pre><code class="hljs language-crmsh">git <span class="hljs-keyword">clone</span> <span class="hljs-title">&#x3C;your_repo_name</span>>
+</code></pre>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-clonedrepo.png" width="75%">
+    <ol start="7">
+      <li>This will clone the repository with server and client files in your home directory in the lab environment. Check the same with the following command.</li>
+    </ol>
+    <pre><code class="hljs language-ebnf"><span class="hljs-attribute">ls</span>
+</code></pre>
+    <p></p>
+    <p>The output should list the directory named <code>cazgi-IBM-Watson-NLU-Project</code>.</p>
+    <ol start="8">
+      <li>Change to the project directory and check its contents.</li>
+    </ol>
+    <pre><code class="hljs language-jboss-cli"><span class="hljs-keyword">cd</span> cazgi-IBM-Watson-NLU-Project
+<span class="hljs-keyword">ls</span>
+</code></pre>
+    <p></p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-checkclone.png" width="75%">
+    <h1>Part B: Install the necessary packages</h1>
+    <h2>Exercise 1 - Install client-side packages</h2>
+    <ol>
+      <li>Change to client directory <code>sentimentAnalyzeClient</code>.</li>
+    </ol>
+    <pre><code class="hljs language-bash"><span class="hljs-built_in">cd</span> cazgi-IBM-Watson-NLU-Project/sentimentAnalyzeClient
+</code></pre>
+    <p></p>
+    <ol start="2">
+      <li>All packages are needed to be installed are listed in <code>package.json</code>. To install and save those packages, run the following command in the terminal.</li>
+    </ol>
+    <pre><code class="hljs language-sql_more">npm <span class="hljs-keyword">install</span> <span class="hljs-comment">--save</span>
+</code></pre>
+    <p></p>
+    <ol start="3">
+      <li>After the installations get through, run <code>npm start</code> to start the client side. If the React server starts without any issues, it confirms that all the necessary packages were installed.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-startclient.png" width="75%">
+    <ol start="4">
+      <li>Click on launch application and connect to port 3000 to access the React page. The client will be rendered on the browser as below.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-reactclient.png" width="75%">
+    <ol start="5">
+      <li>
+        <p>To stop the server press Ctrl + C in the terminal.</p>
+      </li>
+      <li>
+        <p>Run <code>npm run-script build</code>. Please note this is customized in package.json to generate and copy the client code to the server.</p>
+      </li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-buildclient.png" width="75%">
+    <h2>Exercise 2 - Install Server-side packages</h2>
+    <ol>
+      <li>Change to the server directory.</li>
+    </ol>
+    <pre><code class="hljs language-awk">cd <span class="hljs-regexp">/home/</span>projects<span class="hljs-regexp">/cazgi-IBM-Watson-NLU-Project/</span>sentimentAnalyzeServer
+</code></pre>
+    <p></p>
+    <ol start="2">
+      <li>All packages are needed to be installed are listed in <code>package.json</code>. Run <code>npm install --save</code>, to install and save those packages.</li>
+    </ol>
+    <details>
+      <summary>Click here for the checklist of required packages</summary>
+      <ul>
+        <li>cors 2.8.5</li>
+        <li>express 4.17.1</li>
+        <li>nodemon 2.0.6</li>
+      </ul>
+    </details>
+    <ol start="3">
+      <li>Run the server using the following command.</li>
+    </ol>
+    <pre><code class="hljs language-coffeescript"><span class="hljs-built_in">npm</span> start
+</code></pre>
+    <p></p>
+    <ol start="4">
+      <li>If all the required packages are successfully installed, the server should start without any issues.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-startserver.png" width="75%">
+    <ol start="5">
+      <li>Click on launch application and connect to port 8080 to access the React page through the server. The same page you saw earlier, will be rendered through the client. Click around and analyze the output you get.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-reactclientthroughserver.png" width="75%">
+    <ol start="6">
+      <li>Press Ctrl+C to stop the server.</li>
+    </ol>
+    <h1>Part C: Install IBM Watson package and set up the .env file</h1>
+    <ol>
+      <li>Install the ibm-watson package in your server side using the following command.</li>
+    </ol>
+    <pre><code class="hljs language-sql_more">npm <span class="hljs-keyword">install</span> <span class="hljs-comment">--save ibm-watson</span>
+</code></pre>
+    <p></p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-ibmwatsoninstall.png" width="75%">
+    <ol start="2">
+      <li>Right click on the <code>sentimentAnalyzeServer</code> in the explorer and a new file named <code>.env</code>.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-newfile.png" width="75%">
+    <ol start="3">
+      <li>Copy the credentials to point to your Watson NLU credentials from the IBM cloud, if you have not already done so in the previous lab.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-NLUcreds.png" width="75%">
+    <ol start="4">
+      <li>Add the credentials required to the .env file you created.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-envfile.png" width="75%">
+    <ol start="5">
+      <li>The contents of the .env file would be as below</li>
+    </ol>
+    <pre><code class="hljs language-txt">API_KEY=&#x3C;your api key>
+API_URL=&#x3C;your url>
+</code></pre>
+    <ol start="6">
+      <li>Install dotenv to use the .env file in the server application using the following command.</li>
+    </ol>
+    <pre><code class="hljs language-sql_more">npm <span class="hljs-keyword">install</span> <span class="hljs-comment">--save dotenv</span>
+</code></pre>
+    <p></p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-npminstalldotenv.png" width="75%">
+    <ol start="7">
+      <li>Make changes in your express JS (in the file named sentimentAnalyzerServer.js) to define and implement a method <code>getNLUInstance()</code> where you create an instance of NaturalLanguageUnderstanding using the credential from the .env file using dotenv package and return the instance. You can refer to this <a href="https://cloud.ibm.com/apidocs/natural-language-understanding?code=node&#x26;utm_email=Email&#x26;utm_source=Nurture&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_campaign=PLACEHOLDER&#x26;utm_id=SkillsNetwork-Courses-IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork-20363180" target="_blank" rel="external">link</a> for more details on how to do this.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-nlu.png" width="75%">
+    <ol start="8">
+      <li>Share the URL of your Git repository with all the changes. <em>Ensure that the .env file with all the credentials is not added to the gitrepository.</em></li>
+    </ol>
+    <h1>Part D: Create end points and connect the React front-end to the backend</h1>
+    <ol>
+      <li>Observe that the server code provides 4 end-points which have a dummy implementation in <strong>sentimentAnalyzerServer.js</strong>.</li>
+    </ol>
+    <pre><code class="hljs language-js">app.get(<span class="hljs-string">"/url/emotion"</span>, <span class="hljs-function">(<span class="hljs-params">req,res</span>) =></span> {
+<span class="hljs-comment">// dummy code here</span>
+});
+
+app.get(<span class="hljs-string">"/url/sentiment"</span>, <span class="hljs-function">(<span class="hljs-params">req,res</span>) =></span> {
+<span class="hljs-comment">// dummy code here</span>
+});
+
+app.get(<span class="hljs-string">"/text/emotion"</span>, <span class="hljs-function">(<span class="hljs-params">req,res</span>) =></span> {
+<span class="hljs-comment">// dummy code here</span>
+});
+
+app.get(<span class="hljs-string">"/text/sentiment"</span>, <span class="hljs-function">(<span class="hljs-params">req,res</span>) =></span> {
+<span class="hljs-comment">// dummy code here</span>
+});
+
+</code></pre>
+    <p></p>
+    <ol start="2">
+      <li>
+        <p>Replace these implementations to actually return valid results, as per instructions that follow.</p>
+        <ul>
+          <li>
+            <p>Each of the end points should use the <code>getNLUInstance()</code> created in the previous part to return appropriate response.</p>
+          </li>
+          <li>
+            <p>Each end point should send a JSON or a string response as may be considered relevant.</p>
+          </li>
+          <li>
+            <p>You may check you endpoints using <code>curl</code> as discussed in the lessons. This is for your own purpose of checking and is not a mandatory step in the project.</p>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p>Make changes to client code</p>
+        <p>a. Open the client code <code>cazgi-IBM-Watson-NLU-Project/sentimentAnalyzeClient/src/App.js</code> in the explorer</p>
+        <p>b. Make changes to change the title of the page to "Sentiment Analyzer"</p>
+        <p>c. Make changes to change the color of the sentiment response to <code>green</code> if the sentiment is positive, <code>yellow</code> if the sentiment is neutral and <code>red</code> if the sentiment is negative.</p>
+        <p>d. Make changes in the <code>cazgi-IBM-Watson-NLU-Project/sentimentAnalyzeClient/src/EmotionTable.js</code> to use <code>map</code> function that we used in the Hands-on-ReactLab, to render the EmotionTable component as a below.</p>
+        <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork/labs/FinalProject/3-create-application/images/screenshot-textemotion.png" width="75%">
+        <details>
+          <summary><i>Click here to see how to implement Map</i></summary>
+          <pre><code class="hljs language-js">    <span class="hljs-built_in">Object</span>.entries(<span class="hljs-built_in">this</span>.props.emotions).map(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">mapentry</span>) </span>{
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">tr</span>></span>
+        <span class="hljs-tag">&#x3C;<span class="hljs-name">td</span>></span>{mapentry[0]}<span class="hljs-tag">&#x3C;/<span class="hljs-name">td</span>></span>
+        <span class="hljs-tag">&#x3C;<span class="hljs-name">td</span>></span>{mapentry[1]}<span class="hljs-tag">&#x3C;/<span class="hljs-name">td</span>></span>
+        <span class="hljs-tag">&#x3C;/<span class="hljs-name">tr</span>></span></span>
+    )
+    })
+
+</code></pre>
+        </details>
+        <p>e. Repeat the steps in Part B, Exercise 1 to build the client side. <em>This will automatically copy the updated client to the server side</em></p>
+      </li>
+      <li>
+        <p>Change to the server side and run the server. Connect to port <code>8080</code> from <strong>launch application</strong></p>
+      </li>
+    </ol>
+    <pre><code class="hljs language-gradle">cd <span class="hljs-regexp">/home/</span><span class="hljs-keyword">project</span><span class="hljs-regexp">/cazgi-IBM-Watson-NLU-Project/</span>sentimentAnalyzeServer
+</code></pre>
+    <p></p>
+    <pre><code class="hljs language-coffeescript"><span class="hljs-built_in">npm</span> start
+</code></pre>
+    <p></p>
+    <ol start="5">
+      <li>Verify your output on the browser. The output depending on which whether you choose text or URL and whether you choose sentiment or emotions, the output should vary.</li>
+    </ol>
+    <h1>Part E: Commit and push your local code to your remote git repository</h1>
+    <ol>
+      <li>In the terminal, go to the project directory.</li>
+    </ol>
+    <pre><code class="hljs language-gradle">cd <span class="hljs-regexp">/home/</span><span class="hljs-keyword">project</span>/cazgi-IBM-Watson-NLU-<span class="hljs-keyword">Project</span>
+</code></pre>
+    <p></p>
+    <ol start="2">
+      <li>Run these following commands replacing your github username and the email you use for loggin into github as appropriate.</li>
+    </ol>
+    <pre><code class="hljs language-basic">git config --global user.email you<span class="hljs-comment">remail@domain.com</span>
+git config --global user.<span class="hljs-keyword">name</span> your_github_username
+</code></pre>
+    <ol start="3">
+      <li>Run the following command to add all the files to the remote repository. <em>Remove the files that you have not changed from this list. Add any new files you have added to the list</em></li>
+    </ol>
+    <pre><code class="hljs language-gradle">git add sentimentAnalyzeServer<span class="hljs-regexp">/package.json sentimentAnalyzeServer/</span><span class="hljs-keyword">package</span>-lock.json sentimentAnalyzeServer<span class="hljs-regexp">/sentimentAnalyzerServer.js sentimentAnalyzeClient/</span>src<span class="hljs-regexp">/App.js sentimentAnalyzeClient/</span>src/EmotionTable.js
+</code></pre>
+    <p></p>
+    <ol start="4">
+      <li>Run the following command to commit your changes. <em>Remove the files that you have not changed from this list. Add any new files you have added to the list</em></li>
+    </ol>
+    <pre><code class="hljs language-gradle">git commit -m<span class="hljs-string">"Server and client side changes to implement the final project requirements"</span> sentimentAnalyzeServer<span class="hljs-regexp">/package.json sentimentAnalyzeServer/</span><span class="hljs-keyword">package</span>-lock.json sentimentAnalyzeServer<span class="hljs-regexp">/sentimentAnalyzerServer.js sentimentAnalyzeClient/</span>src<span class="hljs-regexp">/App.js sentimentAnalyzeClient/</span>src/EmotionTable.js
+</code></pre>
+    <p></p>
+    <ol start="5">
+      <li>Run the following command to push the changes to the remote repository. You will be asked to enter the password for your github login.</li>
+    </ol>
+    <pre><code class="hljs language-armasm"><span class="hljs-symbol">git</span> <span class="hljs-keyword">push</span>
+</code></pre>
+    <p></p>
+    <h1>Checklist for completion</h1>
+    <ul>
+      <li>Client-side changes done as per requirements.</li>
+      <li>Client side <code>npm run-script build</code> is run to build the client code and copy it to server side.</li>
+      <li>.env file is created on the server side and the NLU credentials are added.</li>
+      <li>All the four API endpoints have been implemented in the server side.</li>
+      <li>Testing done from server side to see if the client is rendered as expected - Text Emotion, Text Sentiment, URL Emotions and URL Sentiment return results as expected.</li>
+      <li>Code is pushed to Github.</li>
+    </ul>
+    <h1>Next step</h1>
+    <p>The next and the final step is the deployment of the application on cloud foundry.</p>
+    <h2>Author(s)</h2>
+    <p><a href="https://www.linkedin.com/in/lavanya-sunderarajan-199a445?utm_email=Email&#x26;utm_source=Nurture&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_campaign=PLACEHOLDER&#x26;utm_id=SkillsNetwork-Courses-IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork-20363180" target="_blank" rel="external">Lavanya</a></p>
+    <h2>Other contributors</h2>
+    <p><a href="https://www.linkedin.com/in/lidderupk/?utm_email=Email&#x26;utm_source=Nurture&#x26;utm_content=000026UJ&#x26;utm_term=10006555&#x26;utm_campaign=PLACEHOLDER&#x26;utm_id=SkillsNetwork-Courses-IBMDeveloperSkillsNetwork-CD0220EN-SkillsNetwork-20363180" target="_blank" rel="external">Upkar Lidder</a></p>
+    <h2>Changelog</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2021-01-20</td>
+          <td>0.2</td>
+          <td>Lavanya</td>
+          <td>Included git login commands</td>
+        </tr>
+        <tr>
+          <td>2020-12-01</td>
+          <td>0.1</td>
+          <td>Lavanya</td>
+          <td>Initial version created</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2020. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.11b2a82f.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>
