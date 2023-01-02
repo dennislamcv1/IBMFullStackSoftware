@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/IDSNlogo.png" width="300">
+    <h1>Practice Hands-on lab: Budget Allocation Application</h1>
+    <h2>Estimated Time: 60 minutes</h2>
+    <p>In this React Budget Allocation app, you will learn how to break down a UI into React components. You will become familiar with state using the Context API. Furthermore, you will explore actions, reducers, and the dispatch function.You will create a code file, save it, and edit it to make changes.</p>
+    <h2>Objectives:</h2>
+    <ul>
+      <li>Setup a React Project.</li>
+      <li>Put the UI Components in Place.</li>
+      <li>Add the Context API.</li>
+      <li>Render the created components and context in App.js.</li>
+      <li>View your app on the browser.</li>
+    </ul>
+    <h2>Exercise 1: Setup a React Project</h2>
+    <p><strong>Fork the Git repository to have the react code you need to start</strong></p>
+    <p><strong>1.</strong> Go to the <a href="https://github.com/ibm-developer-skills-network/ejtos-react_budget_app/tree/main/src" target="_blank" rel="external">repository</a> which has the partially developed code for react side.</p>
+    <p><strong>2.</strong> Create a fork of the repository into your own. You will need to have a github account of your own to do so.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/fork.PNG" width="75%">
+    <p><strong>3.</strong> Go to your repository and copy the clone url.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/clone.PNG" width="75%">
+    <p><strong>4.</strong> Open a terminal window by using the menu in the editor: Terminal > New Terminal.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/new-terminal.png" width="75%">
+    <p><strong>5.</strong> Clone the repository by running the command given below:</p>
+    <pre><code class="hljs language-crmsh">git <span class="hljs-keyword">clone</span> <span class="hljs-title">&#x3C;your_repo_name</span>>
+</code></pre>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/git.PNG" width="75%">
+    <p><strong>6.</strong> This will clone the repository with budget allocation app files in your home directory in the lab environment. Check the same with the following command.</p>
+    <pre><code class="hljs language-ebnf"><span class="hljs-attribute">ls</span>
+</code></pre>
+    <p><strong>7.</strong> Change to the project directory and check its contents.</p>
+    <pre><code class="hljs language-jboss-cli"><span class="hljs-keyword">cd</span> ejtos-react_budget_app &#x26;&#x26; <span class="hljs-keyword">ls</span>
+</code></pre>
+    <p><strong>8.</strong> All packages required to be installed are listed in package.json. Run npm install -s, to install and save those packages.</p>
+    <pre><code class="hljs language-cmake">npm <span class="hljs-keyword">install</span>  -s
+</code></pre>
+    <h2>Exercise 2: Put the UI Components in Place</h2>
+    <p>You will be creating six components named as <code>Budget.js</code>,<code>ExpenseItem.js</code>,<code>ExpenseList.js</code>,<code>ExpenseTotal.js</code>,<code>Remaining.js</code>,<code>AllocationForm.js</code>. In <code>Budget.js</code> you will be adding text and value for your budget. You will be importing app context and the useContext hook, and pass your AppContext to it - this is how a component connects to the context in order to get values from global state. In <code>Remaining.js</code> you will be importing expense and budget from context and getting the remaining value using subtraction. In <code>ExpenseTotal.js</code> you will be adding useContext and AppContext. Taking the expenses from state, in <code>ExpenseList.js</code> you will be using the map function to display the Expenseitem component. In <code>Expenseitem.js</code> you will be importing dispatch from Context, which allows you to dispatch a delete action, creating a function that gets called when the delete icon is clicked. In <code>AllocationForm.js</code> you will be creating an expense object, containing the name and the cost. This is what will get dispatched as the payload, and what you'll use to update the state. In <code>AppContext.js</code> you will be creating reducer, which is used to update the state, based on the action. Then you will set the initial state for the departments. You will be creating the Provider component which wraps the components you want to give access to the state.</p>
+    <p><strong>1.</strong> Make changes to <strong>Budget.js</strong> component. Open the code, in the <code>src/components/Budget.js</code>. Copy the below code and paste in the Budget.js</p>
+    <pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React, { useContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> { AppContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'../context/AppContext'</span>;
+
+<span class="hljs-keyword">const</span> Budget = <span class="hljs-function">() =></span> {
+	<span class="hljs-keyword">const</span> { budget } = useContext(AppContext);
+
+	<span class="hljs-keyword">return</span> (
+		<span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'alert alert-secondary'</span>></span>
+			<span class="hljs-tag">&#x3C;<span class="hljs-name">span</span>></span>Budget: £{budget}<span class="hljs-tag">&#x3C;/<span class="hljs-name">span</span>></span>
+		<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span></span>
+	);
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Budget;
+</code></pre>
+    <p></p>
+    <p>Here, you are using the Bootstrap Alert classes to give a nice gray background by adding some text and hard coding a value.</p>
+    <p><strong>2.</strong> Make changes to <strong>Remaining.js</strong> component. Open the code, in the <code>src/components/Remaining.js</code>. Copy the below code and paste in the Remaining.js</p>
+    <pre><code class="hljs language-basic">import React, { useContext } from <span class="hljs-comment">'react';</span>
+import { AppContext } from <span class="hljs-comment">'../context/AppContext';</span>
+
+const <span class="hljs-comment">Remaining = () => {</span>
+	const { expenses, budget } = useContext(AppContext);
+
+	const totalExpenses = expenses.reduce((total, item) => {
+		<span class="hljs-keyword">return</span> (total = total + item.cost);
+	}, <span class="hljs-number">0</span>);
+
+	const alertType = totalExpenses > budget ? <span class="hljs-comment">'alert-danger' : 'alert-success';</span>
+
+	<span class="hljs-keyword">return</span> (
+		&#x3C;div className={`alert ${alertType}`}>
+			&#x3C;span><span class="hljs-comment">Remaining: £{budget - totalExpenses}&#x3C;/span></span>
+		&#x3C;/div>
+	);
+};
+
+export default <span class="hljs-comment">Remaining;</span>
+</code></pre>
+    <p></p>
+    <p>Here, you are importing expenses and budget from Context, getting the total cost of the expenses using the reduce function, creating a variable to store the CSS classname you want to display, using a template string to create your classes, and rendering the remaining budget using a subtraction.</p>
+    <p><strong>3.</strong> Make changes to <strong>ExpenseTotal.js</strong> component. Open the code, in the <code>src/components/ExpenseTotal.js</code>. Copy the below code and paste in the ExpenseTotal.js.</p>
+    <pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React, { useContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> { AppContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'../context/AppContext'</span>;
+
+<span class="hljs-keyword">const</span> ExpenseTotal = <span class="hljs-function">() =></span> {
+	<span class="hljs-keyword">const</span> { expenses } = useContext(AppContext);
+
+	<span class="hljs-keyword">const</span> totalExpenses = expenses.reduce(<span class="hljs-function">(<span class="hljs-params">total, item</span>) =></span> {
+		<span class="hljs-keyword">return</span> (total += item.cost);
+	}, <span class="hljs-number">0</span>);
+
+	<span class="hljs-keyword">return</span> (
+		<span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'alert alert-primary'</span>></span>
+			<span class="hljs-tag">&#x3C;<span class="hljs-name">span</span>></span>Spent so far: £{totalExpenses}<span class="hljs-tag">&#x3C;/<span class="hljs-name">span</span>></span>
+		<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span></span>
+	);
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> ExpenseTotal;
+</code></pre>
+    <p></p>
+    <p>
+      Here, you are using the reduce function to get a total of all the costs, assigning this to a variable and displaying the variable in your JSX.
+      Now whenever the user adds an expense, this causes the state to update, which will cause all components connected to the context to re-render and update themselves with new values.
+    </p>
+    <p><strong>4.</strong> Make changes to <strong>ExpenseList.js</strong> component. Open the code, in the <code>src/components/ExpenseList.js</code>. Copy the below code and paste in the ExpenseList.js.</p>
+    <pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React, { useContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> ExpenseItem <span class="hljs-keyword">from</span> <span class="hljs-string">'./ExpenseItem'</span>;
+<span class="hljs-keyword">import</span> { AppContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'../context/AppContext'</span>;
+
+<span class="hljs-keyword">const</span> ExpenseList = <span class="hljs-function">() =></span> {
+	<span class="hljs-keyword">const</span> { expenses } = useContext(AppContext);
+	
+	<span class="hljs-keyword">return</span> (
+		<span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">table</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'table'</span>></span>
+			  <span class="hljs-tag">&#x3C;<span class="hljs-name">thead</span> <span class="hljs-attr">className</span>=<span class="hljs-string">"thead-light"</span>></span>
+		    <span class="hljs-tag">&#x3C;<span class="hljs-name">tr</span>></span>
+		      <span class="hljs-tag">&#x3C;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">"col"</span>></span>Department<span class="hljs-tag">&#x3C;/<span class="hljs-name">th</span>></span>
+		      <span class="hljs-tag">&#x3C;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">"col"</span>></span>Allocated Budget<span class="hljs-tag">&#x3C;/<span class="hljs-name">th</span>></span>
+              <span class="hljs-tag">&#x3C;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">"col"</span>></span>Increase by 10<span class="hljs-tag">&#x3C;/<span class="hljs-name">th</span>></span>
+		      <span class="hljs-tag">&#x3C;<span class="hljs-name">th</span> <span class="hljs-attr">scope</span>=<span class="hljs-string">"col"</span>></span>Delete<span class="hljs-tag">&#x3C;/<span class="hljs-name">th</span>></span>
+		    <span class="hljs-tag">&#x3C;/<span class="hljs-name">tr</span>></span>
+		  <span class="hljs-tag">&#x3C;/<span class="hljs-name">thead</span>></span>
+			<span class="hljs-tag">&#x3C;<span class="hljs-name">tbody</span>></span>
+			{expenses.map((expense) => (
+				<span class="hljs-tag">&#x3C;<span class="hljs-name">ExpenseItem</span> <span class="hljs-attr">id</span>=<span class="hljs-string">{expense.id}</span> <span class="hljs-attr">key</span>=<span class="hljs-string">{expense.id}</span> <span class="hljs-attr">name</span>=<span class="hljs-string">{expense.name}</span> <span class="hljs-attr">cost</span>=<span class="hljs-string">{expense.cost}</span> /></span>
+			))}
+			<span class="hljs-tag">&#x3C;/<span class="hljs-name">tbody</span>></span>
+		<span class="hljs-tag">&#x3C;/<span class="hljs-name">table</span>></span></span>
+	);
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> ExpenseList;
+</code></pre>
+    <p></p>
+    <p>Here, we are creating a list, using the map function to iterate over the expenses, and displaying an ExpenseItem component.</p>
+    <p><strong>5.</strong> Make changes to <strong>ExpenseItem.js</strong> component. Open the code, in the <code>src/components/ExpenseItem.js</code>. Copy the below code and paste in the ExpenseItem.js.</p>
+    <pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React, { useContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> { TiDelete } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-icons/ti'</span>;
+<span class="hljs-keyword">import</span> { AppContext } <span class="hljs-keyword">from</span> <span class="hljs-string">'../context/AppContext'</span>;
+
+<span class="hljs-keyword">const</span> ExpenseItem = <span class="hljs-function">(<span class="hljs-params">props</span>) =></span> {
+	<span class="hljs-keyword">const</span> { dispatch } = useContext(AppContext);
+
+	<span class="hljs-keyword">const</span> handleDeleteExpense = <span class="hljs-function">() =></span> {
+		dispatch({
+			<span class="hljs-attr">type</span>: <span class="hljs-string">'DELETE_EXPENSE'</span>,
+			<span class="hljs-attr">payload</span>: props.id,
+		});
+	};
+
+	<span class="hljs-keyword">const</span> increaseAllocation = <span class="hljs-function">(<span class="hljs-params">name</span>) =></span> {
+		<span class="hljs-keyword">const</span> expense = {
+			<span class="hljs-attr">name</span>: name,
+			<span class="hljs-attr">cost</span>: <span class="hljs-number">10</span>,
+		};
+
+		dispatch({
+			<span class="hljs-attr">type</span>: <span class="hljs-string">'ADD_EXPENSE'</span>,
+			<span class="hljs-attr">payload</span>: expense
+		});
+
+	}
+
+
+	<span class="hljs-keyword">return</span> (
+		<span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">tr</span>></span>
+		<span class="hljs-tag">&#x3C;<span class="hljs-name">td</span>></span>{props.name}<span class="hljs-tag">&#x3C;/<span class="hljs-name">td</span>></span>
+		<span class="hljs-tag">&#x3C;<span class="hljs-name">td</span>></span>£{props.cost}<span class="hljs-tag">&#x3C;/<span class="hljs-name">td</span>></span>
+		<span class="hljs-tag">&#x3C;<span class="hljs-name">td</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{event</span>=></span> increaseAllocation(props.name)}>+<span class="hljs-tag">&#x3C;/<span class="hljs-name">button</span>></span><span class="hljs-tag">&#x3C;/<span class="hljs-name">td</span>></span>
+		<span class="hljs-tag">&#x3C;<span class="hljs-name">td</span>></span><span class="hljs-tag">&#x3C;<span class="hljs-name">TiDelete</span> <span class="hljs-attr">size</span>=<span class="hljs-string">'1.5em'</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{handleDeleteExpense}</span>></span><span class="hljs-tag">&#x3C;/<span class="hljs-name">TiDelete</span>></span><span class="hljs-tag">&#x3C;/<span class="hljs-name">td</span>></span>
+		<span class="hljs-tag">&#x3C;/<span class="hljs-name">tr</span>></span></span>
+	);
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> ExpenseItem;
+</code></pre>
+    <p></p>
+    <p>Here, you are dispatching an action. Your action contains the type (so the reducer knows how to update the state) and the payload. In this case you are passing the ID of this expense (which you get from props when you rendered the ExpenseList).</p>
+    <p><strong>6.</strong> Make changes to <strong>AllocationForm.js</strong> component. Open the code, in the <code>src/components/AllocationForm.js</code>. Copy the below code and paste in the AllocationForm.js.</p>
+    <pre><code class="hljs language-ini">import React, { useContext, useState } from 'react'<span class="hljs-comment">;</span>
+import { AppContext } from '../context/AppContext'<span class="hljs-comment">;</span>
+
+const <span class="hljs-attr">AllocationForm</span> = (props) => {
+	const { dispatch,remaining  } = useContext(AppContext)<span class="hljs-comment">;</span>
+
+	const <span class="hljs-section">[name, setName]</span> = useState('')<span class="hljs-comment">;</span>
+	const <span class="hljs-section">[cost, setCost]</span> = useState('')<span class="hljs-comment">;</span>
+	const <span class="hljs-section">[action, setAction]</span> = useState('')<span class="hljs-comment">;</span>
+
+	const <span class="hljs-attr">submitEvent</span> = () => {
+
+			if(cost > remaining) {
+				alert("The value cannot exceed remaining funds  £"+remaining)<span class="hljs-comment">;</span>
+				setCost("")<span class="hljs-comment">;</span>
+				return<span class="hljs-comment">;</span>
+			}
+
+		const <span class="hljs-attr">expense</span> = {
+			name: name,
+			cost: parseInt(cost),
+		}<span class="hljs-comment">;</span>
+		if(<span class="hljs-attr">action</span> === <span class="hljs-string">"Reduce"</span>) {
+			dispatch({
+				type: 'RED_EXPENSE',
+				payload: expense,
+			})<span class="hljs-comment">;</span>
+		} else {
+				dispatch({
+					type: 'ADD_EXPENSE',
+					payload: expense,
+				})<span class="hljs-comment">;</span>
+			}
+	}<span class="hljs-comment">;</span>
+
+	return (
+		&#x3C;div>
+			&#x3C;div <span class="hljs-attr">className</span>=<span class="hljs-string">'row'</span>>
+				
+			&#x3C;div <span class="hljs-attr">className</span>=<span class="hljs-string">"input-group mb-3"</span> style={{ marginLeft: <span class="hljs-string">'2rem'</span> }}>
+					&#x3C;div <span class="hljs-attr">className</span>=<span class="hljs-string">"input-group-prepend"</span>>
+		    	&#x3C;label <span class="hljs-attr">className</span>=<span class="hljs-string">"input-group-text"</span> htmlFor=<span class="hljs-string">"inputGroupSelect01"</span>>Department&#x3C;/label>
+		  		&#x3C;/div>
+  				&#x3C;select <span class="hljs-attr">className</span>=<span class="hljs-string">"custom-select"</span> id=<span class="hljs-string">"inputGroupSelect01"</span> <span class="hljs-literal">on</span>Change={(event) => setName(event.target.value)}>
+						&#x3C;option defaultValue>Choose...&#x3C;/option>
+						&#x3C;option <span class="hljs-attr">value</span>=<span class="hljs-string">"Marketing"</span> name=<span class="hljs-string">"marketing"</span>> Marketing&#x3C;/option>
+	        	&#x3C;option <span class="hljs-attr">value</span>=<span class="hljs-string">"Sales"</span> name=<span class="hljs-string">"sales"</span>>Sales&#x3C;/option>
+	        	&#x3C;option <span class="hljs-attr">value</span>=<span class="hljs-string">"Finance"</span> name=<span class="hljs-string">"finance"</span>>Finance&#x3C;/option>
+	        	&#x3C;option <span class="hljs-attr">value</span>=<span class="hljs-string">"HR"</span> name=<span class="hljs-string">"hr"</span>>HR&#x3C;/option>
+	        	&#x3C;option <span class="hljs-attr">value</span>=<span class="hljs-string">"IT"</span> name=<span class="hljs-string">"it"</span>>IT&#x3C;/option>
+	        	&#x3C;option <span class="hljs-attr">value</span>=<span class="hljs-string">"Admin"</span> name=<span class="hljs-string">"admin"</span>>Admin&#x3C;/option>
+				  &#x3C;/select>
+					
+					&#x3C;div <span class="hljs-attr">className</span>=<span class="hljs-string">"input-group-prepend"</span> style={{ marginLeft: <span class="hljs-string">'2rem'</span> }}>
+		    	&#x3C;label <span class="hljs-attr">className</span>=<span class="hljs-string">"input-group-text"</span> htmlFor=<span class="hljs-string">"inputGroupSelect02"</span>>Allocation&#x3C;/label>
+		  		&#x3C;/div>
+  				&#x3C;select <span class="hljs-attr">className</span>=<span class="hljs-string">"custom-select"</span> id=<span class="hljs-string">"inputGroupSelect02"</span> <span class="hljs-literal">on</span>Change={(event) => setAction(event.target.value)}>
+						&#x3C;option defaultValue <span class="hljs-attr">value</span>=<span class="hljs-string">"Add"</span> name=<span class="hljs-string">"Add"</span>>Add&#x3C;/option>
+	        	&#x3C;option <span class="hljs-attr">value</span>=<span class="hljs-string">"Reduce"</span> name=<span class="hljs-string">"Reduce"</span>>Reduce&#x3C;/option>
+				  &#x3C;/select>
+
+					&#x3C;input
+						<span class="hljs-attr">required</span>=<span class="hljs-string">'required'</span>
+						<span class="hljs-attr">type</span>=<span class="hljs-string">'number'</span>
+						<span class="hljs-attr">id</span>=<span class="hljs-string">'cost'</span>
+						<span class="hljs-attr">value</span>={cost}
+						<span class="hljs-attr">style</span>={{ marginLeft: <span class="hljs-string">'2rem'</span> , size: <span class="hljs-number">10</span>}}
+						<span class="hljs-attr">onChange</span>={(event) => setCost(event.target.value)}>
+						&#x3C;/input>
+
+					&#x3C;button <span class="hljs-attr">className</span>=<span class="hljs-string">"btn btn-primary"</span> <span class="hljs-literal">on</span>Click={submitEvent} style={{ marginLeft: <span class="hljs-string">'2rem'</span> }}>
+						Save
+					&#x3C;/button>
+				&#x3C;/div>
+				&#x3C;/div>
+				
+		&#x3C;/div>
+	)<span class="hljs-comment">;</span>
+}<span class="hljs-comment">;</span>
+
+export default AllocationForm<span class="hljs-comment">;</span>
+</code></pre>
+    <p></p>
+    <p>Here, you are adding form tags, adding a label/input for name, cost and action field, and adding values for various departments.</p>
+    <h2>Excercise 3: Add the Context API</h2>
+    <p><strong>1.</strong> Make changes to <strong>AppContext.js</strong> context. Open the code, in the <code>src/contexts/AppContext.js</code>. Copy the below code and paste in the AppContext.js.</p>
+    <pre><code class="hljs language-pf">import React, { createContext, useReducer } <span class="hljs-keyword">from</span> 'react';
+
+// <span class="hljs-number">5</span>. The reducer - this is used <span class="hljs-keyword">to</span> update the <span class="hljs-keyword">state</span>, based <span class="hljs-keyword">on</span> the action
+export <span class="hljs-keyword">const</span> AppReducer = (<span class="hljs-keyword">state</span>, action) => {
+	let budget = <span class="hljs-number">0</span>;
+	switch (action.type) {
+		case 'ADD_EXPENSE':
+			let total_budget = <span class="hljs-number">0</span>;
+			total_budget = <span class="hljs-keyword">state</span>.expenses.reduce(
+				(previousExp, currentExp) => {
+					return previousExp + currentExp.cost
+				},<span class="hljs-number">0</span>
+			);
+			total_budget = total_budget + action.payload.cost;
+			action.type = <span class="hljs-string">"DONE"</span>;
+			if(total_budget <span class="hljs-variable">&#x3C;= state.budget) {
+				total_budget = 0;
+				state.expenses.map((currentExp)=></span> {
+					if(currentExp.name === action.payload.name) {
+						currentExp.cost = action.payload.cost + currentExp.cost;
+					}
+					return currentExp
+				});
+				return {
+					...<span class="hljs-keyword">state</span>,
+				};
+			} else {
+				alert(<span class="hljs-string">"Cannot increase the allocation! Out of funds"</span>);
+				return {
+					...<span class="hljs-keyword">state</span>
+				}
+			}
+			case 'RED_EXPENSE':
+				<span class="hljs-keyword">const</span> red_expenses = <span class="hljs-keyword">state</span>.expenses.map((currentExp)=> {
+					if (currentExp.name === action.payload.name &#x26;&#x26; currentExp.cost - action.payload.cost >= <span class="hljs-number">0</span>) {
+						currentExp.cost =  currentExp.cost - action.payload.cost;
+						budget = <span class="hljs-keyword">state</span>.budget + action.payload.cost
+					}
+					return currentExp
+				})
+				action.type = <span class="hljs-string">"DONE"</span>;
+				return {
+					...<span class="hljs-keyword">state</span>,
+					expenses: [...red_expenses],
+				};
+			case 'DELETE_EXPENSE':
+			action.type = <span class="hljs-string">"DONE"</span>;
+			<span class="hljs-keyword">state</span>.expenses.map((currentExp)=> {
+				if (currentExp.name === action.payload) {
+					budget = <span class="hljs-keyword">state</span>.budget + currentExp.cost
+					currentExp.cost =  <span class="hljs-number">0</span>;
+				}
+				return currentExp
+			})
+			action.type = <span class="hljs-string">"DONE"</span>;
+			return {
+				...<span class="hljs-keyword">state</span>,
+				budget
+			};
+		case 'SET_BUDGET':
+			action.type = <span class="hljs-string">"DONE"</span>;
+			<span class="hljs-keyword">state</span>.budget = action.payload;
+
+			return {
+				...<span class="hljs-keyword">state</span>,
+			};
+		case 'CHG_CURRENCY':
+			action.type = <span class="hljs-string">"DONE"</span>;
+			<span class="hljs-keyword">state</span>.currency = action.payload;
+			return {
+				...<span class="hljs-keyword">state</span>
+			}
+
+		<span class="hljs-keyword">default</span>:
+			return <span class="hljs-keyword">state</span>;
+	}
+};
+
+// <span class="hljs-number">1</span>. Sets the initial <span class="hljs-keyword">state</span> when the app loads
+<span class="hljs-keyword">const</span> initialState = {
+	budget: <span class="hljs-number">2000</span>,
+	expenses: [
+		{ id: <span class="hljs-string">"Marketing"</span>, name: 'Marketing', cost: <span class="hljs-number">50</span> },
+		{ id: <span class="hljs-string">"Finance"</span>, name: 'Finance', cost: <span class="hljs-number">300</span> },
+		{ id: <span class="hljs-string">"Sales"</span>, name: 'Sales', cost: <span class="hljs-number">70</span> },
+		{ id: <span class="hljs-string">"Human Resource"</span>, name: 'Human Resource', cost: <span class="hljs-number">40</span> },
+		{ id: <span class="hljs-string">"IT"</span>, name: 'IT', cost: <span class="hljs-number">500</span> },
+	],
+	currency: '£'
+};
+
+// <span class="hljs-number">2</span>. Creates the context this is the thing our components import and use <span class="hljs-keyword">to</span> get the <span class="hljs-keyword">state</span>
+export <span class="hljs-keyword">const</span> AppContext = createContext();
+
+// <span class="hljs-number">3</span>. Provider component - wraps the components we want <span class="hljs-keyword">to</span> give access <span class="hljs-keyword">to</span> the <span class="hljs-keyword">state</span>
+// Accepts the children, which are the nested(wrapped) components
+export <span class="hljs-keyword">const</span> AppProvider = (props) => {
+	// <span class="hljs-number">4</span>. Sets up the app <span class="hljs-keyword">state</span>. takes a reducer, and an initial <span class="hljs-keyword">state</span>
+	<span class="hljs-keyword">const</span> [<span class="hljs-keyword">state</span>, dispatch] = useReducer(AppReducer, initialState);
+	let remaining = <span class="hljs-number">0</span>;
+
+	if (<span class="hljs-keyword">state</span>.expenses) {
+			<span class="hljs-keyword">const</span> totalExpenses = <span class="hljs-keyword">state</span>.expenses.reduce((total, item) => {
+			return (total = total + item.cost);
+		}, <span class="hljs-number">0</span>);
+		remaining = <span class="hljs-keyword">state</span>.budget - totalExpenses;
+	}
+
+	return (
+		<span class="hljs-variable">&#x3C;AppContext.Provider
+			value={{
+				expenses: state.expenses,
+				budget: state.budget,
+				remaining: remaining,
+				dispatch,
+				currency: state.currency
+			}}
+		></span>
+			{props.children}
+		&#x3C;/AppContext.Provider>
+	);
+};
+</code></pre>
+    <p></p>
+    <p>Here, you are adding an initial budget, creating a Provider component, setting up the useReducer hook which will hold your state, and allow you to update the state via dispatch.</p>
+    <p>Adding a new case to the switch statement called "ADD_EXPENSE", "RED_EXPENSE", "DELETE_EXPENSE".</p>
+    <h2>Excercise 4: Render the created components and context in App.js</h2>
+    <p><strong>1.</strong> Make changes to <strong>App.js</strong>. Open the code, in the <code>src/App.js</code>. You need to add the code in the container div to import and add the components created above.</p>
+    <pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'bootstrap/dist/css/bootstrap.min.css'</span>;
+<span class="hljs-comment">// Add code to import the components</span>
+<span class="hljs-keyword">import</span> { AppProvider } <span class="hljs-keyword">from</span> <span class="hljs-string">'./context/AppContext'</span>;
+<span class="hljs-keyword">const</span> App = <span class="hljs-function">() =></span> {
+    <span class="hljs-keyword">return</span> (
+        <span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">AppProvider</span>></span>
+            <span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'container'</span>></span>
+                {/* Add the code here to add the components          */}
+            <span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+        <span class="hljs-tag">&#x3C;/<span class="hljs-name">AppProvider</span>></span></span>
+    );
+};
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+    <p></p>
+    <details>
+      <summary>Click here to view the hint</summary>
+      <p>You will be adding the components <code>Budget.js</code>, <code>Remaining.js</code>, <code>ExpenseItem.js</code>, <code>ExpenseList.js</code>, <code>ExpenseTotal.js</code>, <code>AllocationForm.js</code> created above.</p>
+    </details>
+    <details>
+      <summary>Click here to view the solution</summary>
+      <pre><code class="hljs language-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'bootstrap/dist/css/bootstrap.min.css'</span>;
+
+<span class="hljs-keyword">import</span> { AppProvider } <span class="hljs-keyword">from</span> <span class="hljs-string">'./context/AppContext'</span>;
+<span class="hljs-keyword">import</span> Budget <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/Budget'</span>;
+<span class="hljs-keyword">import</span> ExpenseTotal <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/ExpenseTotal'</span>;
+<span class="hljs-keyword">import</span> ExpenseList <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/ExpenseList'</span>;
+<span class="hljs-keyword">import</span> AllocationForm <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/AllocationForm'</span>;
+<span class="hljs-keyword">import</span> RemainingBudget <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/Remaining'</span>;
+
+<span class="hljs-keyword">const</span> App = <span class="hljs-function">() =></span> {
+	<span class="hljs-keyword">return</span> (
+		<span class="xml"><span class="hljs-tag">&#x3C;<span class="hljs-name">AppProvider</span>></span>
+			<span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'container'</span>></span>
+				<span class="hljs-tag">&#x3C;<span class="hljs-name">h1</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'mt-3'</span>></span>Company's Budget Allocation<span class="hljs-tag">&#x3C;/<span class="hljs-name">h1</span>></span>
+				<span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'row mt-3'</span>></span>
+					<span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'col-sm'</span>></span>
+						<span class="hljs-tag">&#x3C;<span class="hljs-name">Budget</span> /></span>
+					<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+					<span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'col-sm'</span>></span>
+						<span class="hljs-tag">&#x3C;<span class="hljs-name">RemainingBudget</span> /></span>
+					<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+					<span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'col-sm'</span>></span>
+						<span class="hljs-tag">&#x3C;<span class="hljs-name">ExpenseTotal</span> /></span>
+					<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+				<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+				<span class="hljs-tag">&#x3C;<span class="hljs-name">h3</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'mt-3'</span>></span>Allocation<span class="hljs-tag">&#x3C;/<span class="hljs-name">h3</span>></span>
+				<span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'row '</span>></span>
+					<span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'col-sm'</span>></span>
+						<span class="hljs-tag">&#x3C;<span class="hljs-name">ExpenseList</span> /></span>
+					<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+				<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+				<span class="hljs-tag">&#x3C;<span class="hljs-name">h3</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'mt-3'</span>></span>Change allocation<span class="hljs-tag">&#x3C;/<span class="hljs-name">h3</span>></span>
+				<span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'row mt-3'</span>></span>
+					<span class="hljs-tag">&#x3C;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'col-sm'</span>></span>
+						<span class="hljs-tag">&#x3C;<span class="hljs-name">AllocationForm</span>/></span>
+					<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+				<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+			<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+		<span class="hljs-tag">&#x3C;/<span class="hljs-name">AppProvider</span>></span></span>
+	);
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+    </details>
+    <p>Here, you are importing different components,adding a bootstrap container that helps you center your App on the page</p>
+    <ul>
+      <li>Adding a title</li>
+      <li>Adding a Bootstrap row</li>
+      <li>Adding a column within the row for each of your components so far</li>
+      <li>Imported and Rendered the AllocationForm</li>
+      <li>Imported AppProvider and Nested components in the AppProvider element.</li>
+    </ul>
+    <h2>Excercise 5: Launch and view your react app on the browser</h2>
+    <p><strong>1.</strong> Make sure you are in the <code>ejtos-react_budget_app</code> directory and run the server using the following command.</p>
+    <pre><code class="hljs language-coffeescript"><span class="hljs-built_in">npm</span> start
+</code></pre>
+    <p><strong>2.</strong> Click on the Skills Network button on the left, it will open the <strong>"Skills Network Toolbox"</strong>. Then click <strong>Other</strong> then <strong>Launch Application</strong>. From there you should be able to enter the port <code>3000</code>.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/Launch_Application-SN-ToolBox.png" width="75%">
+    <p><strong>3.</strong> Verify your output on the browser.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/practicefinal.PNG" width="75%">
+    <h2>Commit and push your local code to your remote git repository</h2>
+    <p>This git pushed code will be cloned and used in final project.</p>
+    <p>Please refer to this lab <a href="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CD0101EN-SkillsNetwork/labs/GitHubLabs/Github_commit.md.html" target="_blank" rel="external">Working with git in the Theia lab environment</a></p>
+    <p>Congratulations! You have completed this practice lab and know how to create components of a budget allocation application.</p>
+    <p><strong>Change Log</strong></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2022-08-31</td>
+          <td>1.0</td>
+          <td>Pallavi Rai</td>
+          <td>Initial version created</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2022. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

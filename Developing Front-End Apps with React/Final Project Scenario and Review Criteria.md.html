@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/IDSNlogo.png" width="300">
+    <h1>Final Project: Scenario and Review Criteria</h1>
+    <h2>Estimated time needed: 15 mins</h2>
+    <h2>Final project: Scenario</h2>
+    <p>You have just joined RKL Insurance company's IT department as a front-end engineer. The company wants you to create an application front end which will allow them to plan for budgeting expenses for various departments. The person that worked in this position before has completed the code but has not paid attention to some of the features that were specifically asked for. You are now entrusted with this responsibility and you are expected to deliver the project within expected timeline.</p>
+    <p>This is the final project for this course and has several steps that you must complete. You will be building on the Budget allocation application you built using react in the practice project.</p>
+    <p>In this project, you will be given tasks to complete and render them into your budget allocation app. The completed Budget Allocation application page should look like the image below:</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/finalbudget.png" width="75%">
+    <h2>Review Criteria:</h2>
+    <p><strong>1:</strong> Budget allocation validation. <strong>(2 pts)</strong></p>
+    <p>Provide a screenshot of the budget allocation validation. It should show that the application:</p>
+    <ul>
+      <li>Accepts only numbers in the allocation field. <strong>(1 pts)</strong></li>
+      <li>The number does not exceed remaining budget. <strong>(1 pts)</strong></li>
+    </ul>
+    <p><strong>2:</strong> Editable budget value <strong>(3 pts)</strong></p>
+    <p>Provide a screenshot of the budget value. It should show that the application:</p>
+    <ul>
+      <li>Has editable budget field with increasing and decreasing value by 10. <strong>(1 pts)</strong></li>
+      <li>Does not allow amount lower than amount spent so far. <strong>(1 pts)</strong></li>
+      <li>The upper limit is set to 20,000. <strong>(1 pts)</strong></li>
+    </ul>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/task_1.PNG" width="75%">
+    <p><strong>3:</strong> Dropdown to change currency <strong>(4 pts)</strong></p>
+    <p>Provide a screenshot of the dropdown list for Currency component. It should show that the application:</p>
+    <ul>
+      <li>Has a <strong>Currency</strong> label in the appropriate place. <strong>(1 pts)</strong></li>
+      <li>Has an editable currency dropdown list. <strong>(1 pts)</strong></li>
+      <li>Has four values $ Dollar,£ Pound,€ Euro,₹ Rupee in the dropdown list, in the specified format. <strong>(1 pts)</strong></li>
+      <li>Has stylized dropdown list (Use image provided for reference). <strong>(1 pts)</strong></li>
+    </ul>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/task_2.png" width="30%">
+    <p><strong>4:</strong> Add a currency prefix to the <strong>Change allocation</strong> textbox <strong>(1 pts)</strong></p>
+    <p><strong>5:</strong> Add a currency prefix to the <strong>budget value</strong> textbox <strong>(1 pts)</strong></p>
+    <p><strong>6:</strong> Change event of the currency dropdown list <strong>(5 pts)</strong></p>
+    <p>Provide a screenshot after the dropdown for Currency component change event. It should show that for the event, on change of the dropdown value, all the currency representation on the screen changes.</p>
+    <ul>
+      <li>Budget . <strong>(1 pts)</strong></li>
+      <li>Remaining. <strong>(1 pts)</strong></li>
+      <li>Spent so far. <strong>(1 pts)</strong></li>
+      <li>Allocated Budget. <strong>(1 pts)</strong></li>
+      <li>Change Allocation. <strong>(1 pts)</strong></li>
+    </ul>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/task_3.PNG" width="75%">
+    <p><strong>7:</strong> Decrease and Increase Buttons <strong>(4 pts)</strong></p>
+    <p>Provide a screenshot that shows that,</p>
+    <ul>
+      <li>A decrease button is added for all departments in the allocation, beside increase by 10 as shown in the screenshot. <strong>(1 pts)</strong></li>
+      <li>Onclick of the button the value decreases by 10. <strong>(1 pts)</strong></li>
+      <li>The<code> +</code> button is stylized with the image provided. <strong>(1 pts)</strong></li>
+      <li>The<code> -</code> button is stylized with the image provided. <strong>(1 pts)</strong></li>
+    </ul>
+    <p><strong>Change Log</strong></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2022-08-31</td>
+          <td>1.0</td>
+          <td>Pallavi Rai</td>
+          <td>Initial version created</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2022. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/styles/default.min.css">
+  </head>
+  <body>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/IDSNlogo.png" width="300">
+    <h1>Final Project: Enhanced Budget Allocation Application</h1>
+    <h2>Estimated Time: 120 minutes</h2>
+    <p>Note: Though this lab is split into multiple parts, it is highly recommended it is all completed in one sitting as the project environment may not be persisted. If for any reason that is not possible, please push your changes to git so that the changes are copied to your remote repository and you can start where you left.</p>
+    <h2>Pre-requisite:</h2>
+    <p>You need to complete Practice project before you start with the final project. That will be the base code on which you will buid this React application.</p>
+    <h2>Part A: Git clone the Git repository to have the react code you need to start</h2>
+    <ol>
+      <li>Open a terminal window by using the menu in the editor: Terminal > New Terminal.</li>
+    </ol>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/new-terminal.png" width="75%">
+    <ol start="2">
+      <li>Clone the repository you cloned, edited and git pushed in the practice project with all the components added by running the command given below:</li>
+    </ol>
+    <pre><code class="hljs language-crmsh">git <span class="hljs-keyword">clone</span> <span class="hljs-title">&#x3C;your_repo_name</span>>
+</code></pre>
+    <ol start="3">
+      <li>This will clone the repository with budget allocation app files in your home directory in the lab environment. Check the same with the following command.</li>
+    </ol>
+    <pre><code class="hljs language-ebnf"><span class="hljs-attribute">ls</span>
+</code></pre>
+    <ol start="4">
+      <li>Change to the project directory and check its contents.</li>
+    </ol>
+    <pre><code class="hljs language-jboss-cli"><span class="hljs-keyword">cd</span> ejtos-react_budget_app &#x26;&#x26; <span class="hljs-keyword">ls</span>
+</code></pre>
+    <blockquote>
+      <p>Note: Remove the 'node_modules' folder in the main project and directories before running npm install command to install the packages. This is necessary to ensure that all package installation commands run correctly.</p>
+    </blockquote>
+    <ol start="5">
+      <li>All packages are needed to be installed are listed in package.json. Run npm install -s, to install and save those packages.</li>
+    </ol>
+    <pre><code class="hljs language-cmake">npm <span class="hljs-keyword">install</span> -s
+</code></pre>
+    <h2>Part B: Launch and view your react app on the browser</h2>
+    <p><strong>1.</strong> Make sure you are in the <code>ejtos-react_budget_app</code> directory and run the server using the following command.</p>
+    <pre><code class="hljs language-coffeescript"><span class="hljs-built_in">npm</span> start
+</code></pre>
+    <p><strong>2.</strong> Click on the Skills Network button on the left, it will open the <strong>"Skills Network Toolbox"</strong>. Then click the <strong>Other</strong> then <strong>Launch Application</strong>. From there you should be able to enter the port <code>3000</code>.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/Launch_Application-SN-ToolBox.png" width="75%">
+    <h2>Part C: Enhancement of the Budget Allocation Application</h2>
+    <h3>Task 1: Budget allocation Validation</h3>
+    <p>Add validation to the existing budget allocation component.</p>
+    <ul>
+      <li>It should accept only number value. Take a screenshot and save it as <strong>budget_allocation.png</strong>.</li>
+    </ul>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/budget_allocation.PNG" width="50%">
+    <ul>
+      <li>The value should not exceed the remaining budget. Take a screenshot and save it as <strong>budget_allocation_error message.png</strong>.</li>
+    </ul>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/budget_allocation_error_message.PNG" width="50%">
+    <h3>Task 2: Editable budget value</h3>
+    <p>Update the code to make <strong>Budget</strong> editable with option to increase and decrease its value by 10. Take a screenshot and save it as <strong>budget_value.png</strong>.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/task_1.PNG" width="50%">
+    <p>Set the upper limit value to 20,000. Take a screenshot of error message when it is more than 20000 and save it as <strong>budget_not_exceeding.png</strong>.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/budget_not_exceeding.PNG" width="50%">
+    <p>It should not allow for the budget to be lower than the spending, as that is already allocated. Take a screenshot of error message when it is lower than spending and save it as <strong>budget_morethan_spending.png</strong>.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/budget_morethan_spending.PNG" width="50%">
+    <h3>Task 3: Dropdown to change currency</h3>
+    <p>Update the code to change the currency along with the drop-down option. Add these four currencies: $ Dollar,£ Pound,€ Euro,₹ Ruppee. Take a screenshot and save it as <strong>curreny_dropdown.png</strong>.</p>
+    <ul>
+      <li>Add a <strong>Currency</strong> label in the appropriate place.</li>
+      <li>Stylize the dropdown (Use image provided for refernce).</li>
+    </ul>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/task_2.png" width="30%">
+    <h3>Task 4: Currency prefix to the <strong>Change allocation</strong> textbox.</h3>
+    <p>Add a currency prefix to the <strong>Change allocation</strong> textbox. Take a screenshot and save it as <strong>budget_allocation_with_currency.png</strong>.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/budget_allocation_with_currency.PNG" width="50%">
+    <h3>Task 5: Currency prefix to the <strong>Budget value</strong> textbox.</h3>
+    <p>Add a currency prefix to the <strong>Budget Value</strong> textbox. Take a screenshot and save it as <strong>budget_value_with_currency.png</strong>.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/budget_value_with_currency.PNG" width="30%">
+    <h3>Task 6: Change event of the currency dropdown</h3>
+    <p>Add event handler to the dropdown for Currency component change event. On change of the dropdown value, all the currency representation on the screen changes, in the following places.</p>
+    <ul>
+      <li>Budget</li>
+      <li>Remaining</li>
+      <li>Spent so far</li>
+      <li>Allocated Budget</li>
+      <li>Change Allocation</li>
+    </ul>
+    <p>Change the currecy in the dropdown from £ to another symbol and take a screenshot of the whole page reflecting the changes and save it as <strong>currency_change.png</strong>.</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/currency_change.PNG" width="75%">
+    <h3>Task 7: Decrease and Increase Buttons</h3>
+    <p>Add a decrease button, like the increase button you added in the practice project, to all the departments in the allocation, beside increase by 10 as shown in the screenshot. Stylize the button using these images. Styling of buttong should be done according to the reference provided.</p>
+    <ul>
+      <li>Click the plus button next to <strong>Marketing</strong> department and show that the the value increases by 10. Take a screenshot and save it as <strong>mktgplus10.png</strong></li>
+    </ul>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/mktgplus10.PNG" width="75%">
+    <ul>
+      <li>Click the minus button next to <strong>IT</strong> and show that the the value decreases by 10. Take a screenshot and save it as <strong>itminus10.png</strong></li>
+    </ul>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/itminus.PNG" width="75%">
+    <p>Your final React budget allocation application page should look like this:</p>
+    <img src="https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-CD0210EN-SkillsNetwork/labs/Final%20project-budget%20app/images/finalbudget.png" width="75%">
+    <p>Congratulations! You have completed this Final Project lab and know how to create a budget allocation application.</p>
+    <p><strong>Change Log</strong></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Version</th>
+          <th>Changed by</th>
+          <th>Change Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2022-08-31</td>
+          <td>1.0</td>
+          <td>Pallavi Rai</td>
+          <td>Initial version created</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2></h2>
+    <h3 align="center">© IBM Corporation 2022. All rights reserved.</h3>
+    <h3></h3>
+    <script>window.addEventListener('load', function() {
+snFaculty.inject();
+});</script>
+    <script src="https://skills-network-assets.s3.us.cloud-object-storage.appdomain.cloud/scripts/inject.43989f87.js"></script>
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.1/highlight.min.js"></script>
+    <script src="https://unpkg.com/highlightjs-badge@0.1.9/highlightjs-badge.min.js"></script>
+  </body>
+</html>
